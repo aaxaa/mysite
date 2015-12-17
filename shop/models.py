@@ -19,6 +19,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = u'分类'
+        verbose_name_plural = u'分类'
         ordering = (('display_order'), )
 
 
@@ -67,6 +68,7 @@ class Product(models.Model):
 
     class Meta:
         verbose_name = u'商品'
+        verbose_name_plural = u'商品'
         ordering = (('open_at'), ('status'),)
 
 
@@ -82,6 +84,10 @@ class Item(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name = u'属性'
+        verbose_name_plural = u'属性'
 
 
 class ProductItem(models.Model):
@@ -113,6 +119,7 @@ class Customer(models.Model):
 
     class Meta:
         verbose_name = u'客户'
+        verbose_name_plural = u'客户'
         ordering = (('register_at'), )
 
     def __unicode__(self):
@@ -141,15 +148,13 @@ class CustomerPointLog(models.Model):
         Customer,
         verbose_name=u'所属客户',
         on_delete=models.CASCADE,
-        related_name='point_log_owner',
-        editable=False,
+        related_name='point_log_owner'
     )
     opertor = models.ForeignKey(
         Customer,
         verbose_name=u'贡献者',
         on_delete=models.CASCADE,
-        related_name='point_log_oper',
-        editable=False,
+        related_name='point_log_oper'
     )
     event_name = models.CharField(u'事件', max_length=15)
     opertion = models.CharField(
@@ -166,6 +171,7 @@ class CustomerPointLog(models.Model):
 
     class Meta:
         verbose_name = u'积分记录'
+        verbose_name_plural = u'积分记录'
         ordering = (('create_at'),)
 
 
@@ -173,21 +179,20 @@ class CustomerRelation(models.Model):
     customer = models.ForeignKey(
         Customer,
         verbose_name=u'客户',
-        on_delete=models.CASCADE,
-        editable=False,
+        on_delete=models.CASCADE
     )
     upper = models.ForeignKey(
         Customer,
         verbose_name=u'上级客户',
         on_delete=models.CASCADE,
-        related_name='upper',
-        editable=False,
+        related_name='upper'
     )
     level = models.SmallIntegerField(u'级别')
     create_at = models.DateField(u'时间', auto_now_add=True)
 
     class Meta:
         verbose_name = u'客户关系'
+        verbose_name_plural = u'客户关系'
 
 
 class Order(models.Model):
@@ -209,8 +214,7 @@ class Order(models.Model):
     customer = models.ForeignKey(
         Customer,
         verbose_name=u'客户',
-        on_delete=models.CASCADE,
-        editable=False
+        on_delete=models.CASCADE
     )
     products = models.TextField(u'商品信息')
     total_price = models.FloatField(u'总价')
@@ -227,6 +231,7 @@ class Order(models.Model):
 
     class Meta:
         verbose_name = u'订单'
+        verbose_name_plural = u'订单'
         ordering = (('create_at'), ('status'))
 
 
@@ -244,6 +249,7 @@ class Doctor(models.Model):
 
     class Meta:
         verbose_name = u'医生'
+        verbose_name_plural = u'医生'
 
 
 class DoctorDuty(models.Model):
@@ -261,6 +267,7 @@ class DoctorDuty(models.Model):
 
     class Meta:
         verbose_name = u'值班'
+        verbose_name_plural = u'值班'
 
 
 class Notice(models.Model):
@@ -277,6 +284,7 @@ class Notice(models.Model):
 
     class Meta:
         verbose_name = '公告'
+        verbose_name_plural = '公告'
 
 
 class Setting(models.Model):
@@ -285,6 +293,7 @@ class Setting(models.Model):
 
     class Meta:
         verbose_name = u'设置'
+        verbose_name_plural = u'设置'
 
     def __unicode__(self):
         return self.key
