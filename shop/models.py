@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import unicode_literals
 from django.db import models
+from tinymce import models as tinymce_models
 
 
 class Category(models.Model):
@@ -12,6 +13,7 @@ class Category(models.Model):
         related_name="children"
     )
     name = models.CharField(u"类别名称", max_length=50)
+    level = models.SmallIntegerField(editable=False)
     display_order = models.SmallIntegerField(u"显示排序")
 
     def __unicode__(self):
@@ -37,6 +39,7 @@ class Product(models.Model):
 
     model = models.CharField(u"商品序号", max_length=50)
     name = models.CharField(u"商品名称", max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=u'商品分类')
     description = models.TextField(u"商品简介")
     type = models.CharField(
         u"商品类型",
@@ -46,8 +49,8 @@ class Product(models.Model):
     )
     price = models.FloatField(u"商品价格")
     stock = models.IntegerField(u"库存数量")
-    content = models.TextField(u"产品详情")
-    #cover = models.FileField(u"封面图片", null=True, upload_to='upload/products/%Y/%m/%d/')
+    content = tinymce_models.HTMLField(u"产品详情")
+    cover = models.FileField(u"封面图片", null=True, upload_to='upload/products/%Y/%m/%d/')
     image1 = models.FileField(u"产品图片1", null=True, blank=True, upload_to='upload/products/%Y/%m/%d/')
     image2 = models.FileField(u"产品图片2", null=True, blank=True, upload_to='upload/products/%Y/%m/%d/')
     image3 = models.FileField(u"产品图片3", null=True, blank=True, upload_to='upload/products/%Y/%m/%d/')
@@ -61,7 +64,6 @@ class Product(models.Model):
     open_at = models.DateField(u"上架时间")
     close_at = models.DateField(u"下架时间")
     status = models.SmallIntegerField(u"状态", choices=status_choices, default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -73,7 +75,7 @@ class Product(models.Model):
 
 
 class Item(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=u'商品分类')
     name = models.CharField(u"属性名称", max_length=50)
     display_order = models.IntegerField(u"显示排序")
     products = models.ManyToManyField(
@@ -91,9 +93,13 @@ class Item(models.Model):
 
 
 class ProductItem(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    values = models.TextField()
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, verbose_name=u'字段')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=u'商品')
+    value = models.CharField(u'值', max_length=50)
+
+    class Meta:
+        verbose_name = u'产品属性'
+        verbose_name_plural = u'产品属性'
 
 
 class Customer(models.Model):
@@ -276,7 +282,7 @@ class Notice(models.Model):
         (0, u'草稿'),
     ]
     title = models.CharField(u'标题', max_length=255)
-    content = models.TextField(u'内容')
+    content = tinymce_models.HTMLField(u'内容')
     type = models.CharField(u'类型', max_length=10)
     create_at = models.DateField(u'创建时间')
     public_at = models.DateField(u'发布时间')
