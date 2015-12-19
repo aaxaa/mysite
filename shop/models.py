@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import unicode_literals
 from django.db import models
-from tinymce import models as tinymce_models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Category(models.Model):
@@ -49,7 +49,7 @@ class Product(models.Model):
     )
     price = models.FloatField(u"商品价格")
     stock = models.IntegerField(u"库存数量")
-    content = tinymce_models.HTMLField(u"产品详情")
+    content = RichTextUploadingField(u"产品详情")
     cover = models.FileField(u"封面图片", null=True, upload_to='upload/products/%Y/%m/%d/')
     image1 = models.FileField(u"产品图片1", null=True, blank=True, upload_to='upload/products/%Y/%m/%d/')
     image2 = models.FileField(u"产品图片2", null=True, blank=True, upload_to='upload/products/%Y/%m/%d/')
@@ -104,24 +104,30 @@ class ProductItem(models.Model):
 
 class Customer(models.Model):
     sex_choices = (
-        ('0', '女'),
-        ('1', '男'),
-        ('2', '未知'),
+        (0, '女'),
+        (1, '男'),
+        (2, '未知'),
+    )
+
+    status_choices = (
+        (0, '未激活'),
+        (1, '激活')
     )
 
     username = models.CharField(u'帐号', max_length=15)
     realname = models.CharField(u'姓名', max_length=15)
     phone = models.CharField(u'手机', max_length=15)
     password = models.CharField(u'密码', max_length=50)
-    avatar = models.FileField(u'头像', upload_to='upload/products/%Y/%m/%d/')
+    avatar = models.FileField(u'头像', upload_to='upload/avatar/%Y/%m/%d/')
     sex = models.SmallIntegerField(
         u'性别',
         choices=sex_choices,
         default='2'
     )
-    point = models.IntegerField(u'积分')
+    point = models.IntegerField(u'积分', default=0)
     address = models.CharField(u'收件地址', max_length=255)
     register_at = models.DateField(u'注册时间', auto_now_add=True)
+    status = models.SmallIntegerField(u'状态', default=1)
 
     class Meta:
         verbose_name = u'客户'
@@ -243,7 +249,7 @@ class Order(models.Model):
 
 class Doctor(models.Model):
     name = models.CharField(u'姓名', max_length=15)
-    description = models.CharField(u'简介', max_length=255)
+    description = models.TextField(u'简介')
     product = models.ForeignKey(
         Product,
         verbose_name=u'项目',
@@ -282,7 +288,7 @@ class Notice(models.Model):
         (0, u'草稿'),
     ]
     title = models.CharField(u'标题', max_length=255)
-    content = tinymce_models.HTMLField(u'内容')
+    content = RichTextUploadingField(u'内容')
     type = models.CharField(u'类型', max_length=10)
     create_at = models.DateField(u'创建时间')
     public_at = models.DateField(u'发布时间')

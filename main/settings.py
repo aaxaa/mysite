@@ -1,3 +1,4 @@
+# coding:utf8
 """
 Django settings for main project.
 
@@ -31,7 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'tinymce',
+    'ckeditor',
+    'ckeditor_uploader',
     'shop.apps.ShopConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,8 +122,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
 
-TINYMCE_DEFAULT_CONFIG = {
-    'theme': "advanced"
+MEDIA_ROOT = '/home/xjay/projects/mysite/public/media/'
+MEDIA_URL = '/media/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/xjay/projects/mysite/public/static/'
+
+CKEDITOR_RESTRICT_BY_USER = True
+CKEDITOR_BROWSE_SHOW_DIRS = True
+CKEDITOR_UPLOAD_PATH = 'upload/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_CONFIGS = {
+    'default' : {
+        'language': 'zh-cn',
+        'font_names': u'宋体/宋体;黑体/黑体;仿宋/仿宋_GB2312;楷体/楷体_GB2312;隶书/隶书;幼圆/幼圆;微软雅黑/微软雅黑;',
+        'toolbar': 'full',
+        'height': 400,
+        'width': 800,
+    },
 }

@@ -2,8 +2,6 @@
 from django.contrib import admin
 from .models import *
 
-# Register your models here.
-
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent', 'display_order')
@@ -17,6 +15,8 @@ class ProductItemInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'model', 'type', 'price', 'stock', 'status')
     list_filter = ('type', 'status')
+
+    date_hierarchy = 'create_at'
 
     fieldsets = (
         (None, {
@@ -43,20 +43,38 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('customer',  'type', 'products', 'total_price', 'create_at', 'status')
     list_filter = ('type', 'status')
 
+    date_hierarchy = 'create_at'
+
+    def has_delete_permission(self, request, obj=None):
+    	return False
+
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('username', 'realname', 'phone', 'point', 'register_at')
-    list_filter = ()
+    list_filter = ('sex',)
+
+    date_hierarchy = 'register_at'
+
+    def has_delete_permission(self, request, obj=None):
+    	return False
 
 
 class CustomerPointLogAdmin(admin.ModelAdmin):
     list_display = ('customer', 'opertor', 'event_name', 'opertion', 'score', 'create_at')
     list_filter = ()
+    
+    date_hierarchy = 'create_at'
+
+    def has_delete_permission(self, request, obj=None):
+    	return False
 
 
 class CustomerRelationAdmin(admin.ModelAdmin):
     list_display = ('customer', 'upper', 'level', 'create_at')
     list_filter = ()
+
+    def has_delete_permission(self, request, obj=None):
+    	return False
 
 
 class DoctorAdmin(admin.ModelAdmin):
