@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Example</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  {% load staticfiles %}
+  <link rel="alternate icon" type="image/png" href="{% static "i/favicon.png" %}">
+  <link rel="stylesheet" href="{% static "css/amazeui.min.css" %}"/>
+</head>
+<body>
+<style>
+.am-list-news-default .am-list>li {
+  border:none;
+}
+</style>
+<header data-am-widget="header"
+        class="am-header am-header-default">
+    <div class="am-header-left am-header-nav">
+        <a href="#left-link" class="">
+
+              <i class="am-header-icon am-icon-home"></i>
+        </a>
+    </div>
+
+    <h1 class="am-header-title">
+        <a href="#title-link" class="">
+          便捷服务
+        </a>
+    </h1>
+</header>
+<div class="contain">
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          实时公告
+      </h2>
+  </div>
+  <div data-am-widget="list_news" class="am-list-news am-list-news-default" >
+    <div class="am-list-news-bd">
+      <ul class="am-list">
+
+          <li class="am-g am-list-item-dated">
+              <a href="##" class="am-list-item-hd ">我很囧，你保重....晒晒旅行中的那些囧！</a>
+
+              <span class="am-list-date">2013-09-18</span>
+
+
+          </li>
+          <li class="am-g am-list-item-dated">
+              <a href="##" class="am-list-item-hd ">我最喜欢的一张画</a>
+
+              <span class="am-list-date">2013-10-14</span>
+
+
+          </li>
+          <li class="am-g am-list-item-dated">
+              <a href="##" class="am-list-item-hd ">“你的旅行，是什么颜色？” 晒照片，换北欧梦幻极光之旅！</a>
+
+              <span class="am-list-date">2013-11-18</span>
+
+
+          </li>
+      </ul>
+    </div>
+  </div>
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          联系我们
+      </h2>
+  </div>
+
+  <article data-am-widget="paragraph"
+           class="am-paragraph am-paragraph-default"
+           data-am-paragraph="{ tableScrollable: true, pureview: true }">
+    <p>联系方式：</p>
+    <p>来院方式：</p>
+  </article>
+
+  <div data-am-widget="map" class="am-map am-map-default"
+      data-name="云适配" data-address="北京市海淀区海淀大街27号亿景大厦3层西区" data-longitude="" data-latitude="" data-scaleControl="" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
+    <div id="bd-map"></div>
+  </div>
+  <a class="am-btn am-btn-success am-btn-block" href="http://www.bing.com" target="_blank">我要预约</a>
+  
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          开始咨询
+      </h2>
+  </div>
+  
+</div>
+
+<footer class="footer">
+  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+      id="">
+      <ul class="am-navbar-nav am-cf am-avg-sm-4">
+          <li>
+            <a href="/" class="">
+                <span class="am-navbar-label">商城</span>
+            </a>
+          </li>
+          <li>
+            <a href="/server" class="">
+                <span class="am-navbar-label">便捷服务</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">美丽代言</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">购物车</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">我</span>
+            </a>
+          </li>
+      </ul>
+  </div>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<!--<![endif]-->
+<script src="{% static "js/amazeui.min.js" %}"></script>
+</body>
+</html>

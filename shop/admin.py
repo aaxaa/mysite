@@ -18,25 +18,12 @@ class ProductAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'create_at'
 
-    fieldsets = (
-        (None, {
-            'fields': ('model', 'name', 'category', 'type', 'price', 'stock', 'cover', 'description', 'content', 'status', 'open_at', 'close_at',),
-        }),
-
-        (u'产品图片', {
-            'classes': ('collapse', ),
-            'fields': ('image1', 'image2', 'image3', 'image4', 'image5', 'image6', 'image7', 'image8', 'image9'),
-        }),
-    )
-
     inlines = (ProductItemInline, )
 
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('category', 'name', 'display_order')
     fields = ('category', 'name', 'display_order')
-
-    #inlines = (ProductItemInline, )
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -46,7 +33,7 @@ class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'create_at'
 
     def has_delete_permission(self, request, obj=None):
-    	return False
+        return False
 
 
 class CustomerAdmin(admin.ModelAdmin):
@@ -56,17 +43,17 @@ class CustomerAdmin(admin.ModelAdmin):
     date_hierarchy = 'register_at'
 
     def has_delete_permission(self, request, obj=None):
-    	return False
+        return False
 
 
 class CustomerPointLogAdmin(admin.ModelAdmin):
     list_display = ('customer', 'opertor', 'event_name', 'opertion', 'score', 'create_at')
     list_filter = ()
-    
+
     date_hierarchy = 'create_at'
 
     def has_delete_permission(self, request, obj=None):
-    	return False
+        return False
 
 
 class CustomerRelationAdmin(admin.ModelAdmin):
@@ -74,7 +61,7 @@ class CustomerRelationAdmin(admin.ModelAdmin):
     list_filter = ()
 
     def has_delete_permission(self, request, obj=None):
-    	return False
+        return False
 
 
 class DoctorAdmin(admin.ModelAdmin):

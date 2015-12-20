@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Example</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  {% load staticfiles %}
+  <link rel="alternate icon" type="image/png" href="{% static "i/favicon.png" %}">
+  <link rel="stylesheet" href="{% static "css/amazeui.min.css" %}"/>
+</head>
+<body>
+<header data-am-widget="header"
+        class="am-header am-header-default">
+    <div class="am-header-left am-header-nav">
+        <a href="#left-link" class="">
+
+              <i class="am-header-icon am-icon-home"></i>
+        </a>
+    </div>
+
+    <h1 class="am-header-title">
+        <a href="#title-link" class="">
+          商城
+        </a>
+    </h1>
+</header>
+<div class="contain">
+  <div data-am-widget="slider" class="am-slider am-slider-default" data-am-slider='{"animation":"slide","slideshow":false}' >
+    <ul class="am-slides">
+        <li>
+            <img src="http://s.amazeui.org/media/i/demos/bing-1.jpg">
+            <div class="am-slider-desc">这是标题标题标题标题标题标题标题0</div>
+           
+        </li>
+        <li>
+            <img src="http://s.amazeui.org/media/i/demos/bing-2.jpg">
+            <div class="am-slider-desc">这是标题标题标题标题标题标题标题1</div>
+           
+        </li>
+        <li>
+            <img src="http://s.amazeui.org/media/i/demos/bing-3.jpg">
+            <div class="am-slider-desc">这是标题标题标题标题标题标题标题2</div>
+           
+        </li>
+        <li>
+            <img src="http://s.amazeui.org/media/i/demos/bing-4.jpg">
+            <div class="am-slider-desc">这是标题标题标题标题标题标题标题3</div>
+           
+        </li>
+    </ul>
+  </div>
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          店长推荐
+      </h2>
+
+      <nav class="am-titlebar-nav">
+          <a href="#more" class="">更多 &raquo;</a>
+      </nav>
+  </div>
+  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" data-am-gallery="{  }" >
+    <li>
+      <div class="am-gallery-item">
+          <a href="http://s.amazeui.org/media/i/demos/bing-1.jpg" class="">
+            <img src="http://s.amazeui.org/media/i/demos/bing-1.jpg"  alt="远方 有一个地方 那里种有我们的梦想"/>
+              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
+              <div class="am-gallery-desc">价格：288 元</div>
+          </a>
+      </div>
+    </li>
+    <li>
+      <div class="am-gallery-item">
+          <a href="http://s.amazeui.org/media/i/demos/bing-2.jpg" class="">
+            <img src="http://s.amazeui.org/media/i/demos/bing-2.jpg"  alt="某天 也许会相遇 相遇在这个好地方"/>
+              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
+              <div class="am-gallery-desc">价格：288 元</div>
+          </a>
+      </div>
+    </li>
+  </ul>
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          整形外科
+      </h2>
+
+      <nav class="am-titlebar-nav">
+          <a href="#more" class="">更多 &raquo;</a>
+      </nav>
+  </div>
+  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" data-am-gallery="{  }" >
+    <li>
+      <div class="am-gallery-item">
+          <a href="http://s.amazeui.org/media/i/demos/bing-1.jpg" class="">
+            <img src="http://s.amazeui.org/media/i/demos/bing-1.jpg"  alt="远方 有一个地方 那里种有我们的梦想"/>
+              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
+              <div class="am-gallery-desc">价格：288 元</div>
+          </a>
+      </div>
+    </li>
+    <li>
+      <div class="am-gallery-item">
+          <a href="http://s.amazeui.org/media/i/demos/bing-2.jpg" class="">
+            <img src="http://s.amazeui.org/media/i/demos/bing-2.jpg"  alt="某天 也许会相遇 相遇在这个好地方"/>
+              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
+              <div class="am-gallery-desc">价格：288 元</div>
+          </a>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<footer class="footer">
+  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+      id="">
+      <ul class="am-navbar-nav am-cf am-avg-sm-4">
+          <li>
+            <a href="/" class="">
+                <span class="am-navbar-label">商城</span>
+            </a>
+          </li>
+          <li>
+            <a href="/server" class="">
+                <span class="am-navbar-label">便捷服务</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">美丽代言</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">购物车</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="">
+                <span class="am-navbar-label">我</span>
+            </a>
+          </li>
+      </ul>
+  </div>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<!--<![endif]-->
+<script src="{% static "js/amazeui.min.js" %}"></script>
+</body>
+</html>

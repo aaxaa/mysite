@@ -18,12 +18,13 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles import views
+from django.views.static import serve
 
 urlpatterns = [
     url(r'^', include('shop.urls')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^static/(?P<path>.*)$',views.serve),
-    url(r'^media/(?P<path>.*)$','django.views.static.serve', {
+    url(r'^static/(?P<path>.*)$', views.serve),
+    url(r'^media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,
     }),
     url(r'^admin/', admin.site.urls),
