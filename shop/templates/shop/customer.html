@@ -15,8 +15,8 @@
 </head>
 <body>
 <style>
-.am-list-news-default .am-list>li {
-  border:none;
+.login-form {
+  margin-top: 30px;
 }
 </style>
 <header data-am-widget="header"
@@ -30,71 +30,44 @@
 
     <h1 class="am-header-title">
         <a href="#title-link" class="">
-          便捷服务
+          我的
         </a>
     </h1>
 </header>
 <div class="am-container">
-  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
-      <h2 class="am-titlebar-title ">
-          实时公告
-      </h2>
-  </div>
-  <div data-am-widget="list_news" class="am-list-news am-list-news-default" >
-    <div class="am-list-news-bd">
-      <ul class="am-list">
-
-          <li class="am-g am-list-item-dated">
-              <a href="##" class="am-list-item-hd ">我很囧，你保重....晒晒旅行中的那些囧！</a>
-
-              <span class="am-list-date">2013-09-18</span>
-
-
-          </li>
-          <li class="am-g am-list-item-dated">
-              <a href="##" class="am-list-item-hd ">我最喜欢的一张画</a>
-
-              <span class="am-list-date">2013-10-14</span>
-
-
-          </li>
-          <li class="am-g am-list-item-dated">
-              <a href="##" class="am-list-item-hd ">“你的旅行，是什么颜色？” 晒照片，换北欧梦幻极光之旅！</a>
-
-              <span class="am-list-date">2013-11-18</span>
-
-
-          </li>
-      </ul>
+  <form class="login-form am-form am-form-horizontal">
+    <div class="am-form-group">
+      <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">帐号</label>
+      <div class="am-u-sm-10">
+        <input type="email" id="doc-ipt-3" placeholder="输入你的电子邮件">
+      </div>
     </div>
-  </div>
-  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
-      <h2 class="am-titlebar-title ">
-          联系我们
-      </h2>
-  </div>
 
-  <article data-am-widget="paragraph"
-           class="am-paragraph am-paragraph-default"
-           data-am-paragraph="{ tableScrollable: true, pureview: true }">
-    <p>联系方式：</p>
-    <p>来院方式：</p>
-  </article>
+    <div class="am-form-group">
+      <label for="doc-ipt-pwd-2" class="am-u-sm-2 am-form-label">密码</label>
+      <div class="am-u-sm-10">
+        <input type="password" id="doc-ipt-pwd-2" placeholder="设置一个密码吧">
+      </div>
+    </div>
 
-  <div data-am-widget="map" class="am-map am-map-default"
-      data-name="云适配" data-address="北京市海淀区海淀大街27号亿景大厦3层西区" data-longitude="" data-latitude="" data-scaleControl="" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
-    <div id="bd-map"></div>
-  </div>
-  <a class="am-btn am-btn-success am-btn-block" href="http://www.bing.com" target="_blank">我要预约</a>
-  
-  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
-      <h2 class="am-titlebar-title ">
-          开始咨询
-      </h2>
-  </div>
-  
+    <div class="am-form-group">
+      <div class="am-u-sm-offset-2 am-u-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"> 记住帐号
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="am-form-group">
+      <div class="am-u-sm-10 am-u-sm-offset-2">
+        <button type="submit" class="am-btn am-btn-default">登录</button>
+        <a href="/register" class="am-btn am-btn-default">注册</a>
+      </div>
+    </div>
+  </form>
 </div>
-
 <footer class="footer">
   <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
       id="">
