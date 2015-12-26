@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<footer class="footer">
+  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+      id="">
+      <ul class="am-navbar-nav am-cf am-avg-sm-4">
+          <li>
+            <a href="/" class="">
+                <span class="am-navbar-label">商城</span>
+            </a>
+          </li>
+          <li>
+            <a href="/server" class="">
+                <span class="am-navbar-label">便捷服务</span>
+            </a>
+          </li>
+          <li>
+            <a href="/beauty" class="">
+                <span class="am-navbar-label">美丽代言</span>
+            </a>
+          </li>
+          <li>
+            <a href="/shopcart" class="">
+                <span class="am-navbar-label">购物车</span>
+            </a>
+          </li>
+          <li>
+            <a href="/customer" class="">
+                <span class="am-navbar-label">我</span>
+            </a>
+          </li>
+      </ul>
+  </div>
+</footer>
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<!--<![endif]-->
+<script src="{% static "js/amazeui.min.js" %}"></script>
+</body>
+</html>

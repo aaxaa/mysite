@@ -2,24 +2,28 @@ from django.shortcuts import render
 
 
 def main(request):
-    return render(request, 'shop/home.html')
+    return render(request, 'home.html')
 
 
 def server(request):
-    return render(request, 'shop/server.html')
+    return render(request, 'server.html')
 
 
 def beauty(request):
-    return render(request, 'shop/beauty.html')
+    return render(request, 'beauty.html')
 
 
 def shopcart(request):
-    return render(request, 'shop/shopcart.html')
+    return render(request, 'shopcart.html')
 
 
 def customer(request):
-    return render(request, 'shop/customer.html')
+    return render(request, 'customer.html')
+
+
+def login(request):
+	return render(request, 'login.html')
 
 
 def register(request):
-    return render(request, 'shop/register.html')
+    return render(request, 'register.html')

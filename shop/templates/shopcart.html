@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Example</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  {% load staticfiles %}
-  <link rel="alternate icon" type="image/png" href="{% static "i/favicon.png" %}">
-  <link rel="stylesheet" href="{% static "css/amazeui.min.css" %}"/>
-</head>
-<body>
+{% extends "libs/base.html" %}
+{% load staticfiles %}
+{% block style %}
 <style>
 .am-shopcart {
   position: fixed;
@@ -31,22 +18,9 @@
   height:100px;
 }
 </style>
-<header data-am-widget="header"
-        class="am-header am-header-default">
-    <div class="am-header-left am-header-nav">
-        <a href="#left-link" class="">
-
-              <i class="am-header-icon am-icon-home"></i>
-        </a>
-    </div>
-
-    <h1 class="am-header-title">
-        <a href="#title-link" class="">
-          购物车
-        </a>
-    </h1>
-</header>
-
+{% endblock %}
+{% block container %}
+{% include "libs/title.html" with title="购物车" %}
 <div class="am-container">
   <ul class="am-list am-list-static">
     <li>
@@ -155,50 +129,4 @@
     </div>
   </div>
 </div>
-
-
-<footer class="footer">
-  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
-      id="">
-      <ul class="am-navbar-nav am-cf am-avg-sm-5">
-          <li>
-            <a href="/" class="">
-                <span class="am-navbar-label">商城</span>
-            </a>
-          </li>
-          <li>
-            <a href="/server" class="">
-                <span class="am-navbar-label">便捷服务</span>
-            </a>
-          </li>
-          <li>
-            <a href="/beauty" class="">
-                <span class="am-navbar-label">美丽代言</span>
-            </a>
-          </li>
-          <li>
-            <a href="/shopcart" class="">
-                <span class="am-navbar-label">购物车</span>
-            </a>
-          </li>
-          <li>
-            <a href="/customer" class="">
-                <span class="am-navbar-label">我</span>
-            </a>
-          </li>
-      </ul>
-  </div>
-</footer>
-
-<!--[if lt IE 9]>
-<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
-<![endif]-->
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<script src="{% static "js/jquery.min.js" %}"></script>
-<!--<![endif]-->
-<script src="{% static "js/amazeui.min.js" %}"></script>
-</body>
-</html>
+{% endblock %}
