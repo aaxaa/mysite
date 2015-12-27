@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -11,6 +11,6 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <link rel="alternate icon" type="image/png" href="{% static "img/favicon.png" %}">
-  <link rel="stylesheet" href="{% static "css/amazeui.min.css" %}"/>
+  <link rel="stylesheet" href="{% static "css/amazeui.css" %}"/>
+  <base href="{% get_media_prefix %}" />
 </head>
-<body>

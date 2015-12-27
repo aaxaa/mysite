@@ -1,12 +1,42 @@
 from django.shortcuts import render
+from shop.models import Notice, Product, Setting
 
 
 def main(request):
-    return render(request, 'home.html')
+    notice_list = Notice.objects.filter(type='global', status=1)
+    recommend_products = Product.objects.filter(recommend=1)
+    return render(request, 'home.html', {
+        'notice_list': notice_list,
+        'recommend_products': recommend_products,
+    })
+
+
+def product(request, id=0):
+    product = Product.objects.get(pk=id)
+
+    product_items = []
+    for item in product.items.all():
+        product_items.append(item)
+
+    return render(request, 'product/view.html', {
+        'product': product,
+        'product_items': product_items
+    })
 
 
 def server(request):
-    return render(request, 'server.html')
+    notice_list = Notice.objects.filter(type='news', status=1)
+
+    tel = Setting.objects.get(key='tel')
+    traffic = Setting.objects.get(key='traffic')
+    address = Setting.objects.get(key='address')
+
+    return render(request, 'server.html', {
+        'notice_list': notice_list,
+        'tel': tel,
+        'traffic': traffic,
+        'address': address,
+    })
 
 
 def beauty(request):
@@ -22,7 +52,7 @@ def customer(request):
 
 
 def login(request):
-	return render(request, 'login.html')
+    return render(request, 'login.html')
 
 
 def register(request):

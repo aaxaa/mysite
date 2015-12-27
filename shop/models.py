@@ -13,16 +13,46 @@ class Category(models.Model):
         related_name="children"
     )
     name = models.CharField(u"类别名称", max_length=50)
-    level = models.SmallIntegerField(editable=False)
-    display_order = models.SmallIntegerField(u"显示排序")
+    path = models.CharField(max_length=255, null=True, blank=True, editable=False)
+    display_order = models.SmallIntegerField(u"显示排序", default=0)
 
     def __unicode__(self):
-        return self.name
+        if self.id == self.path:
+            return self.name
+
+        else:
+            return self.node
+
+    def _node(self):
+        indent_num = len(self.path.split(':')) - 1
+        indent = '--' * indent_num
+        node = u"%s%s" % (indent, self.name)
+        return node
+
+    node = property(_node)
 
     class Meta:
         verbose_name = u'分类'
         verbose_name_plural = u'分类'
-        ordering = (('display_order'), )
+        ordering = ['path']
+
+    def save(self, *args, **kwargs):
+        super(Category, self).save(*args, **kwargs)
+
+        if self.parent:
+            self.path = "%s:%s" % (self.parent.path, self.id)
+
+        else:
+            self.path = self.id
+
+        super(Category, self).save(*args, **kwargs)
+
+        childrens = self.children.all()
+
+        if len(childrens) > 0:
+            for children in childrens:
+                children.path = '%s:%s' % (self.path, children.id)
+                children.save()
 
 
 class Product(models.Model):
@@ -36,8 +66,12 @@ class Product(models.Model):
         (2, u'已下架'),
         (3, u'售罄'),
     ]
+    recommend_choices = [
+        (0, u'否'),
+        (1, u'是')
+    ]
 
-    model = models.CharField(u"商品序号", max_length=50)
+    model = models.CharField(u"商品SKU", max_length=50)
     name = models.CharField(u"商品名称", max_length=50)
     category = models.ForeignKey(
         Category,
@@ -51,10 +85,15 @@ class Product(models.Model):
         choices=type_choices,
         default='G'
     )
+    recommend = models.SmallIntegerField(
+        u'首页推荐',
+        choices=recommend_choices,
+        default=0,
+    )
     price = models.FloatField(u"商品价格", default=0.00)
     stock = models.IntegerField(u"库存数量", default=0)
     content = RichTextUploadingField(u"产品详情")
-    cover = models.FileField(
+    cover = models.ImageField(
         u"封面图片",
         null=True,
         upload_to='upload/products/%Y/%m/%d/'
@@ -104,7 +143,8 @@ class ProductItem(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=u'商品'
+        verbose_name=u'商品',
+        related_name="items"
     )
     value = models.CharField(u'值', max_length=50)
 
@@ -296,11 +336,11 @@ class DoctorDuty(models.Model):
 class Notice(models.Model):
     type_choices = [
         ('global', u'首页幻灯片'),
-        ('news', u'新闻公告')
+        ('news', u'实时公告')
     ]
     status_choices = [
-        (0, u'发布'),
-        (1, u'草稿'),
+        (0, u'草稿'),
+        (1, u'发布'),
     ]
     title = models.CharField(u'标题', max_length=255)
     content = RichTextUploadingField(u'内容')
@@ -310,7 +350,7 @@ class Notice(models.Model):
         choices=type_choices,
         default='news'
     )
-    cover = models.FileField(
+    cover = models.ImageField(
         u'图片',
         null=True,
         blank=True,
@@ -328,6 +368,7 @@ class Notice(models.Model):
 
 class Setting(models.Model):
     key = models.CharField(u'字段', max_length=50)
+    name = models.CharField(u'说明', max_length=50)
     values = models.TextField(u'值')
 
     class Meta:

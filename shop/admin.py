@@ -4,7 +4,24 @@ from .models import *
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent', 'display_order')
+    list_display = ('treenode', 'patha')
+    ordering = ['path']
+
+    def patha(self, obj):
+        if obj.parent:
+            return u"%s > %s" % (obj.parent, obj.name)
+        return obj.name
+
+    patha.short_description = u'路径'
+    patha.allow_tags = True
+
+    def treenode(self, obj):
+        indent_num = len(obj.path.split(':')) - 1
+        p = '<div style="text-indent:%spx;">%s</div>' % (indent_num * 25, obj.name)
+        return p
+
+    treenode.short_description = u"分类"
+    treenode.allow_tags = True
 
 
 class ProductItemInline(admin.TabularInline):
@@ -13,8 +30,8 @@ class ProductItemInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'model', 'type', 'price', 'stock', 'status')
-    list_filter = ('type', 'status')
+    list_display = ('name', 'model', 'type', 'price', 'stock', 'status', 'recommend')
+    list_filter = ('recommend', 'type', 'status')
 
     date_hierarchy = 'create_at'
 
