@@ -1,109 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Example</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  {% load staticfiles %}
-  <link rel="alternate icon" type="image/png" href="{% static "i/favicon.png" %}">
-  <link rel="stylesheet" href="{% static "css/amazeui.min.css" %}"/>
-</head>
-<body>
+{% extends "libs/base.html" %}
+{% load staticfiles %}
+{% block style %}
 <style>
-.login-form {
-  margin-top: 30px;
-}
+
 </style>
-<header data-am-widget="header"
-        class="am-header am-header-default">
-    <div class="am-header-left am-header-nav">
-        <a href="#left-link" class="">
-
-              <i class="am-header-icon am-icon-home"></i>
-        </a>
-    </div>
-
-    <h1 class="am-header-title">
-        <a href="#title-link" class="">
-          我的
-        </a>
-    </h1>
-</header>
+{% endblock %}
+{% block container %}
+{% include "libs/title.html" with title="我的" %}
 <div class="am-container">
-  <form class="login-form am-form">
-    <div class="am-form-group">
-      <label for="doc-ipt-3" class="am-form-label">帐号</label>
-      <input type="email" id="doc-ipt-3" placeholder="输入你的电子邮件">
-    </div>
 
-    <div class="am-form-group">
-      <label for="doc-ipt-pwd-2" class="am-form-label">密码</label>
-      <input type="password" id="doc-ipt-pwd-2" placeholder="设置一个密码吧">
-    </div>
-
-    <div class="am-form-group">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"> 记住帐号
-        </label>
-      </div>
-    </div>
-
-    <div class="am-form-group">
-      <div class="am-u-sm-10 am-u-sm-offset-2">
-        <button type="submit" class="am-btn am-btn-default">登录</button>
-        <a href="/register" class="am-btn am-btn-default">注册</a>
-      </div>
-    </div>
-  </form>
+  
 </div>
-<footer class="footer">
-  <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
-      id="">
-      <ul class="am-navbar-nav am-cf am-avg-sm-4">
-          <li>
-            <a href="/" class="">
-                <span class="am-navbar-label">商城</span>
-            </a>
-          </li>
-          <li>
-            <a href="/server" class="">
-                <span class="am-navbar-label">便捷服务</span>
-            </a>
-          </li>
-          <li>
-            <a href="/beauty" class="">
-                <span class="am-navbar-label">美丽代言</span>
-            </a>
-          </li>
-          <li>
-            <a href="/shopcart" class="">
-                <span class="am-navbar-label">购物车</span>
-            </a>
-          </li>
-          <li>
-            <a href="/customer" class="">
-                <span class="am-navbar-label">我</span>
-            </a>
-          </li>
-      </ul>
-  </div>
-</footer>
-
-<!--[if lt IE 9]>
-<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
-<![endif]-->
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<script src="{% static "js/jquery.min.js" %}"></script>
-<!--<![endif]-->
-<script src="{% static "js/amazeui.min.js" %}"></script>
-</body>
-</html>
+{% endblock %}

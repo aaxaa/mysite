@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from shop.models import Notice, Product, Setting
 
 
@@ -48,7 +50,8 @@ def shopcart(request):
 
 
 def customer(request):
-    return render(request, 'customer.html')
+    return HttpResponseRedirect(reverse('register'))
+    #return render(request, 'customer.html')
 
 
 def login(request):
