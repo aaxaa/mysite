@@ -2,13 +2,43 @@
 {% load staticfiles %}
 {% block style %}
 <style>
-
+.register-form {
+  margin-top: 10px;
+}
 </style>
 {% endblock %}
 {% block container %}
 {% include "libs/title.html" with title="注册" %}
 <div class="am-container">
+    <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        
+        <div class="am-form-group">
+            <label class="am-form-label">手机</label>
+            <input type="text" name="login_account" placeholder="请输入您的手机号码" required pattern="^\d{11}$" />
+        </div>
 
+        <div class="am-form-group">
+            <label class="am-form-label">密码</label>
+            <input type="password" name="password" id="password" placeholder="请输入您的帐号密码" required />
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-form-label">重复密码</label>
+            <input type="password" name="password" placeholder="请重复输入您的帐号密码" required data-equal-to="#password" />
+        </div>
+
+        <div class="am-form-group">
+            <label class="am-form-label am-block">短信验证码</label>
+            <input type="text" class="am-form-field" style="width:50%;display:inline;">
+            <a class="am-btn am-btn-default" type="button">重新发送(30s)</a>
+        </div>
+
+        <div class="am-form-group">
+            <button type="submit" class="am-btn am-btn-success am-center">注册</button>
+        </div>
+        
+    </form>
   
 </div>
 {% endblock %}

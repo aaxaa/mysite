@@ -1,6 +1,9 @@
+# coding:utf8
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from shop.models import Notice, Product, Setting
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+from shop.models import Notice, Product, Setting, Customer
 
 
 def main(request):
@@ -49,13 +52,61 @@ def shopcart(request):
 
 
 def customer(request):
-    return redirect(reverse('login'))
+    if 'customer' in request.session:
+        customer = request.session.get('customer')
+        return render(request, 'customer.html', {
+            'customer': customer
+        })
+    else:
+        return redirect('/login?forward=customer')
     #return render(request, 'customer.html')
 
 
 def login(request):
-    return render(request, 'login.html')
+    if request.method == 'POST':
+        login_account = request.POST['login_account']
+        password = request.POST['password']
+        forward = request.POST['forward']
+
+        data = {}
+        data['forward'] = forward
+        try:
+            
+            if login_account.isdigit() and len(login_account)==11:
+                q = Q(phone=login_account)
+
+            else:
+                q = Q(username=login_account)
+
+            customer = Customer.objects.get(q)
+            if password != '' and customer.check_password(password):
+                request.session['customer'] = {
+                    'id': customer.id,
+                    'username': customer.username,
+                    'phone': customer.phone,
+                    'realname': customer.realname,
+                    'avatar': str(customer.avatar),
+                    'point': customer.point
+                }
+
+                return redirect(reverse('customer'))
+
+            else:
+                data['status'] = 'errors'
+                data['message'] = u'帐号不存在或者密码不对'
+                data['login_account'] = request.POST['login_account']
+
+        except ObjectDoesNotExist:
+            data['status'] = 'errors'
+            data['message'] = u'帐号不存在或者密码不对'
+            data['login_account'] = request.POST['login_account']
+
+
+        return render(request, 'login.html', data)
+    else:
+        return render(request, 'login.html', {'status':None, 'forward':request.GET['forward']})
 
 
 def register(request):
+
     return render(request, 'register.html')

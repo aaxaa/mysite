@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 
+import random, hashlib
+
 
 class Category(models.Model):
     parent = models.ForeignKey(
@@ -179,6 +181,26 @@ class Customer(models.Model):
     address = models.CharField(u'收件地址', max_length=255)
     register_at = models.DateField(u'注册时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', default=1)
+
+    def save(self, *args, **kwargs):
+        self.password = self.hash_password()
+        super(Customer, self).save(*args, **kwargs)
+
+    def hash_password(self):
+        salt = "".join(random.sample('abcdefghijklmnopqrsiuvwxyz1234567890',6))
+        h = hashlib.md5()
+        h.update(salt)
+        h.update(self.password)
+        h.update(salt)
+        return "%s:%s" % (salt, h.hexdigest())
+
+    def check_password(self, password):
+        salt , pwd = self.password.split(':')
+        h = hashlib.md5()
+        h.update(salt)
+        h.update(password)
+        h.update(salt)
+        return str(pwd) == str(h.hexdigest())
 
     class Meta:
         verbose_name = u'客户'

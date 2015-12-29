@@ -10,21 +10,30 @@
 {% block container %}
 {% include "libs/title.html" with title="登录" %}
 <div class="am-container">
-  <form class="login-form am-form">
-    <div class="am-form-group">
-      <label for="doc-ipt-3" class="am-form-label">帐号</label>
-      <input type="email" id="doc-ipt-3" placeholder="输入你的电子邮件">
+  <form class="login-form am-form" method="POST" action="{% url 'login' %}" data-am-validator>
+    {% csrf_token %}
+    {% if status == 'errors' %}
+    <div class="am-form-group am-form-error">
+      <label class="am-form-label">帐号/手机</label>
+      <input type="text" name="login_account" placeholder="{{login_account}}" class="am-field-error am-active" required />
+      <div class="am-alert am-alert-danger">{{message}}</div>
     </div>
+    {% elif status == None %}
+    <div class="am-form-group">
+      <label class="am-form-label">帐号/手机</label>
+      <input type="text" name="login_account" placeholder="请输入您的帐号或者手机号码" required />
+    </div>
+    {% endif %}
 
     <div class="am-form-group">
-      <label for="doc-ipt-pwd-2" class="am-form-label">密码</label>
-      <input type="password" id="doc-ipt-pwd-2" placeholder="设置一个密码吧">
+      <label class="am-form-label">密码</label>
+      <input type="password" name="password" placeholder="请输入您的帐号密码" required />
     </div>
 
     <div class="am-form-group">
       <div class="checkbox">
         <label>
-          <input type="checkbox"> 记住帐号
+          <input type="checkbox" name="remember"> 记住帐号
         </label>
       </div>
     </div>
@@ -35,6 +44,7 @@
         <a href="/register" class="am-btn am-btn-default">注册</a>
       </div>
     </div>
+    <input type="hidden" value="{{forward}}" name="forward">
   </form>
   
 </div>
