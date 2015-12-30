@@ -10,12 +10,28 @@
 {% block container %}
 {% include "libs/title.html" with title="注册" %}
 <div class="am-container">
+    {% if status and status == 'success' %}
+    <div class="am-center" style="width:150px; margin-top:30px;">
+        <h2>您已注册成功！</h2>
+        <a href="{% url 'main' %}" class="am-btn am-btn-success">快点去逛逛</a>
+    </div>
+    {% elif status == 'field-failed' %}
+    <div class="am-center" style="width:150px; margin-top:30px;">
+        {% if 'phone' in errors %}
+            <h3>手机号码不能为空！</h3>
+        {% endif %}
+        {% if 'password' in errors %}
+            <h3>密码不能为空！</h3>
+        {% endif %}
+        <a href="{% url 'register' %}" class="am-btn am-btn-success">返回重新注册</a>
+    </div>
+    {% else %}
     <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
         {% csrf_token %}
         
         <div class="am-form-group">
             <label class="am-form-label">手机</label>
-            <input type="text" name="login_account" placeholder="请输入您的手机号码" required pattern="^\d{11}$" />
+            <input type="text" name="phone" placeholder="请输入您的手机号码" required pattern="^\d{11}$" />
         </div>
 
         <div class="am-form-group">
@@ -25,7 +41,7 @@
 
         <div class="am-form-group">
             <label class="am-form-label">重复密码</label>
-            <input type="password" name="password" placeholder="请重复输入您的帐号密码" required data-equal-to="#password" />
+            <input type="password" name="repassword" placeholder="请重复输入您的帐号密码" required data-equal-to="#password" />
         </div>
 
         <div class="am-form-group">
@@ -39,6 +55,6 @@
         </div>
         
     </form>
-  
+    {% endif %}
 </div>
 {% endblock %}

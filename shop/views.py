@@ -103,17 +103,35 @@ def login(request):
 def register(request):
     if request.method == 'POST':
         errors = {}
+        empty_fields = []
         data = {}
+
         for field in ('phone', 'password'):
             data[field] = request.POST.get(field)
             if data[field] is None or data[field] == '':
-                errors[field] = u'bunenng wei kong!'
-        try:
-            customer = Customer.objects.create(**data)
-            customer.save()
-        except:
-            errors['']
+                empty_fields.append(field)
+
+        if len(empty_fields):
+            return render(request, 'register.html', {'errors': empty_fields, 'status': 'field-failed'})
+
+        # try:
+        customer = Customer.objects.create(**data)
+        print customer.save()
+
+        if customer.id:
+            request.session['customer'] = {
+                'id': customer.id,
+                'username': customer.username,
+                'phone': customer.phone,
+                'realname': customer.realname,
+                'avatar': str(customer.avatar),
+                'point': customer.point
+            }
+            return render(request, 'register.html', {'errors': None, 'status': 'success'})
+        # except:
+        #     errors['message'] = u'数据库创建出错'
+
+        return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
 
 
-
-    return render(request, 'register.html')
+    return render(request, 'register.html', {'errors': None, 'status': 'None'})
