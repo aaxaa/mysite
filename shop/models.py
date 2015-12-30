@@ -167,18 +167,22 @@ class Customer(models.Model):
         (1, '激活')
     )
 
-    username = models.CharField(u'帐号', max_length=15)
-    realname = models.CharField(u'姓名', max_length=15)
+    username = models.CharField(u'帐号', null=True, blank=True, max_length=15)
+    realname = models.CharField(u'姓名', null=True, blank=True, max_length=15)
     phone = models.CharField(u'手机', max_length=15)
     password = models.CharField(u'密码', max_length=50)
-    avatar = models.FileField(u'头像', upload_to='upload/avatar/%Y/%m/%d/')
+    avatar = models.ImageField(u'头像',
+        null=True,
+        blank=True,
+        upload_to='upload/avatar/%Y/%m/%d/'
+    )
     sex = models.SmallIntegerField(
         u'性别',
         choices=sex_choices,
         default='2'
     )
     point = models.IntegerField(u'积分', default=0)
-    address = models.CharField(u'收件地址', max_length=255)
+    address = models.CharField(u'收件地址', null=True, blank=True, max_length=255)
     register_at = models.DateField(u'注册时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', default=1)
 

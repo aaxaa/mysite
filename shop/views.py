@@ -66,10 +66,12 @@ def login(request):
     if request.method == 'POST':
         login_account = request.POST['login_account']
         password = request.POST['password']
-        forward = request.POST['forward']
 
         data = {}
-        data['forward'] = forward
+        data['forward'] = request.POST['forward']
+        data['login_account'] = request.POST['login_account']
+        data['status'] = 'errors'
+        data['message'] = u'帐号不存在或者密码不对'
         try:
             
             if login_account.isdigit() and len(login_account)==11:
@@ -88,19 +90,10 @@ def login(request):
                     'avatar': str(customer.avatar),
                     'point': customer.point
                 }
-
                 return redirect(reverse('customer'))
 
-            else:
-                data['status'] = 'errors'
-                data['message'] = u'帐号不存在或者密码不对'
-                data['login_account'] = request.POST['login_account']
-
         except ObjectDoesNotExist:
-            data['status'] = 'errors'
-            data['message'] = u'帐号不存在或者密码不对'
-            data['login_account'] = request.POST['login_account']
-
+            pass
 
         return render(request, 'login.html', data)
     else:
@@ -108,5 +101,19 @@ def login(request):
 
 
 def register(request):
+    if request.method == 'POST':
+        errors = {}
+        data = {}
+        for field in ('phone', 'password'):
+            data[field] = request.POST.get(field)
+            if data[field] is None or data[field] == '':
+                errors[field] = u'bunenng wei kong!'
+        try:
+            customer = Customer.objects.create(**data)
+            customer.save()
+        except:
+            errors['']
+
+
 
     return render(request, 'register.html')
