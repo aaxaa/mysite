@@ -3,15 +3,22 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from shop.models import Notice, Product, Setting, Customer
+from shop.models import Notice, Product, Setting, Customer, Category
 
 
 def main(request):
     notice_list = Notice.objects.filter(type='global', status=1)
     recommend_products = Product.objects.filter(recommend=1)
+
+    category_list = Category.objects.filter(parent=None)
+    product_list = {}
+    for category in category_list:
+        category.product_list = Product.objects.filter(category=category)[:3]
+
     return render(request, 'home.html', {
         'notice_list': notice_list,
         'recommend_products': recommend_products,
+        'category_list':category_list
     })
 
 
@@ -22,18 +29,26 @@ def product(request, id=0):
     for item in product.items.all():
         product_items.append(item)
 
-    return render(request, 'product/view.html', {
+    return render(request, 'product.html', {
         'product': product,
         'product_items': product_items
     })
 
 
+def order(request):
+    return render(request, 'order.html')
+
+
 def server(request):
     notice_list = Notice.objects.filter(type='news', status=1)
-
-    tel = Setting.objects.get(key='tel')
-    traffic = Setting.objects.get(key='traffic')
-    address = Setting.objects.get(key='address')
+    try:
+        tel = Setting.objects.get(key='tel')
+        traffic = Setting.objects.get(key='traffic')
+        address = Setting.objects.get(key='address')
+    except:
+        tel = ''
+        traffic = ''
+        address = ''
 
     return render(request, 'server.html', {
         'notice_list': notice_list,

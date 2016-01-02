@@ -1,132 +1,100 @@
 {% extends "libs/base.html" %}
 {% load staticfiles %}
-{% block style %}
-<style>
-.am-shopcart {
-  position: fixed;
-  left: 0;
-  bottom: 49px;
-  line-height: 49px;
-  width:100%;
-  height: 49px;
-  z-index: 1011;
-  border-top: solid #aaa 1px;
-  background-color: #fff;
-}
-.product_img {
-  width:100px;
-  height:100px;
-}
-</style>
-{% endblock %}
 {% block container %}
 {% include "libs/title.html" with title="购物车" %}
-<div class="am-container">
-  <ul class="am-list am-list-static">
-    <li>
-      <div class="am-g">
-        <div class="am-u-sm-1">
-          <div class="am-radio">
-            <input type="radio" name="select_all" value="all">
-          </div>
+<div class="am-container am-text-dgrey">
+  <div class="am-g am-margin-vertical-sm am-text-sm">
+    <div class="am-u-sm-1">
+        <input type="radio" name="select_all" value="all">
+    </div>
+    <div class="am-u-sm-3 am-padding-0">
+      <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img am-center" />
+    </div>
+    <div class="am-u-sm-8">
+        <div class="am-g">
+          <dic class="am-u-sm-7">
+            <div class="am-g"><dic class="am-u-sm-12">产品标题</dic></div>
+            <div class="am-g">
+              <div class="am-u-sm-10">
+                <div class="am-input-group am-input-group-shopcart">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn" type="button" onclick="shopcart_up(1)"><span class="am-icon-caret-up"></span> </button>
+                  </span>
+                  <input type="text" class="am-form-field am-text-center" value="10" id="product_1" disabled="disabled">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down(1)"><span class="am-icon-caret-down"></span> </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </dic>
+          <dic class="am-u-sm-5 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_1">2000</label></span></dic>
         </div>
-        <div class="am-u-sm-4">
-          <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img" />
+    </div>
+  </div>
+  <div class="am-g am-margin-vertical-sm am-text-sm">
+    <div class="am-u-sm-1">
+        <input type="radio" name="select_all" value="all">
+    </div>
+    <div class="am-u-sm-3 am-padding-0">
+      <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img am-center" />
+    </div>
+    <div class="am-u-sm-8">
+        <div class="am-g">
+          <dic class="am-u-sm-7">
+            <div class="am-g"><dic class="am-u-sm-12">产品标题</dic></div>
+            <div class="am-g">
+              <div class="am-u-sm-10">
+                <div class="am-input-group am-input-group-shopcart">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn" type="button" onclick="shopcart_up(2)"><span class="am-icon-caret-up"></span> </button>
+                  </span>
+                  <input type="text" class="am-form-field am-text-center" value="10" id="product_2" disabled="disabled">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down(2)"><span class="am-icon-caret-down"></span> </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </dic>
+          <dic class="am-u-sm-5 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_2">2000</label></span></dic>
         </div>
-          <dl>
-            <dt>产品标题服务项目名称</dt>
-            <dd>价格：3000.00元</dd>
-          </dl>
-      </div>
-    </li>
-    <li>
-      <div class="am-g">
-        <div class="am-u-sm-1">
-          <div class="am-radio">
-            <input type="radio" name="select_all" value="all">
-          </div>
-        </div>
-        <div class="am-u-sm-4">
-          <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img" />
-        </div>
-        <div class="am-u-sm-7">
-          <dl>
-            <dt>产品标题服务项目名称</dt>
-            <dd>价格：3000.00元</dd>
-          </dl>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="am-g">
-        <div class="am-u-sm-1">
-          <div class="am-radio">
-            <input type="radio" name="select_all" value="all">
-          </div>
-        </div>
-        <div class="am-u-sm-4">
-          <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img" />
-        </div>
-        <div class="am-u-sm-7">
-          <dl>
-            <dt>产品标题服务项目名称</dt>
-            <dd>价格：3000.00元</dd>
-          </dl>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="am-g">
-        <div class="am-u-sm-1">
-          <div class="am-radio">
-            <input type="radio" name="select_all" value="all">
-          </div>
-        </div>
-        <div class="am-u-sm-4">
-          <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img" />
-        </div>
-        <div class="am-u-sm-7">
-          <dl>
-            <dt>产品标题服务项目名称</dt>
-            <dd>价格：3000.00元</dd>
-          </dl>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="am-g">
-        <div class="am-u-sm-1">
-          <div class="am-radio">
-            <input type="radio" name="select_all" value="all">
-          </div>
-        </div>
-        <div class="am-u-sm-4">
-          <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img" />
-        </div>
-        <div class="am-u-sm-7">
-          <dl>
-            <dt>产品标题服务项目名称</dt>
-            <dd>价格：3000.00元</dd>
-          </dl>
-        </div>
-      </div>
-    </li>
-  </ul>
+    </div>
+  </div>
+
 
   <div class="am-shopcart am-cf">
     <div class="am-g">
       <div class="am-u-sm-4">
         <div class="am-radio">
-          <label>
+          <label class="select_all">
             <input type="radio" name="select_all" value="all">全选
           </label>
         </div>
       </div>
       <div class="am-u-sm-5"><label class="am-fr">总价： xx元</label></div>
       <div class="am-u-sm-3">
-        <button type="button" class="am-btn am-btn-success">结算</button>
+        <button type="button" class="am-btn am-btn-beauty am-btn-xs">结算</button>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
+{% block script %}
+<script>
+function shopcart_up(product_id){
+  var num = parseInt($('#product_'+product_id).val());
+  var total = parseInt($('#total_'+product_id).html());
+  $('#product_'+product_id).val(num+1);
+  $('#total_'+product_id).html((total/num)*(num+1));
+}
+function shopcart_down(product_id){
+  var num = parseInt($('#product_'+product_id).val());
+  var total = parseInt($('#total_'+product_id).html());
+  if(num-1>0){
+    $('#product_'+product_id).val(num-1);
+    $('#total_'+product_id).html((total/num)*(num-1));
+  }
+}
+</script>
+{% endblock%}

@@ -35,7 +35,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = u'分类'
-        verbose_name_plural = u'分类'
+        verbose_name_plural = u'商品分类'
         ordering = ['path']
 
     def save(self, *args, **kwargs):
@@ -110,7 +110,7 @@ class Product(models.Model):
 
     class Meta:
         verbose_name = u'商品'
-        verbose_name_plural = u'商品'
+        verbose_name_plural = u'商品管理'
         ordering = (('open_at'), ('status'),)
 
 
@@ -132,8 +132,8 @@ class Item(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = u'属性'
-        verbose_name_plural = u'属性'
+        verbose_name = u'商品属性'
+        verbose_name_plural = u'商品属性'
 
 
 class ProductItem(models.Model):
@@ -167,9 +167,9 @@ class Customer(models.Model):
         (1, '激活')
     )
 
-    username = models.CharField(u'帐号', null=True, blank=True, max_length=15)
+    username = models.CharField(u'帐号', null=True, blank=True, max_length=15, unique=True)
     realname = models.CharField(u'姓名', null=True, blank=True, max_length=15)
-    phone = models.CharField(u'手机', max_length=15)
+    phone = models.CharField(u'手机', max_length=15, unique=True)
     password = models.CharField(u'密码', max_length=50)
     avatar = models.ImageField(u'头像',
         null=True,
@@ -208,8 +208,9 @@ class Customer(models.Model):
 
     class Meta:
         verbose_name = u'客户'
-        verbose_name_plural = u'客户'
+        verbose_name_plural = u'客户管理'
         ordering = (('register_at'), )
+        index_together = ('username', 'phone')
 
     def __unicode__(self):
         return self.username
@@ -320,43 +321,8 @@ class Order(models.Model):
 
     class Meta:
         verbose_name = u'订单'
-        verbose_name_plural = u'订单'
+        verbose_name_plural = u'客户订单'
         ordering = (('create_at'), ('status'))
-
-
-class Doctor(models.Model):
-    name = models.CharField(u'姓名', max_length=15)
-    description = models.TextField(u'简介')
-    product = models.ForeignKey(
-        Product,
-        verbose_name=u'项目',
-        limit_choices_to={'type': 'S'},
-    )
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = u'医生'
-        verbose_name_plural = u'医生'
-
-
-class DoctorDuty(models.Model):
-    status_choices = [
-        (1, u'正常值班'),
-        (0, u'缺勤'),
-    ]
-    doctor = models.OneToOneField(
-        Doctor,
-        verbose_name='医生',
-        on_delete=models.CASCADE
-    )
-    duty_at = models.DateTimeField(u'值班时间')
-    status = models.SmallIntegerField(u'状态', choices=status_choices, default=1)
-
-    class Meta:
-        verbose_name = u'值班'
-        verbose_name_plural = u'值班'
 
 
 class Notice(models.Model):
@@ -389,7 +355,7 @@ class Notice(models.Model):
 
     class Meta:
         verbose_name = '公告'
-        verbose_name_plural = '公告'
+        verbose_name_plural = '促销公告'
 
 
 class Setting(models.Model):
@@ -399,7 +365,7 @@ class Setting(models.Model):
 
     class Meta:
         verbose_name = u'设置'
-        verbose_name_plural = u'设置'
+        verbose_name_plural = u'站点设置'
 
     def __unicode__(self):
         return self.key

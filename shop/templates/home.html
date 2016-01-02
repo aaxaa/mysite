@@ -2,18 +2,18 @@
 {% load static %}
 {% block container %}
 {% include "libs/title.html" with title="商城" %}
+<div data-am-widget="slider" class="am-slider am-slider-default am-margin-0" data-am-slider='{"animation":"slide","slideshow":false}' >
+  <ul class="am-slides">
+    {% for row in notice_list %}
+    <li>
+        <img src="{{row.cover}}">
+        <div class="am-slider-desc">{{row.title}}</div>
+       
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 <div class="am-container">
-  <div data-am-widget="slider" class="am-slider am-slider-default" data-am-slider='{"animation":"slide","slideshow":false}' >
-    <ul class="am-slides">
-      {% for row in notice_list %}
-      <li>
-          <img src="{{row.cover}}">
-          <div class="am-slider-desc">{{row.title}}</div>
-         
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
   <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
       <h2 class="am-titlebar-title ">
           店长推荐
@@ -27,37 +27,32 @@ am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" >
           <a href="{% url 'product' product.id %}" class="">
             <img src="{{product.cover}}"  alt="{{product.name}}"/>
               <h3 class="am-gallery-title">{{product.name}}</h3>
-              <div class="am-gallery-desc">价格：{{product.price}} 元</div>
+              <div class="am-gallery-desc am-font-beauty">¥ {{product.price}}</div>
           </a>
       </div>
     </li>
     {% endfor %}
   </ul>
+  {% for category in category_list %}
   <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
       <h2 class="am-titlebar-title ">
-          整形外科
+          {{category.name}}
       </h2>
   </div>
   <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
-am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" data-am-gallery="{  }" >
+am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered">
+    {% for product in category.product_list %}
     <li>
       <div class="am-gallery-item">
-          <a href="http://s.amazeui.org/media/i/demos/bing-1.jpg" class="">
-            <img src="http://s.amazeui.org/media/i/demos/bing-1.jpg"  alt="远方 有一个地方 那里种有我们的梦想"/>
-              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
-              <div class="am-gallery-desc">价格：288 元</div>
+          <a href="{% url 'product' product.id %}" class="">
+            <img src="{{product.cover}}"  alt="{{product.name}}"/>
+              <h3 class="am-gallery-title">{{product.name}}</h3>
+              <div class="am-gallery-desc">¥ {{product.price}}</div>
           </a>
       </div>
     </li>
-    <li>
-      <div class="am-gallery-item">
-          <a href="http://s.amazeui.org/media/i/demos/bing-2.jpg" class="">
-            <img src="http://s.amazeui.org/media/i/demos/bing-2.jpg"  alt="某天 也许会相遇 相遇在这个好地方"/>
-              <h3 class="am-gallery-title">测试 产品/项目 名称</h3>
-              <div class="am-gallery-desc">价格：288 元</div>
-          </a>
-      </div>
-    </li>
+    {% endfor %}
   </ul>
+  {% endfor %}
 </div>
 {% endblock %}

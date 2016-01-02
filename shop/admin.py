@@ -81,19 +81,13 @@ class CustomerRelationAdmin(admin.ModelAdmin):
         return False
 
 
-class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'product')
-    list_filter = ()
-
-
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'create_at', 'public_at', 'status')
     list_filter = ('type', 'status')
 
 
 class SettingAdmin(admin.ModelAdmin):
-    list_display = ('key', 'values')
-    list_filter = ()
+    list_display = ('name', 'values')
 
 
 admin.site.register(Category, CategoryAdmin)
@@ -103,6 +97,5 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(CustomerPointLog, CustomerPointLogAdmin)
 admin.site.register(CustomerRelation, CustomerRelationAdmin)
-admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Setting, SettingAdmin)

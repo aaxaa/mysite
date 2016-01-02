@@ -2,15 +2,24 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-  <meta charset="UTF-8">
-  <title>Example</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  <link rel="alternate icon" type="image/png" href="{% static "img/favicon.png" %}">
-  <link rel="stylesheet" href="{% static "css/amazeui.css" %}"/>
-  <base href="{% get_media_prefix %}" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="{% static "img/favicon.png" %}">
+    <link rel="stylesheet" href="{% static "css/amazeui.css" %}"/>
+    <link rel="stylesheet" href="{% static "css/app.css" %}"/>
+    <base href="{% get_media_prefix %}" />
 </head>
+<body>
+<header data-am-widget="header" class="am-header am-header-app">
+    <div class="am-header-left am-header-nav">
+        <a href="{% url "main" %}" class="">
+            <img src="{% static "img/logo.png" %}" />
+        </a>
+    </div>
+</header>
