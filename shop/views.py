@@ -1,6 +1,6 @@
 # coding:utf8
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, F
 from django.db import IntegrityError
@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct
 
+from decimal import *
 import json
 
 
@@ -76,7 +77,7 @@ def addtocart(request, id):
 
     try:
         product = Product.objects.get(pk=id)
-
+        #如果是已登录的用户，则读出数据库购物车
         if 'customer' in request.session:
             customer = Customer.objects.get(pk=request.session['customer'].get('id'))
             try:
@@ -94,16 +95,16 @@ def addtocart(request, id):
             shopcart.save()
 
             data['status'] = 'ok'
-
+        #非登录用户，把商品添加到session中
         else:
             if 'shopcart' in request.session:
                 shopcart = request.session['shopcart']
                 
             else:
                 shopcart = {}
-                shopcart['products'] = ()
+                shopcart['products'] = []
 
-            shopcart.get('products').add(product.id)
+            shopcart.get('products').append(product.id)
             request.session['shopcart'] = shopcart
             
             data['status'] = 'ok'
@@ -115,21 +116,41 @@ def addtocart(request, id):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def shopcart(request):
+    shopcart = {}
+    products_in = []
     if 'customer' in request.session:
         shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
         products_in = shopcart.products_in.all()
 
     else:
-        pass
+        if 'shopcart' in request.session:
+            shopcart = request.session['shopcart']
+            products = Product.objects.filter(id__in=shopcart['products'])
+
+            products_count = shopcart['counts'] if 'counts' in shopcart else {}
+
+            total_price = 0
+            for product in products:
+                count = products_count[str(product.id)] if str(product.id) in products_count else 1
+                product_in = {
+                    'product':product,
+                    'count': count,
+                    'price':product.price * count
+                }
+
+                products_in.append(product_in)
+                total_price += product_in['price']
+            if 'total_price' not in shopcart:
+                shopcart['total_price'] = "%0.2f" % float(total_price)
+
+            request.session['shopcart'] = shopcart
 
     return render(request, 'shopcart.html', {'shopcart': shopcart, 'products_in':products_in})
 
-def shopcart_update(request, op, id):
+def shopcart_update(request, op):
     data = {}
+    id = request.GET.get('id')
     if 'customer' in request.session:
-        #customer = Customer.objects.get(pk=request.session['customer'].get('id'))
-        #shopcart = Shopcart.objects.get(customer=customer)
-
         shopcart_product = ShopcartProduct.objects.get(shopcart__customer__pk=request.session['customer'].get('id'), product__pk=id)
         shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
         if op == 'up':
@@ -137,7 +158,7 @@ def shopcart_update(request, op, id):
             shopcart_product.count = F('count')+1
             shopcart_product.price = F('price')+price
             shopcart_product.save()
-            
+
             shopcart.total_price = F('total_price') + shopcart_product.price
             shopcart.save()
 
@@ -154,16 +175,39 @@ def shopcart_update(request, op, id):
         else:
             return HttpResponse(json.dumps({'status':'failed'}))
 
-        
-
         data['status'] = 'success'
         data['count'] = shopcart_product.count
         data['price'] = shopcart_product.price
         data['total_price'] = shopcart.total_price
 
     else:
-        pass
-    return HttpResponse(json.dumps(data))
+        if 'shopcart' in request.session:
+            shopcart = request.session['shopcart']
+            products_count = shopcart['counts'] if 'counts' in shopcart else {}
+            product = Product.objects.get(pk=int(id))
+
+            data['status'] = 'success'
+            if op == 'up':
+                products_count[id] = products_count[id] + 1 if id in products_count else 2
+                data['total_price'] = "%0.2f"%float(Decimal(shopcart['total_price']) + product.price)
+
+            elif op == 'down':
+                products_count[id] = products_count[id] - 1  if id in products_count else 0
+                data['total_price'] = "%0.2f"%float(Decimal(shopcart['total_price']) - product.price)
+
+            shopcart['counts'] = products_count
+            shopcart['total_price'] = data['total_price']
+            request.session['shopcart'] = shopcart
+
+            
+            data['count'] = products_count[id]
+            data['price'] = float(product.price * data['count'])
+            
+
+        else:
+            data['status'] = 'failed'
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def customer(request):

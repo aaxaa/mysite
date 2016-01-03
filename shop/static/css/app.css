@@ -96,10 +96,11 @@
   background-color: rgb(96, 10, 117);
   color: #fff;
 }
-.am-shopcart .am-radio label, .am-checkbox label {
+.am-shopcart label.am-checkbox, .am-shopcart span.am-ucheck-icons{
 	display:block;
 	font-weight: 800;
-	padding-top:0.3rem;
+	line-height:4rem;
+	margin: 0;
 }
 .product_img , .user-image{
   width:6rem;

@@ -3,70 +3,102 @@
 {% block container %}
 {% include "libs/title.html" with title="购物车" %}
 <div class="am-container am-text-dgrey">
-  {% for row in products_in %}
-  <div class="am-g am-margin-vertical-sm am-text-sm">
-    <div class="am-u-sm-1">
-        <input type="checkbox" name="select_all" value="{{row.product.id}}">
-    </div>
-    <div class="am-u-sm-3 am-padding-0">
-      <img src="{{row.product.cover}}" class="am-img-thumbnail product_img am-center" />
-    </div>
-    <div class="am-u-sm-8">
-        <div class="am-g">
-          <dic class="am-u-sm-6">
-            <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
-            <div class="am-g">
-              <div class="am-u-sm-10">
-                <div class="am-input-group am-input-group-shopcart">
-                  <span class="am-input-group-btn">
-                    <button class="am-btn" type="button" onclick="shopcart_up({{row.product.id}})"><span class="am-icon-caret-up"></span> </button>
-                  </span>
-                  <input type="text" class="am-form-field am-text-center" value="{{row.count}}" id="product_{{row.product.id}}" disabled="disabled">
-                  <span class="am-input-group-btn">
-                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down({{row.product.id}})"><span class="am-icon-caret-down"></span> </button>
-                  </span>
+  {% if products_in %}
+    {% for row in products_in %}
+    <div class="am-g am-margin-vertical-sm am-text-sm">
+      <div class="am-u-sm-1 am-vertical-align">
+        <label class="am-checkbox am-danger am-vertical-align-middle">
+          <input type="checkbox" checked="checked" value="{{row.product.id}}" data-am-ucheck checked>
+        </label>
+      </div>
+      <div class="am-u-sm-3 am-padding-0">
+        <img src="{{row.product.cover}}" class="am-img-thumbnail product_img am-center" />
+      </div>
+      <div class="am-u-sm-8">
+          <div class="am-g">
+            <dic class="am-u-sm-6">
+              <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
+              <div class="am-g">
+                <div class="am-u-sm-10">
+                  <div class="am-input-group am-input-group-shopcart">
+                    <span class="am-input-group-btn">
+                      <button class="am-btn" type="button" onclick="shopcart_up({{row.product.id}})"><span class="am-icon-caret-up"></span> </button>
+                    </span>
+                    <input type="text" class="am-form-field am-text-center" value="{{row.count}}" id="product_{{row.product.id}}" disabled="disabled">
+                    <span class="am-input-group-btn">
+                      <button class="am-btn am-btn-default" type="button" id="btn_down_{{row.product.id}}" onclick="shopcart_down({{row.product.id}})" {% if row.count == 0 %} disabled="disabled" {% endif %}><span class="am-icon-caret-down"></span> </button>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </dic>
-          <dic class="am-u-sm-6 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
-        </div>
+            </dic>
+            <dic class="am-u-sm-6 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
+          </div>
+      </div>
     </div>
-  </div>
-  {% endfor %}
+    {% endfor %}
+    <div class="am-shopcart am-cf">
+      <div class="am-g">
+        <div class="am-u-sm-3">
+            <label class="am-checkbox am-danger">
+              <input type="checkbox" id="select_all" data-am-ucheck>全选
+            </label>
+        </div>
+        <div class="am-u-sm-6"><label class="am-fr">总价： <label id="total_price">{{shopcart.total_price|default:0}}</label>元</label></div>
+        <div class="am-u-sm-3">
+          <button type="button" class="am-btn am-btn-beauty am-btn-xs">结算</button>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="am-margin-lg">
+      <p class="am-center am-text-success am-text-center">购物车空空如也～</p>
+      <a href="{% url "main" %}" class="am-btn am-btn-beauty am-center"><i class="am-icon-shopping-cart"></i> 去逛逛</a>
+    </div>
+  {% endif %}
 
-  <div class="am-shopcart am-cf">
-    <div class="am-g">
-      <div class="am-u-sm-3">
-        <div class="am-radio">
-          <label class="select_all">
-            <input type="radio" name="select_all" value="all">全选
-          </label>
-        </div>
-      </div>
-      <div class="am-u-sm-6"><label class="am-fr">总价： {{shopcart.total_price}}元</label></div>
-      <div class="am-u-sm-3">
-        <button type="button" class="am-btn am-btn-beauty am-btn-xs">结算</button>
-      </div>
-    </div>
-  </div>
+  
 </div>
 {% endblock %}
 {% block script %}
 <script>
 function shopcart_up(product_id){
-  var num = parseFloat($('#product_'+product_id).val());
-  var total = parseFloat($('#total_'+product_id).html()).toFixed(2);
-  $('#product_'+product_id).val(num+1);
-  $('#total_'+product_id).html(parseFloat(total/num).toFixed(2)*(num+1).toFixed(2));
+  $.get('{% url "shopcart_update" "up" %}', {"id":product_id}, function(res){
+    if(res['status']=='success'){
+      $('#product_'+product_id).val(res['count']);
+      $('#total_'+product_id).html(parseFloat(res['price']).toFixed(2));
+      $('#total_price').html(parseFloat(res['total_price']).toFixed(2));
+
+      if(res['count']==1){
+        $('#btn_down_'+product_id).removeAttr('disabled')
+      }
+    }
+  })
 }
 function shopcart_down(product_id){
   var num = parseInt($('#product_'+product_id).val());
-  var total = parseInt($('#total_'+product_id).html());
-  if(num-1>0){
-    $('#product_'+product_id).val(num-1);
-    $('#total_'+product_id).html((total/num)*(num-1));
+  if(num-1>=0){
+    $.get('{% url "shopcart_update" "down" %}', {"id":product_id}, function(res){
+      if(res['status']=='success'){
+        $('#product_'+product_id).val(res['count']);
+        $('#total_'+product_id).html(parseFloat(res['price']).toFixed(2));
+        $('#total_price').html(parseFloat(res['total_price']).toFixed(2));
+
+        if(res['count']==0){
+          $('#btn_down_'+product_id).attr('disabled','disabled');
+        }
+      }
+    })
   }
 }
+$(function(){
+  $('#select_all').on('click', function(evt){
+    if($('#select_all').is(':checked')){
+      $('input[type="checkbox"]').uCheck('check');
+    }else{
+      $('input[type="checkbox"]').uCheck('uncheck');
+    }
+  });
+});
 </script>
 {% endblock%}
