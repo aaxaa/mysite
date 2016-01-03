@@ -25,6 +25,11 @@
         {% endif %}
         <a href="{% url 'register' %}" class="am-btn am-btn-success">返回重新注册</a>
     </div>
+    {% elif status == 'db-failed' %}
+    <div class="am-center" style="width:150px; margin-top:30px;">
+        <h3>{{errors.message}}</h3>
+        <a href="{% url 'register' %}" class="am-btn am-btn-success">返回重新注册</a>
+    </div>
     {% else %}
     <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
         {% csrf_token %}

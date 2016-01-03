@@ -3,76 +3,48 @@
 {% block container %}
 {% include "libs/title.html" with title="购物车" %}
 <div class="am-container am-text-dgrey">
+  {% for row in products_in %}
   <div class="am-g am-margin-vertical-sm am-text-sm">
     <div class="am-u-sm-1">
-        <input type="radio" name="select_all" value="all">
+        <input type="checkbox" name="select_all" value="{{row.product.id}}">
     </div>
     <div class="am-u-sm-3 am-padding-0">
-      <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img am-center" />
+      <img src="{{row.product.cover}}" class="am-img-thumbnail product_img am-center" />
     </div>
     <div class="am-u-sm-8">
         <div class="am-g">
-          <dic class="am-u-sm-7">
-            <div class="am-g"><dic class="am-u-sm-12">产品标题</dic></div>
+          <dic class="am-u-sm-6">
+            <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
             <div class="am-g">
               <div class="am-u-sm-10">
                 <div class="am-input-group am-input-group-shopcart">
                   <span class="am-input-group-btn">
-                    <button class="am-btn" type="button" onclick="shopcart_up(1)"><span class="am-icon-caret-up"></span> </button>
+                    <button class="am-btn" type="button" onclick="shopcart_up({{row.product.id}})"><span class="am-icon-caret-up"></span> </button>
                   </span>
-                  <input type="text" class="am-form-field am-text-center" value="10" id="product_1" disabled="disabled">
+                  <input type="text" class="am-form-field am-text-center" value="{{row.count}}" id="product_{{row.product.id}}" disabled="disabled">
                   <span class="am-input-group-btn">
-                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down(1)"><span class="am-icon-caret-down"></span> </button>
+                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down({{row.product.id}})"><span class="am-icon-caret-down"></span> </button>
                   </span>
                 </div>
               </div>
             </div>
           </dic>
-          <dic class="am-u-sm-5 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_1">2000</label></span></dic>
+          <dic class="am-u-sm-6 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
         </div>
     </div>
   </div>
-  <div class="am-g am-margin-vertical-sm am-text-sm">
-    <div class="am-u-sm-1">
-        <input type="radio" name="select_all" value="all">
-    </div>
-    <div class="am-u-sm-3 am-padding-0">
-      <img src="{% static "img/200x200.jpg"%}" class="am-img-thumbnail product_img am-center" />
-    </div>
-    <div class="am-u-sm-8">
-        <div class="am-g">
-          <dic class="am-u-sm-7">
-            <div class="am-g"><dic class="am-u-sm-12">产品标题</dic></div>
-            <div class="am-g">
-              <div class="am-u-sm-10">
-                <div class="am-input-group am-input-group-shopcart">
-                  <span class="am-input-group-btn">
-                    <button class="am-btn" type="button" onclick="shopcart_up(2)"><span class="am-icon-caret-up"></span> </button>
-                  </span>
-                  <input type="text" class="am-form-field am-text-center" value="10" id="product_2" disabled="disabled">
-                  <span class="am-input-group-btn">
-                    <button class="am-btn am-btn-default" type="button" onclick="shopcart_down(2)"><span class="am-icon-caret-down"></span> </button>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </dic>
-          <dic class="am-u-sm-5 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_2">2000</label></span></dic>
-        </div>
-    </div>
-  </div>
-
+  {% endfor %}
 
   <div class="am-shopcart am-cf">
     <div class="am-g">
-      <div class="am-u-sm-4">
+      <div class="am-u-sm-3">
         <div class="am-radio">
           <label class="select_all">
             <input type="radio" name="select_all" value="all">全选
           </label>
         </div>
       </div>
-      <div class="am-u-sm-5"><label class="am-fr">总价： xx元</label></div>
+      <div class="am-u-sm-6"><label class="am-fr">总价： {{shopcart.total_price}}元</label></div>
       <div class="am-u-sm-3">
         <button type="button" class="am-btn am-btn-beauty am-btn-xs">结算</button>
       </div>
@@ -83,10 +55,10 @@
 {% block script %}
 <script>
 function shopcart_up(product_id){
-  var num = parseInt($('#product_'+product_id).val());
-  var total = parseInt($('#total_'+product_id).html());
+  var num = parseFloat($('#product_'+product_id).val());
+  var total = parseFloat($('#total_'+product_id).html()).toFixed(2);
   $('#product_'+product_id).val(num+1);
-  $('#total_'+product_id).html((total/num)*(num+1));
+  $('#total_'+product_id).html(parseFloat(total/num).toFixed(2)*(num+1).toFixed(2));
 }
 function shopcart_down(product_id){
   var num = parseInt($('#product_'+product_id).val());

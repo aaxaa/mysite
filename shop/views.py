@@ -1,9 +1,14 @@
 # coding:utf8
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, F
+from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-from shop.models import Notice, Product, Setting, Customer, Category
+
+from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct
+
+import json
 
 
 def main(request):
@@ -34,10 +39,15 @@ def product(request, id=0):
         'product_items': product_items
     })
 
+def notice(request, id=0):
+    try:
+        notice = Notice.objects.get(pk=id)
+    except:
+        notice = None
+    return render(request, 'notice.html', {"notice": notice})
 
 def order(request):
     return render(request, 'order.html')
-
 
 def server(request):
     notice_list = Notice.objects.filter(type='news', status=1)
@@ -61,9 +71,99 @@ def server(request):
 def beauty(request):
     return render(request, 'beauty.html')
 
+def addtocart(request, id):
+    data = {}
+
+    try:
+        product = Product.objects.get(pk=id)
+
+        if 'customer' in request.session:
+            customer = Customer.objects.get(pk=request.session['customer'].get('id'))
+            try:
+                shopcart = Shopcart.objects.get(customer=customer)
+
+            except ObjectDoesNotExist:               
+                shopcart = Shopcart.objects.create(customer=customer)
+                shopcart.save()
+
+            shopcart_product = ShopcartProduct(product=product, shopcart=shopcart, count=1, price=product.price)
+            shopcart_product.save()
+
+
+            shopcart.total_price += product.price
+            shopcart.save()
+
+            data['status'] = 'ok'
+
+        else:
+            if 'shopcart' in request.session:
+                shopcart = request.session['shopcart']
+                
+            else:
+                shopcart = {}
+                shopcart['products'] = ()
+
+            shopcart.get('products').add(product.id)
+            request.session['shopcart'] = shopcart
+            
+            data['status'] = 'ok'
+
+    except ObjectDoesNotExist:
+        data['status'] = 'failed'
+        data['message'] = u'商品不存在！'
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 def shopcart(request):
-    return render(request, 'shopcart.html')
+    if 'customer' in request.session:
+        shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
+        products_in = shopcart.products_in.all()
+
+    else:
+        pass
+
+    return render(request, 'shopcart.html', {'shopcart': shopcart, 'products_in':products_in})
+
+def shopcart_update(request, op, id):
+    data = {}
+    if 'customer' in request.session:
+        #customer = Customer.objects.get(pk=request.session['customer'].get('id'))
+        #shopcart = Shopcart.objects.get(customer=customer)
+
+        shopcart_product = ShopcartProduct.objects.get(shopcart__customer__pk=request.session['customer'].get('id'), product__pk=id)
+        shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
+        if op == 'up':
+            price = shopcart_product.price / shopcart_product.count
+            shopcart_product.count = F('count')+1
+            shopcart_product.price = F('price')+price
+            shopcart_product.save()
+            
+            shopcart.total_price = F('total_price') + shopcart_product.price
+            shopcart.save()
+
+        elif op == 'down':
+            if shopcart_product.count - 1 > 0:
+                price = shopcart_product.price / shopcart_product.count
+                shopcart_product.count = F('count')-1
+                shopcart_product.price = F('price')-price
+                shopcart_product.save()
+
+                shopcart.total_price = F('total_price') - shopcart_product.price
+                shopcart.save()
+
+        else:
+            return HttpResponse(json.dumps({'status':'failed'}))
+
+        
+
+        data['status'] = 'success'
+        data['count'] = shopcart_product.count
+        data['price'] = shopcart_product.price
+        data['total_price'] = shopcart.total_price
+
+    else:
+        pass
+    return HttpResponse(json.dumps(data))
 
 
 def customer(request):
@@ -129,22 +229,25 @@ def register(request):
         if len(empty_fields):
             return render(request, 'register.html', {'errors': empty_fields, 'status': 'field-failed'})
 
-        # try:
-        customer = Customer.objects.create(**data)
-        print customer.save()
+        try:
+            customer = Customer.objects.create(**data)
+            print customer.save()
 
-        if customer.id:
-            request.session['customer'] = {
-                'id': customer.id,
-                'username': customer.username,
-                'phone': customer.phone,
-                'realname': customer.realname,
-                'avatar': str(customer.avatar),
-                'point': customer.point
-            }
-            return render(request, 'register.html', {'errors': None, 'status': 'success'})
-        # except:
-        #     errors['message'] = u'数据库创建出错'
+            if customer.id:
+                request.session['customer'] = {
+                    'id': customer.id,
+                    'username': customer.username,
+                    'phone': customer.phone,
+                    'realname': customer.realname,
+                    'avatar': str(customer.avatar),
+                    'point': customer.point
+                }
+                return render(request, 'register.html', {'errors': None, 'status': 'success'})
+        except IntegrityError:
+            errors['message'] = u'手机号码已存在'
+
+        except:
+            errors['message'] = u'数据库创建出错'
 
         return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
 

@@ -80,11 +80,17 @@
 <script>
 $(function(){
     $('#add_to_cart').on('click', function() {
-        $('#add_to_cart_success').modal({
-            'closeViaDimmer' : 0,
-            'width': 300,
-            'height': 120, 
-        });
+    	$.get('{% url "addtocart" product.id %}', function(res){
+    		if(res.status == 'ok'){
+    			$('#add_to_cart_success').modal({
+		            'closeViaDimmer' : 0,
+		            'width': 300,
+		            'height': 120, 
+		        });
+    		}else{
+    			alert(res.message);
+    		}
+    	});
     });
 });
 </script>

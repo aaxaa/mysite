@@ -37,6 +37,12 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = (ProductItemInline, )
 
+class ShopcartProductInline(admin.TabularInline):
+    model = ShopcartProduct
+
+class ShopcartAdmin(admin.ModelAdmin):
+    inlines = (ShopcartProductInline, )
+
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('category', 'name', 'display_order')
@@ -44,8 +50,8 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('customer',  'type', 'products', 'total_price', 'create_at', 'status')
-    list_filter = ('type', 'status')
+    list_display = ('customer',  'total_price', 'create_at', 'status')
+    list_filter = ('status',)
 
     date_hierarchy = 'create_at'
 
@@ -99,3 +105,4 @@ admin.site.register(CustomerPointLog, CustomerPointLogAdmin)
 admin.site.register(CustomerRelation, CustomerRelationAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Setting, SettingAdmin)
+admin.site.register(Shopcart, ShopcartAdmin)

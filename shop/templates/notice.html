@@ -1,0 +1,21 @@
+{% extends "libs/base.html" %}
+{% load static %}
+{% block container %}
+{% include "libs/title.html" with title="公告" %}
+{% if notice %}
+<div class="notice-detail-cover">
+    <img class="am-img-responsive" src="{{notice.cover}}" />
+    <div class="title">
+        <p class="am-margin-sm"><strong>{{notice.title}}</strong><small>{{notice.create_at}}</small></p>
+    </div>
+</div>
+<hr/>
+<div class="am-container">
+    <article data-am-widget="paragraph" class="am-paragraph am-paragraph-default" data-am-paragraph="{ tableScrollable: true, pureview: true }">
+    {{notice.content|safe}}  
+    </article>
+</div>
+{% else %}
+        <p>公告不存在</p>
+{% endif %}
+{% endblock %}

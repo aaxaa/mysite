@@ -5,10 +5,9 @@
 <div data-am-widget="slider" class="am-slider am-slider-default am-margin-0" data-am-slider='{"animation":"slide","slideshow":false}' >
   <ul class="am-slides">
     {% for row in notice_list %}
-    <li>
+    <li><a href="{% url "notice" row.id %}">
         <img src="{{row.cover}}">
-        <div class="am-slider-desc">{{row.title}}</div>
-       
+        <div class="am-slider-desc am-text-xs">{{row.title}}</div></a>
     </li>
     {% endfor %}
   </ul>

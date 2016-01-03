@@ -3,7 +3,9 @@ from __future__ import unicode_literals
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from datetime import date
 import random, hashlib
+
 
 
 class Category(models.Model):
@@ -92,7 +94,7 @@ class Product(models.Model):
         choices=recommend_choices,
         default=0,
     )
-    price = models.FloatField(u"商品价格", default=0.00)
+    price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
     stock = models.IntegerField(u"库存数量", default=0)
     content = RichTextUploadingField(u"产品详情")
     cover = models.ImageField(
@@ -101,8 +103,8 @@ class Product(models.Model):
         upload_to='upload/products/%Y/%m/%d/'
     )
     create_at = models.DateField(u"创建时间", auto_now_add=True)
-    open_at = models.DateField(u"上架时间")
-    close_at = models.DateField(u"下架时间")
+    open_at = models.DateField(u"上架时间", default=date.today())
+    close_at = models.DateField(u"下架时间", null=True, blank=True)
     status = models.SmallIntegerField(u"状态", choices=status_choices, default=0)
 
     def __unicode__(self):
@@ -157,14 +159,14 @@ class ProductItem(models.Model):
 
 class Customer(models.Model):
     sex_choices = (
-        (0, '女'),
-        (1, '男'),
-        (2, '未知'),
+        (0, u'女'),
+        (1, u'男'),
+        (2, u'未知'),
     )
 
     status_choices = (
-        (0, '未激活'),
-        (1, '激活')
+        (0, u'未激活'),
+        (1, u'激活')
     )
 
     username = models.CharField(u'帐号', null=True, blank=True, max_length=15, unique=True)
@@ -213,7 +215,7 @@ class Customer(models.Model):
         index_together = ('username', 'phone')
 
     def __unicode__(self):
-        return self.username
+        return str(self.id)
 
 
 class CustomerConnect(models.Model):
@@ -285,13 +287,42 @@ class CustomerRelation(models.Model):
         verbose_name_plural = u'客户关系'
 
 
+class Shopcart(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        verbose_name=u'客户',
+        on_delete=models.CASCADE
+    )
+    products = models.ManyToManyField(Product, verbose_name=u'商品信息', through='ShopcartProduct')
+    total_price = models.DecimalField(u'总价', max_digits=8, default=0.00, decimal_places=2)
+
+    def __unicode__(self):
+        return str(self.customer.id)
+
+    class Meta:
+        verbose_name = u"购物车"
+        verbose_name_plural = u'购物车'
+
+
+class ShopcartProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    shopcart = models.ForeignKey(Shopcart, on_delete=models.CASCADE, related_name="products_in")
+    joined_at = models.DateField(u'添加时间', auto_now_add=True)
+    count = models.SmallIntegerField(u'数量', default=1)
+    price = models.DecimalField(u'价格', max_digits=8,  default=0.00, decimal_places=2)
+
+    class Meta:
+        auto_created = True
+        verbose_name = u"购物车"
+        verbose_name_plural = u'购物车'
+
+    def __unicode__(self):
+        return self.product.name
+
+
 class Order(models.Model):
-    type_choices = [
-        ('G', u'产品'),
-        ('S', u'项目'),
-    ]
     status_choices = [
-        (0, u'未下单'),
+        (0, u'已创建'),
         (1, u'已下单'),
         (2, u'未支付'),
         (3, u'已付款'),
@@ -306,15 +337,8 @@ class Order(models.Model):
         verbose_name=u'客户',
         on_delete=models.CASCADE
     )
-    products = models.TextField(u'商品信息')
-    total_price = models.FloatField(u'总价')
-    type = models.CharField(
-        u'类型',
-        max_length=1,
-        choices=type_choices,
-        editable=False
-    )
-    booking_at = models.DateField(u'预约时间')
+    products = models.ManyToManyField(Product, verbose_name=u'商品信息', through='OrderProduct')
+    total_price = models.DecimalField(u'总价', max_digits=8, decimal_places=2)
     address = models.CharField(u'收件地址', max_length=255)
     create_at = models.DateField(u'创建时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=0)
@@ -323,6 +347,16 @@ class Order(models.Model):
         verbose_name = u'订单'
         verbose_name_plural = u'客户订单'
         ordering = (('create_at'), ('status'))
+
+class OrderProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    joined_at = models.DateField(u'添加时间', auto_now_add=True)
+    count = models.SmallIntegerField(u'数量', default=1)
+    price = models.DecimalField(u'价格', max_digits=8, default=0.00, decimal_places=2)
+
+    class Meta:
+        auto_created = True
 
 
 class Notice(models.Model):
@@ -354,8 +388,8 @@ class Notice(models.Model):
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=1)
 
     class Meta:
-        verbose_name = '公告'
-        verbose_name_plural = '促销公告'
+        verbose_name = u'公告'
+        verbose_name_plural = u'促销公告'
 
 
 class Setting(models.Model):
