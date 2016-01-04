@@ -100,7 +100,8 @@ class Product(models.Model):
     cover = models.ImageField(
         u"封面图片",
         null=True,
-        upload_to='upload/products/%Y/%m/%d/'
+        upload_to='upload/products/%Y/%m/%d/',
+        help_text=u'图片尺寸比例为4:3(长宽)'
     )
     create_at = models.DateField(u"创建时间", auto_now_add=True)
     open_at = models.DateField(u"上架时间", default=date.today())
@@ -310,6 +311,7 @@ class ShopcartProduct(models.Model):
     joined_at = models.DateField(u'添加时间', auto_now_add=True)
     count = models.SmallIntegerField(u'数量', default=1)
     price = models.DecimalField(u'价格', max_digits=8,  default=0.00, decimal_places=2)
+    checked = models.BooleanField(u'选择', default=True)
 
     class Meta:
         auto_created = True
@@ -381,7 +383,7 @@ class Notice(models.Model):
         null=True,
         blank=True,
         upload_to='upload/notice/%Y/%m/%d/',
-        help_text=u'适合尺寸：200x120'
+        help_text=u'图片尺寸比例为2:1(长宽)'
     )
     create_at = models.DateField(u'创建时间', auto_now_add=True)
     public_at = models.DateField(u'发布时间')

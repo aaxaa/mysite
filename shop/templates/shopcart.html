@@ -6,13 +6,13 @@
   {% if products_in %}
     {% for row in products_in %}
     <div class="am-g am-margin-vertical-sm am-text-sm">
-      <div class="am-u-sm-1 am-vertical-align">
-        <label class="am-checkbox am-danger am-vertical-align-middle">
-          <input type="checkbox" checked="checked" value="{{row.product.id}}" data-am-ucheck checked>
+      <div class="am-u-sm-1">
+        <label class="am-checkbox am-danger">
+          <input type="checkbox" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
         </label>
       </div>
       <div class="am-u-sm-3 am-padding-0">
-        <img src="{{row.product.cover}}" class="am-img-thumbnail product_img am-center" />
+        <img src="{{row.product.cover}}" class="am-img-thumbnail shopcart_product_img am-center" />
       </div>
       <div class="am-u-sm-8">
           <div class="am-g">
@@ -32,7 +32,7 @@
                 </div>
               </div>
             </dic>
-            <dic class="am-u-sm-6 am-vertical-align" style="height:60px;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
+            <dic class="am-u-sm-6 am-vertical-align" style="height:3.5rem;"><span class="am-vertical-align-middle am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
           </div>
       </div>
     </div>
@@ -89,6 +89,11 @@ function shopcart_down(product_id){
         }
       }
     })
+  }
+}
+function shopcart_select(obj){
+  if($(obj).is(':checked')){
+    alert($(obj).val())
   }
 }
 $(function(){

@@ -5,7 +5,7 @@
 <div class="am-slider am-slider-default am-margin-0" data-am-flexslider="{directionNav: false, controlNav: false}">
   <ul class="am-slides">
     {% for row in notice_list %}
-    <li class="slider-notice-li"><p>{{row.title}}</p></li>
+    <li class="slider-notice-li"><p><a href="{% url "notice" row.id %}" class="am-text-sm am-text-white">{{row.title}}</a></p></li>
     {% endfor %}
   </ul>
 </div>
