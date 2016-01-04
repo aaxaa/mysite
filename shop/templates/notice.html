@@ -6,14 +6,14 @@
 <div class="notice-detail-cover">
     <img class="am-img-responsive" src="{{notice.cover}}" />
     <div class="title">
-        <p class="am-margin-sm"><strong>{{notice.title}}</strong><small>{{notice.create_at}}</small></p>
+        <p class="am-margin-sm am-hr"><strong>{{notice.title}}</strong></p>
     </div>
 </div>
-<hr/>
 <div class="am-container">
-    <article data-am-widget="paragraph" class="am-paragraph am-paragraph-default" data-am-paragraph="{ tableScrollable: true, pureview: true }">
+    <article data-am-widget="paragraph" class="am-paragraph am-paragraph-default am-hr" data-am-paragraph="{ tableScrollable: true, pureview: true }">
     {{notice.content|safe}}  
     </article>
+    <p class="am-margin-xs am-text-xs am-text-center">{{notice.create_at}}</p>
 </div>
 {% else %}
         <p>公告不存在</p>

@@ -41,6 +41,9 @@
 	color: #fff;
 	background-color: rgb(227, 48, 140);
 }
+.am-text-beauty {
+	color: rgb(227, 48, 140);
+}
 .am-btn-add-to-cart ,.am-btn-add-to-cart:hover {
 	color: #fff;
 	background-color: rgb(235, 104, 162);
@@ -150,4 +153,10 @@
 }
 .am-paragraph-default img {
 	border:none;
+}
+.am-hr {
+	border-bottom: #eee solid 0.1rem;
+}
+.am-offcanvas-bar:after,.am-offcanvas-bar-active {
+	background-color: #fff;
 }

@@ -237,11 +237,11 @@ def shopcart_update(request, op):
                 #根据op操作数据
                 if op == 'up':
                     product['count'] += 1
-                    product['price'] = product['product']['price'] * product['count']
+                    product['price'] = float(product['product']['price']) * product['count']
 
                 elif op == 'down':
-                    product['count'] += 1
-                    product['price'] = product['product']['price'] * product['count']
+                    product['count'] -= 1
+                    product['price'] = float(product['product']['price']) * product['count']
 
                 elif op == 'check':
                     product['checked'] = True
@@ -252,7 +252,8 @@ def shopcart_update(request, op):
                 shopcart['products_list'].update({id:product})
 
             if op in ('up', 'down'):
-                shopcart['total_price'] = sum([pro['price'] for pro in shopcart['products_list'].values()])
+                print [pro['price'] for pro in shopcart['products_list'].values()]
+                shopcart['total_price'] = sum([float(pro['price']) for pro in shopcart['products_list'].values()])
 
                 data['status'] = 'success'
                 data['count'] = product['count']
@@ -266,6 +267,9 @@ def shopcart_update(request, op):
             data['status'] = 'failed'
 
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+def checkout(request, op, id):
+    return HttpResponse()
 
 
 def customer(request):
