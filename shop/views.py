@@ -105,9 +105,23 @@ def addtocart(request, id):
             else:
                 shopcart = {}
                 shopcart['products'] = []
+                shopcart['products_list'] = {}
 
             #保存到session内
             shopcart.get('products').append(product.id)
+
+            shopcart['products_list'].update({str(product.id):{
+                'product':{
+                    'id':product.id,
+                    'name':product.name,
+                    'cover':str(product.cover),
+                    'price':"%0.2f"%float(product.price),
+                },
+                'count': 1,
+                'price':"%0.2f"%float(product.price),
+                'checked':True
+            }})
+
             request.session['shopcart'] = shopcart
             
             data['status'] = 'ok'
@@ -208,7 +222,6 @@ def shopcart_update(request, op):
         #session内有数据
         if 'shopcart' in request.session:
             shopcart = request.session['shopcart']
-            products_count = shopcart['counts'] if 'counts' in shopcart else {}
             #全选的情况，循环购物车产品列表，全部更新状态
             if op in ('check_all', 'uncheck_all'):
                 for i, pro in shopcart['products_list'].items():

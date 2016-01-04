@@ -8,7 +8,7 @@
     <div class="am-g am-margin-vertical-sm am-text-sm">
       <div class="am-u-sm-1">
         <label class="am-checkbox am-danger">
-          <input type="checkbox" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
+          <input type="checkbox" name="pid" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
         </label>
       </div>
       <div class="am-u-sm-3 am-padding-0">
@@ -93,17 +93,34 @@ function shopcart_down(product_id){
 }
 function shopcart_select(obj){
   if($(obj).is(':checked')){
-    alert($(obj).val())
+    $.get('{% url "shopcart_update" "check" %}', {"id":$(obj).val()});
+  }else{
+    $.get('{% url "shopcart_update" "uncheck" %}', {"id":$(obj).val()});
+  }
+  check_all();
+}
+function check_all(){
+  _check_all = true;
+  $('input[name="pid"]').each(function(i,obj){
+    _check_all &= $(obj).is(':checked');
+  });
+  if(_check_all){
+    $('#select_all').uCheck('check');
+  }else{
+    $('#select_all').uCheck('uncheck');
   }
 }
 $(function(){
   $('#select_all').on('click', function(evt){
     if($('#select_all').is(':checked')){
       $('input[type="checkbox"]').uCheck('check');
+      $.get('{% url "shopcart_update" "check_all" %}');
     }else{
       $('input[type="checkbox"]').uCheck('uncheck');
+      $.get('{% url "shopcart_update" "uncheck_all" %}');
     }
   });
+  check_all();
 });
 </script>
 {% endblock%}
