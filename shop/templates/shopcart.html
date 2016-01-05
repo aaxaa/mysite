@@ -62,37 +62,39 @@
       <h3 class="am-padding-sm am-text-beauty am-hr">确认订单<a href="javascript:void(0);" onclick="$('#checkout').offCanvas('close');" class="am-close am-fr">&times;</a></h3>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">订单号:</label></div>
-        <div class="am-u-sm-9">aaaaa</div>
+        <div class="am-u-sm-9" id="order_num"></div>
       </div>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">产品:</label></div>
-        <div class="am-u-sm-9">清水 * 1 = ¥44444.99<br/>清水 * 2 = ¥44444.99</div>
+        <div class="am-u-sm-9" id="order_products"></div>
       </div>
-      <div class="am-g am-padding-lg am-text-xs am-hr">
+      <div class="am-g am-padding-top-sm am-text-xs am-hr">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">总价:</label></div>
-        <div class="am-u-sm-9"><strong class="am-text-danger">¥ 33343434</strong></div>
+        <div class="am-u-sm-9"><strong class="am-text-danger" id="order_total_price"></strong></div>
       </div>
+      <!--
       <div class="am-g am-padding-top-sm am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">姓名:</label></div>
-        <div class="am-u-sm-9"></div>
+        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
       </div>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">电话:</label></div>
-        <div class="am-u-sm-9"></div>
+        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
       </div>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">地址:</label></div>
-        <div class="am-u-sm-9"></div>
+        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
       </div>
       <div class="am-g am-padding-bottom-sm am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">附言:</label></div>
         <div class="am-u-sm-9">
-          <div class="am-form-group">
-            <textarea class="" rows="3" id="doc-ta-1"></textarea>
-          </div>
+            <textarea class="" rows="3" style="shopcart_info_form_textarea"></textarea>
         </div>
       </div>
-      <button class="am-btn am-btn-beauty am-btn-sm am-center">确认支付</button>
+      -->
+      <div class="am-padding-top-lg">
+        <button class="am-btn am-btn-beauty am-btn-sm am-center">提交订单</button>
+      </div>
     </div>
   </div>
 </div>
@@ -158,6 +160,12 @@ $(function(){
     }
   });
   $('button[name="checkout"]').click(function(){
+    $.get('{% url "shopcart_order"%}', function(res){
+      if(res['status']=='ok'){
+        $('#order_products').html(res['products']);
+        $('#order_total_price').html(res['total_price']);
+      }
+    });
     $('#checkout').offCanvas('open',{effect: 'overlay'});
   });
   check_all();

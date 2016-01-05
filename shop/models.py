@@ -337,11 +337,13 @@ class Order(models.Model):
     customer = models.ForeignKey(
         Customer,
         verbose_name=u'客户',
+        null=True,
+        blank=True,
         on_delete=models.CASCADE
     )
     products = models.ManyToManyField(Product, verbose_name=u'商品信息', through='OrderProduct')
     total_price = models.DecimalField(u'总价', max_digits=8, decimal_places=2)
-    address = models.CharField(u'收件地址', max_length=255)
+    address = models.CharField(u'收件地址', null=True, blank=True, max_length=255)
     create_at = models.DateField(u'创建时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=0)
 
@@ -351,14 +353,14 @@ class Order(models.Model):
         ordering = (('create_at'), ('status'))
 
 class OrderProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="products_in")
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     joined_at = models.DateField(u'添加时间', auto_now_add=True)
     count = models.SmallIntegerField(u'数量', default=1)
     price = models.DecimalField(u'价格', max_digits=8, default=0.00, decimal_places=2)
 
-    class Meta:
-        auto_created = True
+    def __unicode__(self):
+        return self.order.id
 
 
 class Notice(models.Model):

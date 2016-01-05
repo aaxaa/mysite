@@ -6,7 +6,7 @@ from django.db.models import Q, F
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct
+from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order
 
 from decimal import *
 import json
@@ -268,8 +268,41 @@ def shopcart_update(request, op):
 
     return HttpResponse(json.dumps(data), content_type="application/json")
 
-def checkout(request, op, id):
-    return HttpResponse()
+def shopcart_order(request, op=None, id=None):
+    data = {}
+    
+    if "customer" in request.session:
+        pass
+
+    else:
+        data['status'] = 'ok'
+        shopcart = request.session['shopcart']
+        data['products'] = ''
+        ids = set()
+        for id,product in shopcart['products_list'].items():
+            if product['checked']:
+                ids.add(int(id))
+                data['products'] += u"%s * %s = ￥%s<br/>" % (product['product']['name'], product['count'], product['price'])
+
+        data['total_price'] = u"￥%s"%shopcart['total_price']
+        if ids:
+            products = Product.objects.filter(id__in=ids)
+
+            order = Order.objects.create(
+                customer=None,
+                status=0,
+                total_price=shopcart['total_price'],
+                address=''
+            )
+
+            for prod in products:
+                order.products.add(prod)
+
+            order.save()
+        data['order_id'] = order.id
+
+        
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def customer(request):

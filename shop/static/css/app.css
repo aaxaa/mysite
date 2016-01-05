@@ -160,3 +160,12 @@
 .am-offcanvas-bar:after,.am-offcanvas-bar-active {
 	background-color: #fff;
 }
+.shopcart_info_form_input {
+	border-top:none;
+	border-left: none;
+	border-right:none;
+	border-bottom: #999 solid 0.1rem;
+}
+.shopcart_info_form_textarea {
+	border:#999 solid 1px;
+}
