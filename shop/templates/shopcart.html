@@ -62,7 +62,7 @@
       <h3 class="am-padding-sm am-text-beauty am-hr">确认订单<a href="javascript:void(0);" onclick="$('#checkout').offCanvas('close');" class="am-close am-fr">&times;</a></h3>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">订单号:</label></div>
-        <div class="am-u-sm-9" id="order_num"></div>
+        <div class="am-u-sm-9" id="order_id"></div>
       </div>
       <div class="am-g am-text-xs">
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">产品:</label></div>
@@ -93,7 +93,7 @@
       </div>
       -->
       <div class="am-padding-top-lg">
-        <button class="am-btn am-btn-beauty am-btn-sm am-center">提交订单</button>
+        <a class="am-btn am-btn-beauty am-btn-sm am-center" style="width:8rem" id="order_checkout">提交订单</a>
       </div>
     </div>
   </div>
@@ -162,14 +162,21 @@ $(function(){
   $('button[name="checkout"]').click(function(){
     $.get('{% url "shopcart_order"%}', function(res){
       if(res['status']=='ok'){
+        $('#order_id').html(res['order_id']);
         $('#order_products').html(res['products']);
         $('#order_total_price').html(res['total_price']);
+
+        if(res['login']){
+          $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id'])
+        }else{
+          $('#order_checkout').attr('href','{% url 'login' %}?forward=shopcart_order_checkout&order_id='+res['order_id'])
+        }
       }
     });
     $('#checkout').offCanvas('open',{effect: 'overlay'});
   });
   check_all();
-  $('button[name="checkout"]').click();
+  //$('button[name="checkout"]').click();
 });
 </script>
 {% endblock%}

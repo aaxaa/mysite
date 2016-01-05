@@ -6,7 +6,7 @@ from django.db.models import Q, F
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order
+from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct
 
 from decimal import *
 import json
@@ -137,8 +137,31 @@ def shopcart(request):
     products_in = []
     #已登陆用户，直接从数据库读取购物车内产品列表
     if 'customer' in request.session:
-        shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
+        try:
+            shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
+            
+
+        except ObjectDoesNotExist:
+            shopcart = Shopcart.objects.create(customer=Customer.objects.get(id=request.session['customer'].get('id')))
+            shopcart.save()
+
+        products_in_ids = [p.product.id for p in shopcart.products_in.all()]
+        print products_in
+
+        if 'shopcart' in request.session:
+
+            products = Product.objects.filter(id__in=request.session['shopcart']['products'])
+
+            for pro in products:
+
+                if pro.id not in products_in_ids:
+                    product_in = ShopcartProduct.objects.create(product=pro, shopcart=shopcart, count=1, price=pro.price, checked=True)
+                    product_in.save()
+
         products_in = shopcart.products_in.all()
+
+        
+
     #非登陆用户，读取session内购物车
     else:
         if 'shopcart' in request.session:
@@ -190,25 +213,23 @@ def shopcart_update(request, op):
         shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
         #从关联表中获取购物车中该产品的信息
         shopcart_product = ShopcartProduct.objects.get(shopcart__customer__pk=request.session['customer'].get('id'), product__pk=id)
+        product = Product.objects.get(pk=id)
         #加1
         if op == 'up':
-            price = shopcart_product.price / shopcart_product.count
             shopcart_product.count = F('count')+1
-            shopcart_product.price = F('price')+price
+            shopcart_product.price = F('price')+product.price
             shopcart_product.save()
-
-            shopcart.total_price = F('total_price') + shopcart_product.price
+            print type shopcart_product.price
+            shopcart.total_price = F('total_price') + float(shopcart_product.price.values)
             shopcart.save()
         #减1
         elif op == 'down':
-            if shopcart_product.count - 1 > 0:
-                price = shopcart_product.price / shopcart_product.count
-                shopcart_product.count = F('count')-1
-                shopcart_product.price = F('price')-price
-                shopcart_product.save()
+            shopcart_product.count = F('count')-1
+            shopcart_product.price = F('price')-product.price
+            shopcart_product.save()
 
-                shopcart.total_price = F('total_price') - shopcart_product.price
-                shopcart.save()
+            shopcart.total_price = F('total_price') - shopcart_product.price
+            shopcart.save()
 
         else:
             return HttpResponse(json.dumps({'status':'failed'}))
@@ -276,33 +297,60 @@ def shopcart_order(request, op=None, id=None):
 
     else:
         data['status'] = 'ok'
+        data['login'] = False
         shopcart = request.session['shopcart']
         data['products'] = ''
+        data['total_price'] = 0
         ids = set()
         for id,product in shopcart['products_list'].items():
             if product['checked']:
                 ids.add(int(id))
                 data['products'] += u"%s * %s = ￥%s<br/>" % (product['product']['name'], product['count'], product['price'])
+                data['total_price'] += float(product['price'])
 
-        data['total_price'] = u"￥%s"%shopcart['total_price']
+        data['total_price'] = u"￥%0.2f"%float(data['total_price'])
+        
         if ids:
+            order = None
             products = Product.objects.filter(id__in=ids)
+            if 'order_id' in shopcart:
+                data['order_id'] = shopcart['order_id']
 
-            order = Order.objects.create(
-                customer=None,
-                status=0,
-                total_price=shopcart['total_price'],
-                address=''
-            )
+                try:
+                    order = Order.objects.get(id=int(data['order_id']))
+
+                except ObjectDoesNotExist:
+                    pass
+
+            if not order:
+                order = Order.objects.create(
+                    customer=None,
+                    status=0,
+                    total_price=shopcart['total_price'],
+                    address=''
+                )
+                order.save()
+
+                data['order_id'] = order.id
+                shopcart['order_id'] = order.id
+
+                request.session['shopcart'] = shopcart
 
             for prod in products:
-                order.products.add(prod)
-
-            order.save()
-        data['order_id'] = order.id
-
+                if prod not in order.products_in.all():
+                    order_product = OrderProduct.objects.create(
+                        product=prod,
+                        order=order,
+                        count=shopcart['products_list'][str(prod.id)]['count'],
+                        price=shopcart['products_list'][str(prod.id)]['price']
+                    )
+                    order_product.save()
+                
         
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+def shopcart_order_checkout(request):
+    pass
 
 
 def customer(request):

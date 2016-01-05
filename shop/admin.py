@@ -48,6 +48,8 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ('category', 'name', 'display_order')
     fields = ('category', 'name', 'display_order')
 
+class OrderProductInline(admin.TabularInline):
+    model = OrderProduct
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('customer',  'total_price', 'create_at', 'status')
@@ -55,8 +57,8 @@ class OrderAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'create_at'
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    inlines = (OrderProductInline, )
+
 
 
 class CustomerAdmin(admin.ModelAdmin):

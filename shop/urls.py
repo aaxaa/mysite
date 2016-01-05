@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^shopcart$', views.shopcart, name='shopcart'),
     url(r'^shopcart/update/(?P<op>up|down|check|uncheck|check_all|uncheck_all)/$', views.shopcart_update, name='shopcart_update'),
     url(r'^shopcart/order/$', views.shopcart_order, name='shopcart_order'),
+    url(r'^shopcart/order/checkout$', views.shopcart_order_checkout, name='shopcart_order_checkout'),
     url(r'^customer$', views.customer, name='customer'),
     url(r'^register$', views.register, name='register'),
     url(r'^login$', views.login, name='login'),

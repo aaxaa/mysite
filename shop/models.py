@@ -96,6 +96,7 @@ class Product(models.Model):
     )
     price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
     stock = models.IntegerField(u"库存数量", default=0)
+    point = models.IntegerField(u"积分奖励", default=0)
     content = RichTextUploadingField(u"产品详情")
     cover = models.ImageField(
         u"封面图片",
@@ -314,7 +315,6 @@ class ShopcartProduct(models.Model):
     checked = models.BooleanField(u'选择', default=True)
 
     class Meta:
-        auto_created = True
         verbose_name = u"购物车"
         verbose_name_plural = u'购物车'
 
@@ -338,8 +338,7 @@ class Order(models.Model):
         Customer,
         verbose_name=u'客户',
         null=True,
-        blank=True,
-        on_delete=models.CASCADE
+        blank=True
     )
     products = models.ManyToManyField(Product, verbose_name=u'商品信息', through='OrderProduct')
     total_price = models.DecimalField(u'总价', max_digits=8, decimal_places=2)
@@ -353,14 +352,17 @@ class Order(models.Model):
         ordering = (('create_at'), ('status'))
 
 class OrderProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="products_in")
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="products_in")
     joined_at = models.DateField(u'添加时间', auto_now_add=True)
     count = models.SmallIntegerField(u'数量', default=1)
     price = models.DecimalField(u'价格', max_digits=8, default=0.00, decimal_places=2)
 
     def __unicode__(self):
-        return self.order.id
+        return str(self.order.id)
+
+    # class Meta:
+    #     auto_created = True
 
 
 class Notice(models.Model):
