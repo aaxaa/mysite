@@ -72,26 +72,6 @@
         <div class="am-u-sm-3 am-padding-0"><label class="am-fr">总价:</label></div>
         <div class="am-u-sm-9"><strong class="am-text-danger" id="order_total_price"></strong></div>
       </div>
-      <!--
-      <div class="am-g am-padding-top-sm am-text-xs">
-        <div class="am-u-sm-3 am-padding-0"><label class="am-fr">姓名:</label></div>
-        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
-      </div>
-      <div class="am-g am-text-xs">
-        <div class="am-u-sm-3 am-padding-0"><label class="am-fr">电话:</label></div>
-        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
-      </div>
-      <div class="am-g am-text-xs">
-        <div class="am-u-sm-3 am-padding-0"><label class="am-fr">地址:</label></div>
-        <div class="am-u-sm-9"><input type="text" value="" class="shopcart_info_form_input"></div>
-      </div>
-      <div class="am-g am-padding-bottom-sm am-text-xs">
-        <div class="am-u-sm-3 am-padding-0"><label class="am-fr">附言:</label></div>
-        <div class="am-u-sm-9">
-            <textarea class="" rows="3" style="shopcart_info_form_textarea"></textarea>
-        </div>
-      </div>
-      -->
       <div class="am-padding-top-lg">
         <a class="am-btn am-btn-beauty am-btn-sm am-center" style="width:8rem" id="order_checkout">提交订单</a>
       </div>
@@ -132,9 +112,19 @@ function shopcart_down(product_id){
 }
 function shopcart_select(obj){
   if($(obj).is(':checked')){
-    $.get('{% url "shopcart_update" "check" %}', {"id":$(obj).val()});
+    $.get('{% url "shopcart_update" "check" %}', {"id":$(obj).val()}, function(res){
+        
+        if(res['status']=='success'){
+          $('#total_price').html(res['total_price']);
+        }
+      });
   }else{
-    $.get('{% url "shopcart_update" "uncheck" %}', {"id":$(obj).val()});
+    $.get('{% url "shopcart_update" "uncheck" %}', {"id":$(obj).val()}, function(res){
+        
+        if(res['status']=='success'){
+          $('#total_price').html(res['total_price']);
+        }
+      });
   }
   check_all();
 }
@@ -153,10 +143,20 @@ $(function(){
   $('#select_all').on('click', function(evt){
     if($('#select_all').is(':checked')){
       $('input[type="checkbox"]').uCheck('check');
-      $.get('{% url "shopcart_update" "check_all" %}');
+      $.get('{% url "shopcart_update" "check_all" %}', function(res){
+        
+        if(res['status']=='success'){
+          $('#total_price').html(res['total_price']);
+        }
+      });
     }else{
       $('input[type="checkbox"]').uCheck('uncheck');
-      $.get('{% url "shopcart_update" "uncheck_all" %}');
+      $.get('{% url "shopcart_update" "uncheck_all" %}', function(res){
+        
+        if(res['status']=='success'){
+          $('#total_price').html(res['total_price']);
+        }
+      });
     }
   });
   $('button[name="checkout"]').click(function(){
@@ -167,7 +167,7 @@ $(function(){
         $('#order_total_price').html(res['total_price']);
 
         if(res['login']){
-          $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id'])
+          $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id']);
         }else{
           $('#order_checkout').attr('href','{% url 'login' %}?forward=shopcart_order_checkout&order_id='+res['order_id'])
         }

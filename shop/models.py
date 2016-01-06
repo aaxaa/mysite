@@ -341,7 +341,10 @@ class Order(models.Model):
     )
     products = models.ManyToManyField(Product, verbose_name=u'商品信息', through='OrderProduct')
     total_price = models.DecimalField(u'总价', max_digits=8, decimal_places=2)
+    realname = models.CharField(u'收件人', max_length=50, null=True, blank=True)
+    phone = models.CharField(u'联系电话', max_length=15, null=True, blank=True)
     address = models.CharField(u'收件地址', null=True, blank=True, max_length=255)
+    message = models.CharField(u'附言', max_length=255, null=True, blank=True)
     create_at = models.DateField(u'创建时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=0)
 

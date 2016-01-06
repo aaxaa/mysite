@@ -15,30 +15,41 @@
       <div class="am-u-sm-10">{{products|safe}}</div>
     </div>
   </div>
+  <form class="am-form am-form-horizontal" action="{% url 'purchase' %}" method="POST" data-am-validator>
+  {% csrf_token %}
+  <input type="hidden" value="{{order_id}}" name="order_id">
   <div class="am-g am-margin-xs am-padding-top-xs am-text-xs">
-    <div class="am-u-sm-3 am-padding-0"><label class="am-fr">姓名:</label></div>
-    <div class="am-u-sm-9"><input type="text" value="{{customer.realname|default_if_none:''}}" class="shopcart_info_form_input"></div>
+    <div class="am-u-sm-2 am-padding-0"><label class="am-fr">姓名:</label></div>
+    <div class="am-u-sm-10"><input type="text" name="realname" value="{{customer.realname|default_if_none:''}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
-    <div class="am-u-sm-3 am-padding-0"><label class="am-fr">电话:</label></div>
-    <div class="am-u-sm-9"><input type="text" value="{{customer.phone|default_if_none:''}}" class="shopcart_info_form_input"></div>
+    <div class="am-u-sm-2 am-padding-0"><label class="am-fr">电话:</label></div>
+    <div class="am-u-sm-10"><input type="text" name="phone" value="{{customer.phone|default_if_none:''}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
-    <div class="am-u-sm-3 am-padding-0"><label class="am-fr">地址:</label></div>
-    <div class="am-u-sm-9"><input type="text" value="{{customer.address|default_if_none:''}}" class="shopcart_info_form_input"></div>
+    <div class="am-u-sm-2 am-padding-0"><label class="am-fr">地址:</label></div>
+    <div class="am-u-sm-10"><input type="text" name="address" value="{{customer.address|default_if_none:''}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
-    <div class="am-u-sm-3 am-padding-0"><label class="am-fr">附言:</label></div>
-    <div class="am-u-sm-9">
-        <textarea class="" rows="3" style="shopcart_info_form_textarea"></textarea>
+    <div class="am-u-sm-2 am-padding-0"><label class="am-fr">附言:</label></div>
+    <div class="am-u-sm-10">
+        <textarea class="" rows="3" name="message"></textarea>
     </div>
   </div>
-  <ul class="am-listam-list-static am-list-border">
-    <li><input type="radio" value="" name="" /> 微信支付</li>
+  <ul class="am-list am-list-static am-list-border am-text-xs am-padding-xs">
+    <li class="am-pading-vertical-0">
+    <label class="am-radio am-pading-vertical-0">
+        <input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付
+      </label> </li>
+    <li class="am-padding-xs"><label class="am-radio am-pading-vertical-0">
+        <input type="radio"  value="point" name="pay" required> 积分支付
+      </label> </li>
   </ul>
+
   <div class="am-text-center am-padding-top-lg">
-    <a class="am-btn am-btn-beauty am-btn-sm">付款</a>
+    <button type="submit" class="am-btn am-btn-beauty am-btn-sm">付款</button>
   </div>
+  </form>
 </div>
 {% endblock %}
 {% block script %}

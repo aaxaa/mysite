@@ -16,13 +16,32 @@
       </h2>
   </div>
   <ul data-am-widget="gallery" class="am-gallery am-avg-sm-4 am-avg-md-8 am-avg-lg-16 am-gallery-default">
+    {% for row in relation_list%}
     <li>
       <div class="am-gallery-item">
           <a href="{% static "img/a.jgp" %}" class="">
-            <img src="{% static "img/a.jpg" %}" class="am-img-thumbnail am-circle user-image"  alt="远方"/>
+            {% if row.customer.avator %}
+            <img src="{% static "img/a.jpg" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+            {% else %}
+            <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+            {% endif %}
           </a>
       </div>
     </li>
+    {% endfor %}
+    {% for row in relation_list_sub%}
+    <li>
+      <div class="am-gallery-item">
+          <a href="{% static "img/a.jgp" %}" class="">
+            {% if row.customer.avator %}
+            <img src="{% static "img/a.jpg" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+            {% else %}
+            <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+            {% endif %}
+          </a>
+      </div>
+    </li>
+    {% endfor %}
   </ul>
   {% endif %}
 </div>

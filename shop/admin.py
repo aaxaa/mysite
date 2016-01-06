@@ -52,7 +52,7 @@ class OrderProductInline(admin.TabularInline):
     model = OrderProduct
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('customer',  'total_price', 'create_at', 'status')
+    list_display = ('id',  'total_price', 'create_at', 'status')
     list_filter = ('status',)
 
     date_hierarchy = 'create_at'
