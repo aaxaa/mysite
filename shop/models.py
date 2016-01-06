@@ -7,7 +7,6 @@ from datetime import date
 import random, hashlib
 
 
-
 class Category(models.Model):
     parent = models.ForeignKey(
         'self',

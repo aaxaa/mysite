@@ -11,29 +11,31 @@
 {% include "libs/title.html" with title="注册" %}
 <div class="am-container">
     {% if status and status == 'success' %}
-    <div class="am-center" style="width:150px; margin-top:30px;">
-        <h2>您已注册成功！</h2>
-        <a href="{% url 'main' %}" class="am-btn am-btn-success">快点去逛逛</a>
+    <div class="am-text-center" style="margin-top:3rem">
+        <h2>您已注册成功！{% if order_id %}您有未付款订单，是否继续？{% endif %}</h2>
+
+        <a href="{% url 'main' %}" class="am-btn am-btn-sm am-btn-success">去逛逛</a>
+        {% if order_id %}<a href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}" class="am-btn am-btn-sm am-btn-success">去付款</a>{% endif %}
+
     </div>
     {% elif status == 'field-failed' %}
-    <div class="am-center" style="width:150px; margin-top:30px;">
+    <div class="am-text-center" style="margin-top:3rem;">
         {% if 'phone' in errors %}
             <h3>手机号码不能为空！</h3>
         {% endif %}
         {% if 'password' in errors %}
             <h3>密码不能为空！</h3>
         {% endif %}
-        <a href="{% url 'register' %}" class="am-btn am-btn-success">返回重新注册</a>
+        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'db-failed' %}
-    <div class="am-center" style="width:150px; margin-top:30px;">
+    <div  class="am-text-center" style="margin-top:3rem;">
         <h3>{{errors.message}}</h3>
-        <a href="{% url 'register' %}" class="am-btn am-btn-success">返回重新注册</a>
+        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
     </div>
     {% else %}
     <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
         {% csrf_token %}
-        
         <div class="am-form-group">
             <label class="am-form-label">手机</label>
             <input type="text" name="phone" placeholder="请输入您的手机号码" required pattern="^\d{11}$" />
@@ -56,7 +58,10 @@
         </div>
 
         <div class="am-form-group">
-            <button type="submit" class="am-btn am-btn-success am-center">注册</button>
+            <div class="am-center" style="width:15rem;">
+                <button type="submit" class="am-btn am-btn-success">注册</button>
+                <a href="{% url "login" %}" class="am-btn am-btn-success">返回登陆</a>
+            </div>
         </div>
         
     </form>
