@@ -24,7 +24,7 @@
 		    </div>
 		</div>
 		<div class="am-u-sm-6">
-			<a class="am-btn am-btn-shipping" style="width:100%">立刻购买</a>
+			<a class="am-btn am-btn-shipping" style="width:100%" id="quick_checkout">立刻购买</a>
 		</div>
 	</div>
 	
@@ -74,6 +74,26 @@
 		</div>
 	</div>
 </div>
+<div id="checkout" class="am-offcanvas">
+	<div class="am-offcanvas-bar am-offcanvas-bar-flip">
+		<h3 class="am-padding-sm am-text-beauty am-hr">确认订单<a href="javascript:void(0);" onclick="$('#checkout').offCanvas('close');" class="am-close am-fr">&times;</a></h3>
+		<div class="am-g am-text-xs">
+			<div class="am-u-sm-3 am-padding-0"><label class="am-fr">订单号:</label></div>
+			<div class="am-u-sm-9" id="order_id"></div>
+		</div>
+		<div class="am-g am-text-xs">
+			<div class="am-u-sm-3 am-padding-0"><label class="am-fr">产品:</label></div>
+			<div class="am-u-sm-9" id="order_products"></div>
+		</div>
+		<div class="am-g am-padding-top-sm am-text-xs am-hr">
+			<div class="am-u-sm-3 am-padding-0"><label class="am-fr">总价:</label></div>
+			<div class="am-u-sm-9"><strong class="am-text-danger" id="order_total_price"></strong></div>
+		</div>
+		<div class="am-padding-top-lg">
+			<a class="am-btn am-btn-beauty am-btn-sm am-center" style="width:8rem" id="order_checkout">提交订单</a>
+		</div>
+	</div>
+</div>
 {% endblock %}
 {% block script %}
 <script>
@@ -102,6 +122,32 @@ $(function(){
 		            'width': 300,
 		            'height': 120, 
 		        });
+    		}else{
+    			alert(res.message);
+    		}
+    	});
+    });
+    $('#quick_checkout').on('click', function(){
+    	var num = $('#product_count').val();
+    	$.get('{% url "addtocart" product.id %}?count='+num+'&checked=1', function(res){
+    		if(res.status == 'ok'){
+    			$.get('{% url "shopcart_order"%}', function(r){
+					if(r['status']=='ok'){
+						$('#order_id').html(r['order_id']);
+						$('#order_products').html(r['products']);
+						$('#order_total_price').html(r['total_price']);
+
+						if(r['login']){
+							$('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+r['order_id']);
+						}else{
+							$('#order_checkout').attr('href','{% url 'login' %}?forward=shopcart_order_checkout&order_id='+r['order_id'])
+						}
+						$('#checkout').offCanvas('open',{effect: 'overlay'});
+					}else{
+						alert(r.message);
+					}
+			    });
+		    	
     		}else{
     			alert(res.message);
     		}

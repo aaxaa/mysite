@@ -51,6 +51,8 @@ def order(request):
     if 'customer' in request.session:
         customer = Customer.objects.get(id=request.session['customer'].get('id'))
         order_list = Order.objects.filter(customer=customer)
+        for order in order_list:
+            order.products_in_all = order.products_in.all()
 
         return render(request, 'order.html', {'order_list':order_list})
 
@@ -121,6 +123,7 @@ def beauty(request):
 def addtocart(request, id):
     data = {}
     count = int(request.GET.get('count', 1))
+    checked = int(request.GET.get('checked', 0))
     total_price = 0
 
     try:
@@ -141,9 +144,12 @@ def addtocart(request, id):
                 shopcart_product = ShopcartProduct.objects.get(product=product, shopcart=shopcart)
                 shopcart_product.count = F('count') + count
                 shopcart_product.price = F('price') + product.price * count
+                if checked == 1:
+                    shopcart_product.checked = True
+
                 shopcart_product.save()
             except ObjectDoesNotExist:
-                shopcart_product = ShopcartProduct(product=product, shopcart=shopcart, count=count, price=product.price*count)
+                shopcart_product = ShopcartProduct(product=product, shopcart=shopcart, count=count, price=product.price*count, checked=(checked==1))
                 shopcart_product.save() 
 
             #计算总价
@@ -422,7 +428,7 @@ def shopcart_order(request):
         products = Product.objects.filter(id__in=ids)
         if 'order_id' in request.session:
             data['order_id'] = request.session['order_id']
-
+            #获取订单，若订单是未登录创建的，还要更新订单归属
             try:
                 order = Order.objects.get(id=int(data['order_id']))
                 if customer and not order.customer:
@@ -445,18 +451,19 @@ def shopcart_order(request):
             request.session['order_id'] = order.id
 
         for prod in products:
-            data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
+            if prod.checked:
+                data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
 
-            if prod.id not in [p.product.id for p in order.products_in.all()]:
-                order_product = OrderProduct.objects.create(
-                    product=prod,
-                    order=order,
-                    count=products_list[prod.id]['count'],
-                    price=products_list[prod.id]['price']
-                )
-                order_product.save()
-            else:
-                OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
+                if prod.id not in [p.product.id for p in order.products_in.all()]:
+                    order_product = OrderProduct.objects.create(
+                        product=prod,
+                        order=order,
+                        count=products_list[prod.id]['count'],
+                        price=products_list[prod.id]['price']
+                    )
+                    order_product.save()
+                else:
+                    OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
 
                 
         
@@ -481,19 +488,16 @@ def shopcart_order_checkout(request):
 
             data['total_price'] = "%0.2f"%total_price
 
-            if not order.realname:
-                order.realname = data['customer'].realname
-
             data['order'] = order
 
-            params = build_form_by_params({
-                'body': data['products'].replace('<br/>', ','),
-                'out_trade_no' : order.id,
-                'total_fee':data['total_price'],
-                'spbill_create_ip':get_client_ip(request)
-            })
+            # params = build_form_by_params({
+            #     'body': data['products'].replace('<br/>', ','),
+            #     'out_trade_no' : order.id,
+            #     'total_fee':data['total_price'],
+            #     'spbill_create_ip':get_client_ip(request)
+            # })
 
-            data['wx_pay_params'] = json.dumps(params)
+            # data['wx_pay_params'] = json.dumps(params)
 
         else:
             pass
@@ -522,6 +526,7 @@ def purchase(request):
             order.phone = data['phone']
             order.address = data['address']
             order.message = request.POST.get('message', '')
+            order.status = 3
 
             order.save()
             return render(request, 'purchase.html')
@@ -531,8 +536,6 @@ def purchase(request):
 
     else:
         return redirect('/login?forward=purchase')
-
-
 
 
 def customer(request):
