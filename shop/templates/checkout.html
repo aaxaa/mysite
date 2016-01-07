@@ -20,20 +20,20 @@
   <input type="hidden" value="{{order_id}}" name="order_id">
   <div class="am-g am-margin-xs am-padding-top-xs am-text-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">姓名:</label></div>
-    <div class="am-u-sm-10"><input type="text" name="realname" value="{{customer.realname|default_if_none:''}}" class="am-input-sm" required></div>
+    <div class="am-u-sm-10"><input type="text" name="realname" value="{{order.realname|default_if_none:''}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">电话:</label></div>
-    <div class="am-u-sm-10"><input type="text" name="phone" value="{{customer.phone|default_if_none:''}}" class="am-input-sm" required></div>
+    <div class="am-u-sm-10"><input type="text" name="phone" value="{{order.phone|default_if_none:''}}" class="am-input-sm js-pattern-mobile" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">地址:</label></div>
-    <div class="am-u-sm-10"><input type="text" name="address" value="{{customer.address|default_if_none:''}}" class="am-input-sm" required></div>
+    <div class="am-u-sm-10"><input type="text" name="address" value="{{order.address|default_if_none:''}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">附言:</label></div>
     <div class="am-u-sm-10">
-        <textarea class="" rows="3" name="message"></textarea>
+        <textarea class="" rows="3" name="message">{{order.message|default_if_none:''}}</textarea>
     </div>
   </div>
   <ul class="am-list am-list-static am-list-border am-text-xs am-padding-xs">
@@ -41,8 +41,8 @@
     <label class="am-radio am-pading-vertical-0">
         <input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付
       </label> </li>
-    <li class="am-padding-xs"><label class="am-radio am-pading-vertical-0">
-        <input type="radio"  value="point" name="pay" required> 积分支付
+    <li class="am-padding-xs"><label class="am-radio am-pading-vertical-0" onclick="show_point()">
+        <input type="radio"  value="point" name="pay" required {% if customer.point < order.total_price %}disabled="disabled" {% endif %}> 积分支付 (目前积分：<i class="am-text-danger">{{customer.point}}</i> )
       </label> </li>
   </ul>
 
@@ -53,8 +53,12 @@
 </div>
 {% endblock %}
 {% block script %}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
   $(function(){
+    if ($.AMUI && $.AMUI.validator) {
+      $.AMUI.validator.patterns.mobile = /^\s*1\d{10}\s*$/;
+    }
     $('#show_box').click(function(){
       if($('#order_products').hasClass('am-hide')){
         $('#order_products').removeClass('am-hide');
@@ -64,6 +68,7 @@
         $('#show_icon').attr('class','am-icon-angle-double-left am-fr');
       }
     });
+    
   });
 </script>
 {% endblock %}

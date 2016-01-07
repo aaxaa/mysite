@@ -88,6 +88,9 @@ class CustomerRelationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('customer', 'question_text', 'answer_text', 'create_at')
+
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'create_at', 'public_at', 'status')
@@ -106,5 +109,6 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(CustomerPointLog, CustomerPointLogAdmin)
 admin.site.register(CustomerRelation, CustomerRelationAdmin)
 admin.site.register(Notice, NoticeAdmin)
+admin.site.register(Message, MessageAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Shopcart, ShopcartAdmin)

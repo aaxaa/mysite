@@ -27,7 +27,7 @@
       <i class="am-icon-phone"></i>
     </div> 
     <div class="am-u-sm-11 am-u-lg-10">
-      {{tel.values}}
+      美丽热线：{{tel.values}}
     </div>
   </div>
   <div class="am-g">
@@ -38,24 +38,55 @@
       {{traffic.values|safe}}
     </div>
   </div>
-  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="http://www.bing.com" target="_blank">我要预约</a>
+  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:{{tel.values}}" target="_blank">我要预约</a>
 </div>
 
-
+{% if customer_id %}
 <div class="am-container">
   <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
       <h2 class="am-titlebar-title ">
           开始咨询
       </h2>
   </div>
-  <form class="am-form am-magin-l">
+  <ul class="am-comments-list am-comments-list-flip am-text-xs">
+    {%for message in message_data %}
+      {% for m in message.question_text %}
+      <li class="am-comment am-comment-flip">
+        <a href="#link-to-user-home">
+        {% if message.customer.avatar %}
+        <img src="{{message.customer.avatar}}" alt="" class="am-comment-avatar" width="48" height="48">
+        {% else %}
+        <img src="{% static "img/no-pic.png" %}" alt="" class="am-comment-avatar" width="48" height="48">
+        {% endif %}
+        </a>
+        <div class="am-comment-main">
+          <div class="am-comment-bd"><p>{{m}}</p></div>
+        </div>
+      </li>
+      {% endfor %}
+      {% if message.answer_text %}
+      <li class="am-comment am-comment-danger">
+        <a href="#link-to-user-home"><img src="{% static "img/logo.png" %}" alt="" class="am-comment-avatar" width="48" height="48"></a>
+        <div class="am-comment-main"><div class="am-comment-bd"><p>{{message.answer_text}}</p></div>
+        </div>
+      </li>
+      {% endif %}
+    {% endfor %}
+    
+    </ul>
+
+
+
+  <form class="am-form am-magin-l" action="{% url "ask"%}" method="POST">
+  {% csrf_token %}
   <fieldset>
     <div class="am-form-group">
-      <textarea class="" rows="5" id="doc-ta-1"></textarea>
+      <textarea class="" rows="3" name="message"></textarea>
     </div>
     </fieldset>
     <button class="am-btn am-btn-beauty am-btn-block" href="http://www.bing.com" target="_blank">我要咨询</button>
   </form>
   
 </div>
+{% endif %}
 {% endblock %}

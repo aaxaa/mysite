@@ -143,3 +143,9 @@ CKEDITOR_CONFIGS = {
         'width': 800,
     },
 }
+WECHAT_PAY_PARAMS = {
+    'appId': '',
+    'Mchid': '',
+    'Key': '',
+    'notify_url': ''
+}

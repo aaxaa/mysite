@@ -216,7 +216,7 @@ class Customer(models.Model):
         index_together = ('username', 'phone')
 
     def __unicode__(self):
-        return str(self.id)
+        return self.realname if self.realname else (u"手机帐号%s" % (self.phone)) 
 
 
 class CustomerConnect(models.Model):
@@ -366,6 +366,20 @@ class OrderProduct(models.Model):
     # class Meta:
     #     auto_created = True
 
+
+class Message(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=u"客户")
+    create_at = models.DateField(u'提问时间', auto_now_add=True)
+    question_text = models.TextField(u'提问内容')
+    answer_text = models.TextField(u'答复内容', null=True, blank=True)
+
+    def __unicode__(self):
+        return self.question_text
+
+    class Meta:
+        verbose_name = u'咨询'
+        verbose_name_plural = u'客户咨询'
+        ordering = (('create_at'), )
 
 class Notice(models.Model):
     type_choices = [

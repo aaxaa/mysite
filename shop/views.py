@@ -6,8 +6,8 @@ from django.db.models import Q, F, Sum
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation
-
+from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, Message
+from shop.utils import build_form_by_params, get_client_ip
 from decimal import *
 import json
 
@@ -65,12 +65,47 @@ def server(request):
         traffic = ''
         address = ''
 
+    if 'customer' in request.session:
+        customer_id = request.session['customer'].get('id')
+        message_list = Message.objects.filter(customer__id=customer_id)
+        message_data = []
+        for message in message_list:
+            message.question_text = str(message.question_text).split('\b')
+            message_data.append(message)
+    else:
+        customer_id = None
+        message_data = None
+
+
     return render(request, 'server.html', {
         'notice_list': notice_list,
         'tel': tel,
         'traffic': traffic,
         'address': address,
+        'customer_id':customer_id,
+        'message_data':message_data
     })
+
+
+def ask(request):
+    if 'customer' in request.session:
+        customer = Customer.objects.get(id=request.session['customer'].get('id'))
+        if request.method == 'POST':
+            _message = request.POST.get('message','')
+
+            if _message != '':
+                try:
+                    message = Message.objects.get(customer=customer, answer_text=None)
+                    message.question_text = "%s\b%s" % (message.question_text, _message)
+                    message.save()
+
+                except:
+                    message = Message.objects.create(customer=customer, question_text=_message)
+                    message.save()
+
+                return redirect(reverse('server'))
+    else:
+        return redirect('/login?forward=ask')
 
 
 def beauty(request):
@@ -81,7 +116,7 @@ def beauty(request):
 
         return render(request, 'beauty.html', {'customer':customer, 'relation_list':relation_list, 'relation_list_sub':relation_list_sub})
     else:
-        redirect('/login?forward=customer')
+        return redirect('/login?forward=customer')
 
 def addtocart(request, id):
     data = {}
@@ -163,13 +198,14 @@ def addtocart(request, id):
 def shopcart(request):
     shopcart = {}
     products_in = []
+    order = None
     #已登陆用户，直接从数据库读取购物车内产品列表
     if 'customer' in request.session:
         try:
             order = Order.objects.get(customer__pk=request.session['customer'].get('id'), status=1)
 
         except:
-            order = None
+            pass
 
         try:
             shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
@@ -180,17 +216,23 @@ def shopcart(request):
         products_in_ids = [p.product.id for p in shopcart.products_in.all()]
 
         if 'shopcart' in request.session:
-
-            products = Product.objects.filter(id__in=request.session['shopcart']['products'])
+            _shopcart = request.session['shopcart']
+            products = Product.objects.filter(id__in=set(_shopcart['products']))
 
             for pro in products:
-
+                product = _shopcart['products_list'][str(pro.id)]
                 if pro.id not in products_in_ids:
-                    product_in = ShopcartProduct.objects.create(product=pro, shopcart=shopcart, count=1, price=pro.price, checked=True)
+                    product_in = ShopcartProduct.objects.create(product=pro, shopcart=shopcart, count=product.count, price=product.price, checked=product.checked)
                     product_in.save()
+                else:
+                    ShopcartProduct.objects.filter(product=pro, shopcart=shopcart).update(count=F('count')+product['count'], price=F('price')+float(product['price']))
+            del request.session['shopcart']
 
         products_in = shopcart.products_in.all()
 
+        sp = ShopcartProduct.objects.filter(shopcart__customer__pk=request.session['customer'].get('id'), checked=True).aggregate(total=Sum('price'))
+        shopcart.total_price = "%0.2f"%(sp['total']+0) if sp['total'] else "0"
+        shopcart.save()
         
 
     #非登陆用户，读取session内购物车
@@ -364,7 +406,11 @@ def shopcart_order(request):
         for _id,product in shopcart['products_list'].items():
             if product['checked']:
                 ids.add(int(_id))
-                products_list.update({int(_id):product})
+                if int(_id) in products_list:
+                    p = products_list[int(_id)]
+                    products_list.update({int(_id):{'count':product['count']+p['count'], 'price':float(product['price'])+float(p['price'])}})
+                else:
+                    products_list.update({int(_id):product})
     
     if ids:
         for _id in ids:
@@ -385,8 +431,8 @@ def shopcart_order(request):
 
             except ObjectDoesNotExist:
                 pass
-
-        if not order:
+        #最新的订单结束，则创建薪订单
+        if not order or order.status > 1:
             order = Order.objects.create(
                 customer=customer,
                 status=0,
@@ -400,7 +446,8 @@ def shopcart_order(request):
 
         for prod in products:
             data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
-            if prod not in order.products_in.all():
+
+            if prod.id not in [p.product.id for p in order.products_in.all()]:
                 order_product = OrderProduct.objects.create(
                     product=prod,
                     order=order,
@@ -408,15 +455,19 @@ def shopcart_order(request):
                     price=products_list[prod.id]['price']
                 )
                 order_product.save()
+            else:
+                OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
+
                 
         
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def shopcart_order_checkout(request):
+    order_id = request.GET.get('order_id', '')
     if "customer" in request.session:
         data = {}
-        order_id = request.GET.get('order_id', '')
-        customer = Customer.objects.get(id=request.session['customer'].get('id'))
+        
+        data['customer'] = Customer.objects.get(id=request.session['customer'].get('id'))
 
         if order_id:
             order = Order.objects.get(id=order_id)
@@ -428,12 +479,27 @@ def shopcart_order_checkout(request):
                 data['products'] += u"%s * %s = ￥%s<br/>" % (product.product.name, product.count, product.price)
                 total_price += float(product.price)
 
-            data['customer'] = customer
             data['total_price'] = "%0.2f"%total_price
+
+            if not order.realname:
+                order.realname = data['customer'].realname
+
+            data['order'] = order
+
+            params = build_form_by_params({
+                'body': data['products'].replace('<br/>', ','),
+                'out_trade_no' : order.id,
+                'total_fee':data['total_price'],
+                'spbill_create_ip':get_client_ip(request)
+            })
+
+            data['wx_pay_params'] = json.dumps(params)
 
         else:
             pass
-    return render(request, 'checkout.html', data)
+        return render(request, 'checkout.html', data)
+    else:
+        return redirect('/login?forward=shopcart_order_checkout&order_id=%s'%(order_id))
 
 
 def purchase(request):
@@ -441,7 +507,6 @@ def purchase(request):
         errors = {}
         empty_fields = []
         data = {}
-        print request.POST
         for field in ('realname', 'phone', 'address', 'pay'):
             data[field] = request.POST.get(field)
             if data[field] is None or data[field] == '':

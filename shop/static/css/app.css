@@ -160,6 +160,9 @@
 .am-offcanvas-bar:after,.am-offcanvas-bar-active {
 	background-color: #fff;
 }
+.am-offcanvas-bar {
+	background:#fff;
+}
 .am-form-horizontal .am-radio {
 	padding:0;
 	margin: 0;
