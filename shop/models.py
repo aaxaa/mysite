@@ -354,11 +354,16 @@ class Order(models.Model):
         ordering = (('create_at'), ('status'))
 
 class OrderProduct(models.Model):
+    status_choices = [
+        (0, u'未消费'),
+        (1, u'已消费')
+    ]
     product = models.ForeignKey(Product)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="products_in")
     joined_at = models.DateField(u'添加时间', auto_now_add=True)
     count = models.SmallIntegerField(u'数量', default=1)
     price = models.DecimalField(u'价格', max_digits=8, default=0.00, decimal_places=2)
+    status = models.SmallIntegerField(u'状态', choices=status_choices, default=0)
 
     def __unicode__(self):
         return str(self.order.id)
