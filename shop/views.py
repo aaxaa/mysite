@@ -188,7 +188,7 @@ def addtocart(request, id):
                     },
                     'count': count,
                     'price':"%0.2f"%float(product.price*count),
-                    'checked':True
+                    'checked':True if checked==1 else False
                 }})
 
             request.session['shopcart'] = shopcart
@@ -451,19 +451,18 @@ def shopcart_order(request):
             request.session['order_id'] = order.id
 
         for prod in products:
-            if prod.checked:
-                data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
+            data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
 
-                if prod.id not in [p.product.id for p in order.products_in.all()]:
-                    order_product = OrderProduct.objects.create(
-                        product=prod,
-                        order=order,
-                        count=products_list[prod.id]['count'],
-                        price=products_list[prod.id]['price']
-                    )
-                    order_product.save()
-                else:
-                    OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
+            if prod.id not in [p.product.id for p in order.products_in.all()]:
+                order_product = OrderProduct.objects.create(
+                    product=prod,
+                    order=order,
+                    count=products_list[prod.id]['count'],
+                    price=products_list[prod.id]['price']
+                )
+                order_product.save()
+            else:
+                OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
 
                 
         
