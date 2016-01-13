@@ -33,7 +33,7 @@
     </div>
     {% elif status == 'verify-failed' %}
     <div class="am-text-center" style="margin-top:3rem;">
-        <h3>验证码不通过，返回重试！</h3>
+        <h3>{{message}}，返回重试！</h3>
         <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'db-failed' %}
@@ -66,7 +66,7 @@
         </div>
 
         <div class="am-form-group">
-            <div class="am-center" style="width:15rem;">
+            <div class="am-center" style="width:18rem;">
                 <button type="submit" class="am-btn am-btn-success">注册</button>
                 <a href="{% url "login" %}" class="am-btn am-btn-success">返回登陆</a>
             </div>

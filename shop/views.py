@@ -606,54 +606,58 @@ def register(request):
         if len(empty_fields):
             return render(request, 'register.html', {'errors': empty_fields, 'status': 'field-failed'})
 
-        if 'verifycode' not in request.session or data['verifycode'] != request.session['verifycode']:
-            return render(request, 'register.html', {'status': 'verify-failed'})
+        if 'verifycode' not in request.session:
+            return render(request, 'register.html', {'status': 'verify-failed', 'message':u'验证码不存在'})
 
-        # try:
-        del data['verifycode']
-        del request.session['verifycode']
-        del request.session['verifytoken']
-        del request.session['verifytime']
+        elif int(data['verifycode']) != int(request.session['verifycode']):
+            return render(request, 'register.html', {'status': 'verify-failed', 'message':u'验证码不正确'})
+        else:
+            del data['verifycode']
+            del request.session['verifycode']
+            del request.session['verifytoken']
+            del request.session['verifytime']
 
-        customer = Customer.objects.create(**data)
+        try:
+            
+            customer = Customer.objects.create(**data)
 
-        if customer.id:
-            request.session['customer'] = {
-                'id': customer.id,
-                'username': customer.username,
-                'phone': customer.phone,
-                'realname': customer.realname,
-                'avatar': str(customer.avatar),
-                'point': customer.point
-            }
-            if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
-                try:
-                    #创建一级关系
-                    upper = Customer.objects.get(id=request.session['invite_customer_id'])
-                    customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
-                    customer_relation.save()
-                    #查找是否有二级关系，存在则创建二级关系
+            if customer.id:
+                request.session['customer'] = {
+                    'id': customer.id,
+                    'username': customer.username,
+                    'phone': customer.phone,
+                    'realname': customer.realname,
+                    'avatar': str(customer.avatar),
+                    'point': customer.point
+                }
+                if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
                     try:
-                        upper_relation = CustomerRelation.objects.get(customer=upper)
-
-                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
+                        #创建一级关系
+                        upper = Customer.objects.get(id=request.session['invite_customer_id'])
+                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
                         customer_relation.save()
+                        #查找是否有二级关系，存在则创建二级关系
+                        try:
+                            upper_relation = CustomerRelation.objects.get(customer=upper)
+
+                            customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
+                            customer_relation.save()
+                        except:
+                            pass
+
+                        del request.session['invite_customer_id']
                     except:
                         pass
 
-                    del request.session['invite_customer_id']
-                except:
-                    pass
+                if 'order_id' in request.session and request.session['order_id']:
+                    return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
+                else:
+                    return render(request, 'register.html', {'errors': None, 'status': 'success'})
+        except IntegrityError:
+            errors['message'] = u'手机号码已存在'
 
-            if 'order_id' in request.session and request.session['order_id']:
-                return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
-            else:
-                return render(request, 'register.html', {'errors': None, 'status': 'success'})
-        # except IntegrityError:
-        #     errors['message'] = u'手机号码已存在'
-
-        # except:
-        #     errors['message'] = u'数据库创建出错'
+        except:
+            errors['message'] = u'数据库创建出错'
 
         return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
     #verify token
@@ -680,6 +684,7 @@ def verify(request):
 
     try:
         code = random.randint(100000,999999)
+        
         r = requests.post('http://hprpt2.eucp.b2m.cn:8080/sdkproxy/sendsms.action', data={
             'cdkey':EMAY_KEY,
             'password':EMAY_PWD,

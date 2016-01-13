@@ -58,3 +58,4 @@ target/
 
 # DB
 db.sqlite3
+shop/migrations/*
