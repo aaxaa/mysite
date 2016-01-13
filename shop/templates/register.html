@@ -26,6 +26,14 @@
         {% if 'password' in errors %}
             <h3>密码不能为空！</h3>
         {% endif %}
+        {% if 'verifycode' in errors %}
+            <h3>密码不能为空！</h3>
+        {% endif %}
+        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
+    </div>
+    {% elif status == 'verify-failed' %}
+    <div class="am-text-center" style="margin-top:3rem;">
+        <h3>验证码不通过，返回重试！</h3>
         <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'db-failed' %}
@@ -54,7 +62,7 @@
         <div class="am-form-group">
             <label class="am-form-label am-block">短信验证码</label>
             <input type="text" name="verifycode" class="am-form-field" style="width:50%;display:inline;" required>
-            <a class="am-btn am-btn-default" type="button" id="verify">重新发送(30s)</a>
+            <a class="am-btn am-btn-default" type="button" id="verify">获取验证码</a>
         </div>
 
         <div class="am-form-group">
@@ -70,6 +78,35 @@
 {% endblock %}
 {% block script %}
 <script>
-
+$(function(){
+    $('#verify').on('click',function(){
+        phone = $('input[name="phone"]').val();
+        if(phone!=''){
+            $.get("{% url 'verify'%}", {'vt':{{verify_token}}, 'phone':phone}, function(ret){
+                if(ret['status']=='success'){
+                    $('#verify').html('重新发送(<label>60</label>s)');
+                    $('#verify').attr('disabled','disabled');
+                    setTimeout(timecount, 1000);  
+                }else if(ret['status']=='waiting'){
+                    $('#verify').html('重新发送(<label>60</label>s)');
+                }else{
+                    $('input[name="phone"]').trigger("focus");
+                }
+            });
+              
+        }
+        
+    });
+});
+function timecount(){
+    var num = parseInt($('#verify label').html());
+    if(num>1){
+        $('#verify label').html(num-1);
+        setTimeout(timecount, 1000);
+    }else{
+        $('#verify label').html(60);
+        $('#verify').removeAttr('disabled');
+    }
+}
 </script>
 {% endblock %}

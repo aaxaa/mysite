@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block container %}
 {% include "libs/title.html" with title="登录" %}
-<div class="am-container am-text-xs">
+<div class="am-container">
   <form class="login-form am-form" method="POST" action="{% url 'login' %}" data-am-validator>
     {% csrf_token %}
     {% if status == 'errors' %}

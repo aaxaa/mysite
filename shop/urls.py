@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^customer/$', views.customer, name='customer'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.login, name='login'),
-    url(r'^code/(?P<code>[0-9]+)/$', views.code, name='code')
+    url(r'^code/(?P<code>[0-9]+)/$', views.code, name='code'),
+    url(r'^verify/$', views.verify, name='verify')
 ]

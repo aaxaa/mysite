@@ -11,7 +11,7 @@ from shop.utils import build_form_by_params, get_client_ip
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD
 
 from decimal import *
-import json, time, random
+import json, time, random, requests, xmltodict
 
 
 def main(request):
@@ -598,7 +598,7 @@ def register(request):
         empty_fields = []
         data = {}
 
-        for field in ('phone', 'password'):
+        for field in ('phone', 'password', 'verifycode'):
             data[field] = request.POST.get(field)
             if data[field] is None or data[field] == '':
                 empty_fields.append(field)
@@ -606,50 +606,60 @@ def register(request):
         if len(empty_fields):
             return render(request, 'register.html', {'errors': empty_fields, 'status': 'field-failed'})
 
-        try:
-            customer = Customer.objects.create(**data)
+        if 'verifycode' not in request.session or data['verifycode'] != request.session['verifycode']:
+            return render(request, 'register.html', {'status': 'verify-failed'})
 
-            if customer.id:
-                request.session['customer'] = {
-                    'id': customer.id,
-                    'username': customer.username,
-                    'phone': customer.phone,
-                    'realname': customer.realname,
-                    'avatar': str(customer.avatar),
-                    'point': customer.point
-                }
-                if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
+        # try:
+        del data['verifycode']
+        del request.session['verifycode']
+        del request.session['verifytoken']
+        del request.session['verifytime']
+
+        customer = Customer.objects.create(**data)
+
+        if customer.id:
+            request.session['customer'] = {
+                'id': customer.id,
+                'username': customer.username,
+                'phone': customer.phone,
+                'realname': customer.realname,
+                'avatar': str(customer.avatar),
+                'point': customer.point
+            }
+            if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
+                try:
+                    #创建一级关系
+                    upper = Customer.objects.get(id=request.session['invite_customer_id'])
+                    customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
+                    customer_relation.save()
+                    #查找是否有二级关系，存在则创建二级关系
                     try:
-                        #创建一级关系
-                        upper = Customer.objects.get(id=request.session['invite_customer_id'])
-                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
+                        upper_relation = CustomerRelation.objects.get(customer=upper)
+
+                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
                         customer_relation.save()
-                        #查找是否有二级关系，存在则创建二级关系
-                        try:
-                            upper_relation = CustomerRelation.objects.get(customer=upper)
-
-                            customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
-                            customer_relation.save()
-                        except:
-                            pass
-
-                        del request.session['invite_customer_id']
                     except:
                         pass
 
-                if 'order_id' in request.session and request.session['order_id']:
-                    return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
-                else:
-                    return render(request, 'register.html', {'errors': None, 'status': 'success'})
-        except IntegrityError:
-            errors['message'] = u'手机号码已存在'
+                    del request.session['invite_customer_id']
+                except:
+                    pass
 
-        except:
-            errors['message'] = u'数据库创建出错'
+            if 'order_id' in request.session and request.session['order_id']:
+                return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
+            else:
+                return render(request, 'register.html', {'errors': None, 'status': 'success'})
+        # except IntegrityError:
+        #     errors['message'] = u'手机号码已存在'
+
+        # except:
+        #     errors['message'] = u'数据库创建出错'
 
         return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
-
-    return render(request, 'register.html', {'errors': None, 'status': 'None'})
+    #verify token
+    verify_token = random.randint(100000000,999999999)
+    request.session['verifytoken'] = verify_token
+    return render(request, 'register.html', {'errors': None, 'status': 'None', 'verify_token':verify_token})
 
 def code(request, code):
     try:
@@ -661,12 +671,12 @@ def code(request, code):
     return redirect(reverse('main'))
 
 def verify(request):
-    data = {}
+    ret = {}
     if 'verifytime' in request.session:
         verifytime = int(request.session['verifytime'])
         if int(time.time()) - verifytime < 60:
-            data['status'] = 'waiting'
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            ret['status'] = 'waiting'
+            return HttpResponse(json.dumps(ret), content_type="application/json")
 
     try:
         code = random.randint(100000,999999)
@@ -679,16 +689,16 @@ def verify(request):
         if int(r.status_code) == 200:
             data = xmltodict.parse(r.text.strip())
             if int(data['response']['error'])==0:
-                data['status'] = 'success'
+                ret['status'] = 'success'
 
                 request.session['verifytime'] = int(time.time())
                 request.session['verifycode'] = code
             else:
                 data['status'] = data['response']['message']
         else:
-            data['status'] = status_code
+            ret['status'] = status_code
 
     except:
-        data['status'] = 'error'
+        ret['status'] = 'error'
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps(ret), content_type="application/json")
