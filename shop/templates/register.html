@@ -53,8 +53,8 @@
 
         <div class="am-form-group">
             <label class="am-form-label am-block">短信验证码</label>
-            <input type="text" class="am-form-field" style="width:50%;display:inline;">
-            <a class="am-btn am-btn-default" type="button">重新发送(30s)</a>
+            <input type="text" name="verifycode" class="am-form-field" style="width:50%;display:inline;" required>
+            <a class="am-btn am-btn-default" type="button" id="verify">重新发送(30s)</a>
         </div>
 
         <div class="am-form-group">
@@ -67,4 +67,9 @@
     </form>
     {% endif %}
 </div>
+{% endblock %}
+{% block script %}
+<script>
+
+</script>
 {% endblock %}

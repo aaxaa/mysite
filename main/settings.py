@@ -143,6 +143,11 @@ CKEDITOR_CONFIGS = {
         'width': 800,
     },
 }
+
+EMAY_KEY = '8SDK-EMY-6699-RFQNP'
+EMAY_PWD = '574757'
+EMAY_SN = u'【贝尔美】'
+
 WECHAT_PAY_PARAMS = {
     'appId': '',
     'Mchid': '',

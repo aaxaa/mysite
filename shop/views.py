@@ -8,8 +8,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, Message
 from shop.utils import build_form_by_params, get_client_ip
+from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD
+
 from decimal import *
-import json
+import json, time, random
 
 
 def main(request):
@@ -72,7 +74,7 @@ def server(request):
         message_list = Message.objects.filter(customer__id=customer_id)
         message_data = []
         for message in message_list:
-            message.question_text = str(message.question_text).split('\b')
+            message.question_text = message.question_text.split('\b')
             message_data.append(message)
     else:
         customer_id = None
@@ -657,3 +659,36 @@ def code(request, code):
         pass
 
     return redirect(reverse('main'))
+
+def verify(request):
+    data = {}
+    if 'verifytime' in request.session:
+        verifytime = int(request.session['verifytime'])
+        if int(time.time()) - verifytime < 60:
+            data['status'] = 'waiting'
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+    try:
+        code = random.randint(100000,999999)
+        r = requests.post('http://hprpt2.eucp.b2m.cn:8080/sdkproxy/sendsms.action', data={
+            'cdkey':EMAY_KEY,
+            'password':EMAY_PWD,
+            'phone':request.GET.get('phone'),
+            'message':u"%s您的验证码是：%s"%(EMAY_SN, code)
+        })
+        if int(r.status_code) == 200:
+            data = xmltodict.parse(r.text.strip())
+            if int(data['response']['error'])==0:
+                data['status'] = 'success'
+
+                request.session['verifytime'] = int(time.time())
+                request.session['verifycode'] = code
+            else:
+                data['status'] = data['response']['message']
+        else:
+            data['status'] = status_code
+
+    except:
+        data['status'] = 'error'
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
