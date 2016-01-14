@@ -8,11 +8,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, Message
 from shop.utils import build_form_by_params, get_client_ip
-from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD
+from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
 import json, time, random, requests, xmltodict
 
+from wechat_sdk.basic import WechatBasic
 
 def main(request):
     notice_list = Notice.objects.filter(type='global', status=1)
@@ -509,7 +510,6 @@ def shopcart_order_checkout(request):
 
 def purchase(request):
     if  "customer" in request.session and request.method == 'POST':
-        errors = {}
         empty_fields = []
         data = {}
         for field in ('realname', 'phone', 'address', 'pay'):
@@ -539,14 +539,20 @@ def purchase(request):
         return redirect('/login?forward=purchase')
 
 def wx_verify(request):
-    from wechat_sdk.basic import WechatBasic
-    from main.settings import WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
-
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
     if wx.check_signature(request.GET.get('signature'), request.GET.get('timestamp'), request.GET.get('nonce')):
         return HttpResponse(request.GET.get('echostr'))
     else:
         return HttpResponse('error')
+
+def wxpay_test(request):
+    wx = WechatBasic(appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+    access_token = wx.get_access_token()
+    if access_token:
+        with open('access_token.json') as f:
+            f.write(json.dumps(access_token))
+
+    return HttpResponse(access_token['access_token'])
     
 
 def wxpay_notify(request):

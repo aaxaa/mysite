@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 # 微信支付V3接口
-from main.settings import WECHAT_PAY_PARAMS as config
+from main.settings import WECHAT_APPID, WECHAT_MCHID, WECHAT_PAY_KEY, WECHAT_PAY_NOTIFY
 
 import hashlib
 from random import Random
@@ -35,7 +35,7 @@ def build_sign(params):
     string1 = "&".join(array)
 
     # 在 string1 最后拼接上 key=Key(商户支付密钥)得到 stringSignTemp 字符串
-    stringSignTemp = string1 + '&key=' + config['Key']
+    stringSignTemp = string1 + '&key=' + WECHAT_PAY_KEY
 
     # 对 stringSignTemp 进行 md5 运算，再将得到的字符串所有字符转换为大写
     m = hashlib.md5(stringSignTemp.encode('utf-8'))
@@ -43,15 +43,15 @@ def build_sign(params):
 
 def build_unifiedorder(params):
     base_params = {
-        'appid': config['appId'],
-        'mch_id': config['Mchid'],
+        'appid': WECHAT_APPID,
+        'mch_id': WECHAT_MCHID,
         'nonce_str': generate_random_string(),
         'trade_type': 'JSAPI',
         'body': params['body'],
         'out_trade_no': params['out_trade_no'],
         'total_fee': params['total_fee'],
         'spbill_create_ip': params['spbill_create_ip'],
-        'notify_url': config['notify_url'],
+        'notify_url': WECHAT_PAY_NOTIFY,
         'openid': params['openid']
     }
 
@@ -79,7 +79,7 @@ def dict_to_xml(params):
 
 def build_form_by_prepay_id(prepay_id):
     base_params = {
-        'appId': config['appId'],
+        'appId': WECHAT_APPID,
         'timeStamp': str(int(time.time())),
         'nonceStr': generate_random_string(),
         'package': "prepay_id=%s" % prepay_id,

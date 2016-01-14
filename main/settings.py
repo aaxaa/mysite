@@ -150,12 +150,7 @@ EMAY_SN = u'【贝尔美】'
 
 WECHAT_TOKEN = 'pOMvhUk2LOczN'
 WECHAT_APPID = 'wx678311826328029a'
+WECHAT_MCHID = '1261878501'
 WECHAT_APPSECRET = '63d2a464f6555b9f1e17a72281ea6868'
 WECHAT_PAY_KEY = 'grandeasebaremeiihospital2016114'
-
-WECHAT_PAY_PARAMS = {
-    'appId': 'wx678311826328029a',
-    'Mchid': '1261878501',
-    'Key': 'grandeasebaremeiihospital2016114',
-    'notify_url': 'http://shop.baremeii.com/wxpay_notify'
-}
+WECHAT_PAY_NOTIFY = 'http://shop.baremeii.com/wxpay_notify'
