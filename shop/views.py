@@ -545,30 +545,27 @@ def wx_verify(request):
         return HttpResponse('error')
 
 def wx_callback(request):
-    if 'wx_code' in request.session:
-        r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
-        if int(r.status_code) == 200:
-            data = r.json()
-            print data
-            r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
+    
+    r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
+    if int(r.status_code) == 200:
+        data = r.json()
+        print data
+        r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
 
-            if int(r2.status_code) == 200:
-                userinfo = r2.json()
-                print userinfo
-                customer_connect = CustomerConnect.objects.create(
-                    nickname=userinfo['nickname'],
-                    sex=userinfo['sex'],
-                    province=userinfo['province'],
-                    city=userinfo['city'],
-                    country=userinfo['country'],
-                    headimgurl=userinfo['headimgurl'],
-                    unionid=userinfo['unionid']
-                )
-                customer_connect.save()
-
-                request.session['wx_code'] = request.GET.get('code')
-
-                return redirect('/')
+        if int(r2.status_code) == 200:
+            userinfo = r2.json()
+            print userinfo
+            customer_connect = CustomerConnect.objects.create(
+                nickname=userinfo['nickname'],
+                sex=userinfo['sex'],
+                province=userinfo['province'],
+                city=userinfo['city'],
+                country=userinfo['country'],
+                headimgurl=userinfo['headimgurl'],
+                unionid=userinfo['unionid']
+            )
+            customer_connect.save()
+            return redirect('/')
 
 def wxpay_notify(request):
     return render(request, 'wxpay_notify.html')
