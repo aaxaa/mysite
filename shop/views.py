@@ -538,11 +538,19 @@ def purchase(request):
     else:
         return redirect('/login?forward=purchase')
 
-def wx_test(request):
-    return render(request, 'wx_test.html')
+def wx_verify(request):
+    from wechat_sdk.basic import WechatBasic
+    from main.settings import WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
-def wx_callback(request):
-    return render(request, 'wx_callback.html')
+    wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+    if wx.check_signature(request.GET.get('signature'), request.GET.get('timestamp'), request.GET.get('nonce')):
+        return HttpResponse(request.GET.get('echostr'))
+    else:
+        return HttpResponse('error')
+    
+
+def wxpay_notify(request):
+    return render(request, 'wxpay_notify.html')
 
 
 def customer(request):
