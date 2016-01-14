@@ -160,9 +160,9 @@ class ProductItem(models.Model):
 
 class Customer(models.Model):
     sex_choices = (
-        (0, u'女'),
+        (0, u'未知'),
         (1, u'男'),
-        (2, u'未知'),
+        (2, u'女'),
     )
 
     status_choices = (
@@ -182,7 +182,7 @@ class Customer(models.Model):
     sex = models.SmallIntegerField(
         u'性别',
         choices=sex_choices,
-        default='2'
+        default=2
     )
     point = models.IntegerField(u'积分', default=0)
     address = models.CharField(u'收件地址', null=True, blank=True, max_length=255)
@@ -225,10 +225,18 @@ class CustomerConnect(models.Model):
         verbose_name=u'用户',
         on_delete=models.CASCADE,
         related_name='connect',
-        editable=False,
+        null=True,
+        blank=True,
     )
     platform = models.CharField(max_length=10)
     openid = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50)
+    sex = models.SmallIntegerField()
+    province = models.CharField(max_length=20)
+    city = models.CharField(max_length=20)
+    country = models.CharField(max_length=20)
+    headimgurl = models.CharField(max_length=255)
+    unionid = models.CharField(max_length=50)
 
 
 class CustomerPointLog(models.Model):
