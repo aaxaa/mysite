@@ -6,7 +6,7 @@ from django.db.models import Q, F, Sum
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, Message
+from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
 from shop.utils import build_form_by_params, get_client_ip
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
@@ -544,15 +544,31 @@ def wx_verify(request):
     else:
         return HttpResponse('error')
 
-def wxpay_test(request):
-    wx = WechatBasic(appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-    access_token = wx.get_access_token()
-    if access_token:
-        with open('access_token.json', 'w') as f:
-            f.write(json.dumps(access_token))
+def wxpay_callback(request):
+    if 'wx_code' in request.session:
+        r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
+        if int(r.status_code) == 200:
+            data = r.json()
+            print data
+            r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
 
-    return HttpResponse(access_token['access_token'])
-    
+            if int(r2.status_code) == 200:
+                userinfo = r2.json()
+                print userinfo
+                customer_connect = CustomerConnect.objects.create(
+                    nickname=userinfo['nickname'],
+                    sex=userinfo['sex'],
+                    province=userinfo['province'],
+                    city=userinfo['city'],
+                    country=userinfo['country'],
+                    headimgurl=userinfo['headimgurl'],
+                    unionid=userinfo['unionid']
+                )
+                customer_connect.save()
+
+                request.session['wx_code'] = request.GET.get('code')
+
+                return redirect('/')
 
 def wxpay_notify(request):
     return render(request, 'wxpay_notify.html')
