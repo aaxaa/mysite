@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^code/(?P<code>[0-9]+)/$', views.code, name='code'),
     url(r'^verify/$', views.verify, name='verify'),
     url(r'^wx_verify/$', views.wx_verify, name='wx_verify'),
-    url(r'^wxpay_test/$', views.wxpay_test, name='wxpay_test'),
+    url(r'^wxpay_callback/$', views.wxpay_callback, name='wxpay_callback'),
     url(r'^wxpay_notify/$', views.wxpay_notify, name='wxpay_notify'),
 ]
