@@ -558,7 +558,7 @@ def wx_callback(request):
                 customer_connect = CustomerConnect.objects.get(openid=data['openid'])
             except:
                 customer_connect = CustomerConnect.objects.create(
-                    access_token=data['access_token']
+                    access_token=data['access_token'],
                     openid=data['openid'],
                     expires_at=int(time.time())+int(data['expires_in']),
                     nickname=userinfo['nickname'],
