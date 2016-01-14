@@ -149,8 +149,8 @@ EMAY_PWD = '574757'
 EMAY_SN = u'【贝尔美】'
 
 WECHAT_PAY_PARAMS = {
-    'appId': '',
-    'Mchid': '',
-    'Key': '',
-    'notify_url': ''
+    'appId': 'wx678311826328029a',
+    'Mchid': '1261878501',
+    'Key': 'grandeasebaremeiihospital2016114',
+    'notify_url': 'http://shop.baremeii.com/wxpay_notify'
 }

@@ -538,6 +538,12 @@ def purchase(request):
     else:
         return redirect('/login?forward=purchase')
 
+def wx_test(request):
+    return render(request, 'wx_test.html')
+
+def wx_callback(request):
+    return render(request, 'wx_callback.html')
+
 
 def customer(request):
     if 'customer' in request.session:
