@@ -544,7 +544,7 @@ def wx_verify(request):
     else:
         return HttpResponse('error')
 
-def wxpay_callback(request):
+def wx_callback(request):
     if 'wx_code' in request.session:
         r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
         if int(r.status_code) == 200:
