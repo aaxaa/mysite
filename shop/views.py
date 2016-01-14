@@ -549,23 +549,34 @@ def wx_callback(request):
     r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
     if int(r.status_code) == 200:
         data = r.json()
-        print data
+
         r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
 
         if int(r2.status_code) == 200:
             userinfo = r2.json()
-            print userinfo
-            customer_connect = CustomerConnect.objects.create(
-                nickname=userinfo['nickname'],
-                sex=userinfo['sex'],
-                province=userinfo['province'],
-                city=userinfo['city'],
-                country=userinfo['country'],
-                headimgurl=userinfo['headimgurl'],
-                unionid=userinfo['unionid']
-            )
-            customer_connect.save()
+            try:
+                customer_connect = CustomerConnect.objects.get(openid=data['openid'])
+            except:
+                customer_connect = CustomerConnect.objects.create(
+                    access_token=data['access_token']
+                    openid=data['openid'],
+                    expires_at=int(time.time())+int(data['expires_in']),
+                    nickname=userinfo['nickname'],
+                    sex=userinfo['sex'],
+                    province=userinfo['province'],
+                    city=userinfo['city'],
+                    country=userinfo['country'],
+                    headimgurl=userinfo['headimgurl'],
+                    unionid=userinfo['unionid'] if 'unionid' in userinfo else ''
+                )
+                customer_connect.save()
+
+            request.session['wx_code'] = request.GET.get('code')
             return redirect('/')
+        else:
+            return HttpResponse(u'获取个人信息时，网络出现问题！')
+    else:
+        return HttpResponse(u'网络出现故障，请返回重试！')
 
 def wxpay_notify(request):
     return render(request, 'wxpay_notify.html')

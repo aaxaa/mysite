@@ -229,14 +229,16 @@ class CustomerConnect(models.Model):
         blank=True,
     )
     platform = models.CharField(max_length=10)
+    access_token = models.CharField(max_length=255)
     openid = models.CharField(max_length=50)
+    expires_at = models.IntegerField()
     nickname = models.CharField(max_length=50)
     sex = models.SmallIntegerField()
     province = models.CharField(max_length=20)
     city = models.CharField(max_length=20)
     country = models.CharField(max_length=20)
     headimgurl = models.CharField(max_length=255)
-    unionid = models.CharField(max_length=50)
+    unionid = models.CharField(max_length=50, blank=True, null=True)
 
 
 class CustomerPointLog(models.Model):
