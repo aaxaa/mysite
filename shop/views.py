@@ -549,7 +549,7 @@ def wxpay_test(request):
     wx = WechatBasic(appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
     access_token = wx.get_access_token()
     if access_token:
-        with open('access_token.json', 'r') as f:
+        with open('access_token.json', 'w') as f:
             f.write(json.dumps(access_token))
 
     return HttpResponse(access_token['access_token'])
