@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
-from shop.utils import generate_random_string, get_client_ip
+from shop.utils import build_form_by_params, get_client_ip
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
@@ -580,19 +580,13 @@ def wx_callback(request):
         return HttpResponse(u'网络出现故障，请返回重试！')
 
 def wxpay_test(request):
-    data = {
-        'appid':WECHAT_APPID,
-        'timestamp':str(int(time.time())),
-        'noncestr':generate_random_string()
-    }
-    # params = build_form_by_params({
-    #     'body': 'product test',
-    #     'out_trade_no' : '001',
-    #     'total_fee':0.01,
-    #     'spbill_create_ip':get_client_ip(request)
-    # })
+    data = build_form_by_params({
+        'body': 'product test',
+        'out_trade_no' : '001',
+        'total_fee':0.01,
+        'spbill_create_ip':get_client_ip(request)
+    })
 
-    # data['wx_pay_params'] = json.dumps(params)
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
     data['signature'] = wx.generate_jsapi_signature(timestamp=data['timestamp'], noncestr=data['noncestr'], url="http://shop.baremeii.com/wxpay_test/")
 

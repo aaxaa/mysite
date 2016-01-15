@@ -16,15 +16,16 @@ wx.config({
 });
 wx.ready(function(){
     $('#checkjsapi').on('click',function(){
-        wx.checkJsApi({
-            jsApiList:[
-                'getNetworkType',
-                'previewImage'
-            ],
+        wx.chooseWXPay({
+            timestamp:'{{timestamp}}',
+            nonceStr:'{{noncestr}}',
+            package:'{{package}}',
+            signType:'{{signtype}}',
+            paySign:'{{paysign}}',
             success:function(res){
-                alert($.parseJSON(res));
+                alert(res);
             }
-        })
+        });
     });
 });
 </script>
