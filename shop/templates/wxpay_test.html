@@ -6,10 +6,14 @@
 {% block script %}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="javascript" />
 <script>
+var data = $.parseJSON('{{wx_pay_params}}');
 wx.config({
-    debug: true,
-    appId: 'wx080b3f999b527b7b',
-    
+    debug : true,
+    appId : data['appid'],
+    timestamp : data['timestamp'],
+    nonceStr : data['noncestr'],
+    signature : data['signature'],
+    jsApiList:['chooseWXPay']
 });
 </script>
 {% endblock %}
