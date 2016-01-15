@@ -16,13 +16,12 @@ wx.config({
 });
 wx.ready(function(){
     $('#checkjsapi').on('click',function(){
-        alert('on_click');
         wx.checkJsApi({
             jsApiList:[
                 'getNetworkType',
                 'previewImage'
             ],
-            success:function(){
+            success:function(res){
                 alert($.parseJSON(res));
             }
         })
