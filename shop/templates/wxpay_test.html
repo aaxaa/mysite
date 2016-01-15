@@ -28,5 +28,8 @@ wx.ready(function(){
         })
     });
 });
+wx.error(function(){
+    alert($.parseJSON(res));
+});
 </script>
 {% endblock %}
