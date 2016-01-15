@@ -1,7 +1,7 @@
 {% extends "libs/base.html" %}
 {% load static %}
 {% block container %}
-
+<button class="am-btn" id="checkjsapi">check</button>
 {% endblock %}
 {% block script %}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="javascript" />
@@ -14,6 +14,19 @@ wx.config({
     nonceStr : data['noncestr'],
     signature : data['signature'],
     jsApiList:['chooseWXPay']
+});
+wx.ready(function(){
+    $('#checkjsapi').on('click',function(){
+        wx.checkJsApi({
+            jsApiList:[
+                'getNetworkType',
+                'previewImage'
+            ],
+            success:function(){
+                alert($.parseJSON(res));
+            }
+        })
+    });
 });
 </script>
 {% endblock %}
