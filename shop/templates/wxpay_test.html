@@ -1,6 +1,9 @@
-
+{% extends "libs/base.html" %}
+{% load static %}
+{% block container %}
 <button class="am-btn am-btn-primary" id="checkjsapi">check</button>
-
+{% endblock %}
+{% block script %}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="javascript"></script>
 <script type="javascript">
 wx.config({
@@ -27,6 +30,7 @@ wx.ready(function(){
     });
 });
 wx.error(function(res){
-    alert(JSON.parse(res));
+    alert($.parseJSON(res));
 });
 </script>
+{% endblock %}
