@@ -17,11 +17,11 @@ wx.config({
 wx.ready(function(){
     $('#checkjsapi').on('click',function(){
         wx.chooseWXPay({
-            timestamp:'{{timestamp}}',
-            nonceStr:'{{noncestr}}',
+            timestamp:'{{timeStamp}}',
+            nonceStr:'{{nonceStr}}',
             package:'{{package}}',
-            signType:'{{signtype}}',
-            paySign:'{{paysign}}',
+            signType:'{{signType}}',
+            paySign:'{{paySign}}',
             success:function(res){
                 alert(res);
             }

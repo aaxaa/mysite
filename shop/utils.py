@@ -79,13 +79,13 @@ def dict_to_xml(params):
 
 def build_form_by_prepay_id(prepay_id):
     base_params = {
-        'appid': WECHAT_APPID,
-        'timestamp': str(int(time.time())),
-        'noncestr': generate_random_string(),
+        'appId': WECHAT_APPID,
+        'timeStamp': str(int(time.time())),
+        'nonceStr': generate_random_string(),
         'package': "prepay_id=%s" % prepay_id,
-        'signtype': "MD5"
+        'signType': "MD5"
     }
-    base_params['paysign'] = build_sign(base_params)
+    base_params['paySign'] = build_sign(base_params)
     return base_params
 
 def build_form_by_params(params):

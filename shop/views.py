@@ -587,6 +587,7 @@ def wxpay_test(request):
         'spbill_create_ip':get_client_ip(request),
         'openid':request.session['openid']
     })
+    
 
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
     data['signature'] = wx.generate_jsapi_signature(timestamp=data['timestamp'], noncestr=data['noncestr'], url="http://shop.baremeii.com/wxpay_test/")
