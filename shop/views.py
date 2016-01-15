@@ -572,7 +572,7 @@ def wx_callback(request):
                 customer_connect.save()
 
             request.session['wx_code'] = request.GET.get('code')
-            request.session['openid'] = customer_connect['openid']
+            request.session['openid'] = customer_connect.openid
             return redirect('/')
         else:
             return HttpResponse(u'获取个人信息时，网络出现问题！')
