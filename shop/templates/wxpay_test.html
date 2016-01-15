@@ -26,4 +26,7 @@ wx.ready(function(){
         })
     });
 });
+wx.error(function(res){
+    alert(JSON.parse(res));
+});
 </script>
