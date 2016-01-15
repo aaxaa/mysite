@@ -594,7 +594,7 @@ def wxpay_test(request):
 
     # data['wx_pay_params'] = json.dumps(params)
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-    data['signature'] = wx.generate_jsapi_signature(timestamp=data['timestamp'], noncestr=data['noncestr'], url="http://shop.baremeii.com/wxpay_test")
+    data['signature'] = wx.generate_jsapi_signature(timestamp=data['timestamp'], noncestr=data['noncestr'], url="http://shop.baremeii.com/wxpay_test/")
 
     return render(request, 'wxpay_test.html', data)
 

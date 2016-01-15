@@ -6,7 +6,6 @@
 {% block script %}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-alert('start');
 wx.config({
     debug : true,
     appId : '{{appid}}',
@@ -16,7 +15,6 @@ wx.config({
     jsApiList:['chooseWXPay']
 });
 wx.ready(function(){
-    alert('ready');
     $('#checkjsapi').on('click',function(){
         alert('on_click');
         wx.checkJsApi({
@@ -29,9 +27,6 @@ wx.ready(function(){
             }
         })
     });
-});
-wx.error(function(res){
-    alert($.parseJSON(res));
 });
 </script>
 {% endblock %}
