@@ -694,6 +694,12 @@ def register(request):
             customer = Customer.objects.create(**data)
 
             if customer.id:
+                if 'openid' in request.session and request.session['openid']:
+                    customer_connect = CustomerConnect.objects.get(openid=openid)
+                    customer_connect.customer = customer
+
+                    customer_connect.save()
+
                 request.session['customer'] = {
                     'id': customer.id,
                     'username': customer.username,
