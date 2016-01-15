@@ -583,7 +583,7 @@ def wxpay_test(request):
     data = build_form_by_params({
         'body': 'product test',
         'out_trade_no' : '001',
-        'total_fee':0.01,
+        'total_fee':1,
         'spbill_create_ip':get_client_ip(request),
         'openid':request.session['openid'],
     })
