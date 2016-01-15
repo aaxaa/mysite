@@ -51,8 +51,7 @@ def build_unifiedorder(params):
         'out_trade_no': params['out_trade_no'],
         'total_fee': params['total_fee'],
         'spbill_create_ip': params['spbill_create_ip'],
-        'notify_url': WECHAT_PAY_NOTIFY,
-        'openid': params['openid']
+        'notify_url': WECHAT_PAY_NOTIFY
     }
 
     base_params['sign'] = build_sign(base_params)
