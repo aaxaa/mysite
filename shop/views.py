@@ -584,7 +584,8 @@ def wxpay_test(request):
         'body': 'product test',
         'out_trade_no' : '001',
         'total_fee':1,
-        'spbill_create_ip':get_client_ip(request)
+        'spbill_create_ip':get_client_ip(request),
+        'openid':request.session['openid']
     })
 
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
