@@ -1,9 +1,23 @@
-{% extends "libs/base.html" %}
-{% load staticfiles %}
-{% block container %}
-{% include "libs/title.html" with title="登录" %}
-
-{% endblock %}
-{% block script %}
-<p>微信支付模块</p>
-{% endblock%}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+wx.config({
+    debug : true,
+    appId : '{{appId}}',
+    timestamp : '{{timeStamp}}',
+    nonceStr : '{{nonceStr}}',
+    signature : '{{signature}}',
+    jsApiList:['chooseWXPay']
+});
+wx.ready(function(){
+    wx.chooseWXPay({
+        timestamp:'{{timeStamp}}',
+        nonceStr:'{{nonceStr}}',
+        package:'{{package}}',
+        signType:'{{signType}}',
+        paySign:'{{paySign}}',
+        success:function(res){
+            alert(res);
+        }
+    });
+});
+</script>
