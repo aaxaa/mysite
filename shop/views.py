@@ -541,7 +541,7 @@ def purchase(request):
 
         products_str = ''
         for product in order.products_in.all():
-            products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
+            products_str += u"%s * %s = ￥%s, " % (product.product.name.encode('utf8'), product.count, product.price)
 
         params = build_form_by_params({
             'body': products_str.encode('utf8'),
