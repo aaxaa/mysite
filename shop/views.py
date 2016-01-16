@@ -56,10 +56,6 @@ def order(request):
             order_list = Order.objects.filter(customer=customer)
             for order in order_list:
                 order.products_in_all = order.products_in.all()
-
-            order_list = Order.objects.filter(customer=customer, status)
-            for order in order_list:
-                order.products_in_all = order.products_in.all()
                 order.products_in_s0 = order.products_in.filter(status=0)
                 order.products_in_s1 = order.products_in.filter(status=1)
 
