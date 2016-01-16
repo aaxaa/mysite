@@ -539,7 +539,7 @@ def purchase(request):
 
         order.save()
 
-        products_str = ''
+        products_str = 'test'
         # for product in order.products_in.all():
         #     products_str += u"%s * %s = ￥%s, " % (unicode(product.product.name, 'utf8'), product.count, product.price)
 
