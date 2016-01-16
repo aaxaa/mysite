@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
-from shop.utils import build_form_by_params, get_client_ip
+from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
@@ -491,15 +491,6 @@ def shopcart_order_checkout(request):
 
             data['order'] = order
 
-            # params = build_form_by_params({
-            #     'body': data['products'].replace('<br/>', ','),
-            #     'out_trade_no' : order.id,
-            #     'total_fee':data['total_price'],
-            #     'spbill_create_ip':get_client_ip(request)
-            # })
-
-            # data['wx_pay_params'] = json.dumps(params)
-
         else:
             pass
         return render(request, 'checkout.html', data)
@@ -533,7 +524,7 @@ def purchase(request):
             params = build_form_by_params({
                 'body': 'product test',
                 'out_trade_no' : str(order.id),
-                'total_fee':1,
+                'total_fee':int(order.total_price*100),
                 'spbill_create_ip':get_client_ip(request),
                 'openid':request.session['openid']
             })
@@ -608,7 +599,17 @@ def wxpay_test(request):
 
 
 def wxpay_notify(request):
-    return render(request, 'wxpay_notify.html')
+    if request.POST.get('return_code') == 'SUCCESS':
+        if verify_notify_string(request.POST.get('return_msg')):
+            params = notify_string_to_params(request.POST.get('return_msg'))
+            order_id = params['out_trade_no']
+            order = Order.objects.get(id=order_id)
+            order.status = 3
+
+            order.save()
+
+
+    return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
 
 
 def customer(request):
