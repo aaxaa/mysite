@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, F, Sum
 from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, DoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params
@@ -217,7 +217,7 @@ def shopcart(request):
 
         try:
             shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
-        except ObjectDoesNotExist:
+        except DoesNotExist:
             shopcart = Shopcart.objects.create(customer=Customer.objects.get(id=request.session['customer'].get('id')))
             shopcart.save()
 
