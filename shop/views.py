@@ -695,7 +695,7 @@ def register(request):
 
             if customer.id:
                 if 'openid' in request.session and request.session['openid']:
-                    customer_connect = CustomerConnect.objects.get(openid=openid)
+                    customer_connect = CustomerConnect.objects.get(openid=request.session['openid'])
                     customer_connect.customer = customer
 
                     customer_connect.save()
