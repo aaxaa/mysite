@@ -69,7 +69,7 @@ def server(request):
         traffic = ''
         address = ''
 
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         customer_id = request.session['customer'].get('id')
         message_list = Message.objects.filter(customer__id=customer_id)
         message_data = []
@@ -92,7 +92,7 @@ def server(request):
 
 
 def ask(request):
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         customer = Customer.objects.get(id=request.session['customer'].get('id'))
         if request.method == 'POST':
             _message = request.POST.get('message','')
@@ -113,7 +113,7 @@ def ask(request):
 
 
 def beauty(request):
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         customer = Customer.objects.get(id=request.session['customer'].get('id'))
         relation_list = CustomerRelation.objects.filter(upper=customer)
         relation_list_sub = CustomerRelation.objects.filter(upper__in=set([row.customer for row in relation_list]))
@@ -131,7 +131,7 @@ def addtocart(request, id):
     try:
         product = Product.objects.get(pk=id)
         #如果是已登录的用户，则读出数据库购物车
-        if 'customer' in request.session:
+        if 'customer' in request.session and request.session['customer']:
             customer = Customer.objects.get(pk=request.session['customer'].get('id'))
             #获取购物车信息，不存在则创建新购物车
             try:
@@ -208,7 +208,7 @@ def shopcart(request):
     products_in = []
     order = None
     #已登陆用户，直接从数据库读取购物车内产品列表
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         try:
             order = Order.objects.get(customer__pk=request.session['customer'].get('id'), status=1)
 
@@ -289,7 +289,7 @@ def shopcart_update(request, op):
     data = {}
     id = request.GET.get('id')
     #已登陆用户，直接操作数据库关联表字段的增减
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         #获取购物车
         shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
         if op in ('check_all', 'uncheck_all'):
@@ -340,7 +340,7 @@ def shopcart_update(request, op):
     #非登陆用户，从session内获取购物车信息，计算结果，并更新session
     else:
         #session内有数据
-        if 'shopcart' in request.session:
+        if 'shopcart' in request.session and request.session['customer']:
             shopcart = request.session['shopcart']
             #全选的情况，循环购物车产品列表，全部更新状态
             if op in ('check_all', 'uncheck_all'):
@@ -408,7 +408,7 @@ def shopcart_order(request):
                 products_list.update({product_in.product.id:{'count':product_in.count, 'price':product_in.price}})
 
 
-    if 'shopcart' in request.session:
+    if 'shopcart' in request.session and request.session['customer']:
         shopcart = request.session['shopcart']
 
         for _id,product in shopcart['products_list'].items():
@@ -472,7 +472,7 @@ def shopcart_order(request):
 
 def shopcart_order_checkout(request):
     order_id = request.GET.get('order_id', '')
-    if "customer" in request.session:
+    if "customer" in request.session and request.session['customer']:
         data = {}
         
         data['customer'] = Customer.objects.get(id=request.session['customer'].get('id'))
@@ -627,7 +627,7 @@ def wxpay_notify(request):
 
 
 def customer(request):
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         customer = request.session.get('customer')
         return render(request, 'customer.html', {
             'customer': customer
