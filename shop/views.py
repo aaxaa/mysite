@@ -633,6 +633,8 @@ def wxpay_test(request):
 
 
 def wxpay_notify(request):
+    print request.method
+
     if request.POST.get('return_code') == 'SUCCESS':
         if verify_notify_string(request.POST.get('return_msg')):
             params = notify_string_to_params(request.POST.get('return_msg'))

@@ -16,10 +16,11 @@ wx.ready(function(){
         signType:'{{signType}}',
         paySign:'{{paySign}}',
         success:function(res){
+        	alert(res.err_msg)
             if(res.err_msg=='get_brand_wcpay_request:ok'){
-            	localhost.href='/order/';
+            	window.location.href='/order/';
             }else{
-            	localhost.href='/shopcart/order/'
+            	window.location.href='/shopcart/order/checkout/?order_id={{out_trade_no}}'
             }
         }
     });
