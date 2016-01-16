@@ -22,7 +22,11 @@
                                 <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
                                     {{product.product.name}} * {{product.count}}<br/>
                                     <small class="am-text-danger">¥{{product.price}}</small>
+                                    {% if product.status == 1 %}
                                     <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
+                                    {% else %}
+                                    <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
