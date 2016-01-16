@@ -50,7 +50,7 @@ def notice(request, id=0):
     return render(request, 'notice.html', {"notice": notice})
 
 def order(request):
-    if 'customer' in request.session:
+    if 'customer' in request.session and request.session['customer']:
         customer = Customer.objects.get(id=request.session['customer'].get('id'))
         order_list = Order.objects.filter(customer=customer)
         for order in order_list:
@@ -568,7 +568,7 @@ def wx_callback(request):
             try:
                 customer_connect = CustomerConnect.objects.get(openid=data['openid'])
 
-                if customer_connect.customer:
+                if customer_connect.customer.id:
                     request.session['customer'] = {
                         'id': customer_connect.customer.id,
                         'username': customer_connect.customer.username,
