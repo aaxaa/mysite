@@ -9,6 +9,8 @@ class WxMiddleware(object):
 	def process_request(self, request):
 		if (not request.path.startswith('/admin/')) and 'code' not in request.GET and 'state' not in request.GET:
 			if 'openid' in request.session:
+
+				del request.session['openid']
 				customer_connect = CustomerConnect.objects.get(openid=request.session['openid'])
 
 				if not customer_connect.customer:
