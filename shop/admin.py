@@ -84,9 +84,7 @@ class CustomerPointLogAdmin(admin.ModelAdmin):
 class CustomerRelationAdmin(admin.ModelAdmin):
     list_display = ('customer', 'upper', 'level', 'create_at')
     list_filter = ()
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+    
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_text', 'create_at')
