@@ -608,7 +608,9 @@ def wx_callback(request):
 
             request.session['wx_code'] = request.GET.get('code')
             request.session['openid'] = customer_connect.openid
-            return redirect('/')
+
+            state = reqeust.GET.get('state')
+            return redirect(stats if stats else '/')
         else:
             return HttpResponse(u'获取个人信息时，网络出现问题！')
     else:
