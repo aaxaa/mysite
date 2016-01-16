@@ -51,10 +51,14 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
-        customer = Customer.objects.get(id=request.session['customer'].get('id'))
-        order_list = Order.objects.filter(customer=customer)
-        for order in order_list:
-            order.products_in_all = order.products_in.all()
+        try:
+            customer = Customer.objects.get(id=request.session['customer'].get('id'))
+            order_list = Order.objects.filter(customer=customer)
+            for order in order_list:
+                order.products_in_all = order.products_in.all()
+
+        except:
+            order_list = {}
 
         return render(request, 'order.html', {'order_list':order_list})
 
