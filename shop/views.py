@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, F, Sum
-from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist, DoesNotExist
+from django.db import IntegrityError, DoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params
