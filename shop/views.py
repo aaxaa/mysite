@@ -538,25 +538,29 @@ def purchase(request):
             order.status = 3
 
             order.save()
+            products_str = ''
+            for product in order.products_in.all():
+                products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
 
             params = build_form_by_params({
-                'body': 'product test',
+                'body': products_str,
                 'out_trade_no' : str(order.id),
                 'total_fee':int(order.total_price*100),
                 'spbill_create_ip':get_client_ip(request),
                 'openid':request.session['openid']
             })
+            params['order_id'] = str(order.id)
 
 
             wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-            params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/wxpay_test/")
+            params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/purchase/")
             return render(request, 'purchase.html', params)
 
         except:
             return HttpResponse(u'禁止支付不属于自己的订单')
 
     else:
-        return redirect('/login?forward=purchase')
+        return redirect('/login/?forward=purchase')
 
 def wx_verify(request):
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
