@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, F, Sum
-from django.db import IntegrityError, DoesNotExist
+from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
@@ -208,7 +208,15 @@ def shopcart(request):
     products_in = []
     order = None
     #已登陆用户，直接从数据库读取购物车内产品列表
+    customer = None
     if 'customer' in request.session and request.session['customer']:
+        try:
+            customer = Customer.objects.get(id=request.session['customer'].get('id'))
+
+        except:
+            pass
+
+    if customer:
         try:
             order = Order.objects.get(customer__pk=request.session['customer'].get('id'), status=1)
 
@@ -218,7 +226,7 @@ def shopcart(request):
         try:
             shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
         except DoesNotExist:
-            shopcart = Shopcart.objects.create(customer=Customer.objects.get(id=request.session['customer'].get('id')))
+            shopcart = Shopcart.objects.create(customer=customer)
             shopcart.save()
 
         products_in_ids = [p.product.id for p in shopcart.products_in.all()]
@@ -562,12 +570,12 @@ def wx_callback(request):
 
                 if customer_connect.customer:
                     request.session['customer'] = {
-                        'id': customer.id,
-                        'username': customer.username,
-                        'phone': customer.phone,
-                        'realname': customer.realname,
-                        'avatar': str(customer.avatar),
-                        'point': customer.point
+                        'id': customer_connect.customer.id,
+                        'username': customer_connect.customer.username,
+                        'phone': customer_connect.customer.phone,
+                        'realname': customer_connect.customer.realname,
+                        'avatar': str(customer_connect.customer.avatar),
+                        'point': customer_connect.customer.point
                     }
                 else:
                     if 'customer' in request.session:
