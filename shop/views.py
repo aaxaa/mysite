@@ -559,6 +559,20 @@ def wx_callback(request):
             userinfo = r2.json()
             try:
                 customer_connect = CustomerConnect.objects.get(openid=data['openid'])
+
+                if customer_connect.customer:
+                    request.session['customer'] = {
+                        'id': customer.id,
+                        'username': customer.username,
+                        'phone': customer.phone,
+                        'realname': customer.realname,
+                        'avatar': str(customer.avatar),
+                        'point': customer.point
+                    }
+                else:
+                    if 'customer' in request.session:
+                        del request.session['customer']
+
             except:
                 customer_connect = CustomerConnect.objects.create(
                     access_token=data['access_token'],
