@@ -1,7 +1,6 @@
 {% extends "libs/base.html" %}
 {% load staticfiles %}
 {% block container %}
-{% include "libs/title.html" with title="登录" %}
 <div class="am-container am-padding-top-sm am-text-sm">
     <div class="am-tabs" id="doc-my-tabs">
         <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
@@ -25,7 +24,7 @@
                             {% if product.status == 1 %}
                             <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
                             {% else %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                            <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:400-823-2833">电话预约</a>
                             {% endif %}
                         </div>
                     </div>

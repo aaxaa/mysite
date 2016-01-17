@@ -1,7 +1,6 @@
 {% extends "libs/base.html" %}
 {% load staticfiles %}
 {% block container %}
-{% include "libs/title.html" with title="便捷服务" %}
 <div class="am-slider am-slider-default am-margin-0" data-am-flexslider="{directionNav: false, controlNav: false}">
   <ul class="am-slides">
     {% for row in notice_list %}
@@ -19,7 +18,7 @@
       <i class="am-icon-map-marker"></i>
     </div> 
     <div class="am-u-sm-11 am-u-lg-10">
-      {{address.values}}
+      中国广东省佛山市顺德区容桂镇桂洲大道东（桂洲大道与105国道交汇处/创富酒店旁）
     </div>
   </div>
   <div class="am-g">
@@ -27,7 +26,7 @@
       <i class="am-icon-phone"></i>
     </div> 
     <div class="am-u-sm-11 am-u-lg-10">
-      美丽热线：{{tel.values}}
+      美丽热线：400-823-2833
     </div>
   </div>
   <div class="am-g">
@@ -35,10 +34,12 @@
       <i class="am-icon-bus"></i>
     </div> 
     <div class="am-u-sm-11 am-u-lg-10">
-      {{traffic.values|safe}}
+        轻轨：广州南站 → 顺德站 → 容桂站<br/>
+        自驾：广珠西线 → 碧桂公路 → 龙盘西路 → 容奇大桥 →桂洲大道与105国道交汇处<br/>
+        途经公交：335路; 326路; 322路; 317路 ; 214路,; 217路 ; 211路到鹿茵酒店公交站下车
     </div>
   </div>
-  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:{{tel.values}}" target="_blank">我要预约</a>
+  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:400-823-2833" target="_blank">我要预约</a>
 </div>
 
 {% if customer_id %}

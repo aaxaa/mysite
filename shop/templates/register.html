@@ -84,11 +84,11 @@ $(function(){
         if(phone!=''){
             $.get("{% url 'verify'%}", {'vt':{{verify_token}}, 'phone':phone}, function(ret){
                 if(ret['status']=='success'){
-                    $('#verify').html('重新发送(<label>60</label>s)');
+                    $('#verify').html('重新获取(<label>60</label>s)');
                     $('#verify').attr('disabled','disabled');
                     setTimeout(timecount, 1000);  
                 }else if(ret['status']=='waiting'){
-                    $('#verify').html('重新发送(<label>60</label>s)');
+                    $('#verify').html('重新获取(<label>60</label>s)');
                 }else{
                     $('input[name="phone"]').trigger("focus");
                 }
