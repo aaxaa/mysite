@@ -7,9 +7,6 @@ from random import Random
 import time
 import xmltodict
 import requests
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -33,7 +30,7 @@ def build_sign(params):
         # sign不参与签名
         if key == 'sign':
             continue
-        array.append(u"%s=%s" % (key, params[key]))
+        array.append(u"%s=%s" % (key, params[key] if type(params[key]) == int else params[key].decode('utf8')))
     # 使用 URL 键值对的格式拼接成字符串string1
     string1 = u"&".join(array)
 
@@ -74,9 +71,9 @@ def dict_to_xml(params):
     xml_elements = ["<xml>",]
     for (k, v) in params.items():
         if str(v).isdigit():
-            xml_elements.append(u'<%s>%s</%s>' % (k, v, k))
+            xml_elements.append(u'<%s>%s</%s>' % (k, v.decode('utf8'), k))
         else:
-            xml_elements.append(u'<%s><![CDATA[%s]]></%s>' % (k, v, k))
+            xml_elements.append(u'<%s><![CDATA[%s]]></%s>' % (k, v.decode('utf8'), k))
     xml_elements.append('</xml>')
     return ''.join(xml_elements)
 
@@ -99,6 +96,8 @@ def build_form_by_params(params):
     response_dict = xmltodict.parse(response.text)['xml']
     if response_dict['return_code'] == 'SUCCESS':
         return build_form_by_prepay_id(response_dict['prepay_id'])
+    else:
+        print response.text
 
 def notify_string_to_params(string):
     params = {}
