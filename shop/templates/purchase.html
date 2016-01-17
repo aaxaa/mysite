@@ -16,8 +16,7 @@ wx.ready(function(){
         signType:'{{signType}}',
         paySign:'{{paySign}}',
         success:function(res){
-        	alert(res.errMsg)
-            if(res.errMsg=='chooseWXPay: ok"'){
+            if(res.errMsg=='chooseWXPay:ok"'){
             	window.location.href='/order/';
             }else{
             	window.location.href='/shopcart/order/checkout/?order_id={{order_id}}'
