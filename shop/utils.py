@@ -30,7 +30,7 @@ def build_sign(params):
         # sign不参与签名
         if key == 'sign':
             continue
-        array.append(u"%s=%s" % (key, params[key]))
+        array.append(u"%s=%s" % (key, params[key].encode('utf8')))
     # 使用 URL 键值对的格式拼接成字符串string1
     string1 = u"&".join(array)
 
