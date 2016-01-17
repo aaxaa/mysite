@@ -71,9 +71,9 @@ def dict_to_xml(params):
     xml_elements = ["<xml>",]
     for (k, v) in params.items():
         #if str(v).isdigit():
-        #    xml_elements.append(u'<%s>%s</%s>' % (k, v if type(v) == int else v.decode('utf8'), k))
+        xml_elements.append(u'<%s>%s</%s>' % (k, v if type(v) == int else v.decode('utf8'), k))
         #else:
-        xml_elements.append(u'<%s><![CDATA[%s]]></%s>' % (k, v if type(v) == int else v.decode('utf8'), k))
+        #xml_elements.append(u'<%s><![CDATA[%s]]></%s>' % (k, v if type(v) == int else v.decode('utf8'), k))
     xml_elements.append('</xml>')
     return ''.join(xml_elements)
 
