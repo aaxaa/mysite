@@ -44,10 +44,6 @@
 		<tr>
 			<td class="am-active">SKU: </td><td>{{product.model}}</td>
 			<td class="am-active">分类: </td><td>{{product.category.name}}</td>
-			</tr>
-		<tr>
-			<td class="am-active">价格: </td><td>¥{{product.price}}</td>
-			<td class="am-active">库存: </td><td>{{product.stock}}</td>
 		</tr>
 		{% for item in product_items %}
 		<tr><td class="am-active">{{item.item.name}}: </td><td><i class="am-text-danger">{{item.value}}</i></td></tr>

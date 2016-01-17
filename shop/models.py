@@ -66,8 +66,6 @@ class Product(models.Model):
     status_choices = [
         (0, u'待上架'),
         (1, u'已上架'),
-        (2, u'已下架'),
-        (3, u'售罄'),
     ]
     recommend_choices = [
         (0, u'否'),
@@ -94,7 +92,6 @@ class Product(models.Model):
         default=0,
     )
     price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
-    stock = models.IntegerField(u"库存数量", default=0)
     point = models.IntegerField(u"积分奖励", default=0)
     content = RichTextUploadingField(u"产品详情")
     cover = models.ImageField(
@@ -333,11 +330,6 @@ class Order(models.Model):
         (1, u'已下单'),
         (2, u'未支付'),
         (3, u'已付款'),
-        (4, u'待审核'),
-        (5, u'已审核'),
-        (6, u'已发货'),
-        (7, u'已消费'),
-        (8, u'已完成'),
     ]
     customer = models.ForeignKey(
         Customer,
