@@ -77,6 +77,7 @@ def server(request):
             message.question_text = message.question_text.split('\b')
             message_data.append(message)
     else:
+        notice_list = None
         customer_id = None
         message_data = None
 
