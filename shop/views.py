@@ -601,11 +601,11 @@ def wx_callback(request):
                     access_token=data['access_token'],
                     openid=data['openid'],
                     expires_at=int(time.time())+int(data['expires_in']),
-                    nickname=userinfo['nickname'],
+                    nickname=userinfo['nickname'].encode('utf8'),
                     sex=userinfo['sex'],
-                    province=userinfo['province'],
-                    city=userinfo['city'],
-                    country=userinfo['country'],
+                    province=userinfo['province'].encode('utf8'),
+                    city=userinfo['city'].encode('utf8'),
+                    country=userinfo['country'].encode('utf8'),
                     headimgurl=userinfo['headimgurl'],
                     unionid=userinfo['unionid'] if 'unionid' in userinfo else ''
                 )

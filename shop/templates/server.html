@@ -53,13 +53,11 @@
     {%for message in message_data %}
       {% for m in message.question_text %}
       <li class="am-comment am-comment-flip">
-        <a href="#link-to-user-home">
         {% if message.customer.avatar %}
         <img src="{{message.customer.avatar}}" alt="" class="am-comment-avatar" width="48" height="48">
         {% else %}
         <img src="{% static "img/no-pic.png" %}" alt="" class="am-comment-avatar" width="48" height="48">
         {% endif %}
-        </a>
         <div class="am-comment-main">
           <div class="am-comment-bd"><p>{{m}}</p></div>
         </div>
@@ -67,7 +65,7 @@
       {% endfor %}
       {% if message.answer_text %}
       <li class="am-comment am-comment-danger">
-        <a href="#link-to-user-home"><img src="{% static "img/logo.png" %}" alt="" class="am-comment-avatar" width="48" height="48"></a>
+        <img src="{% static "img/logo.png" %}" alt="" class="am-comment-avatar" width="48" height="48">
         <div class="am-comment-main"><div class="am-comment-bd"><p>{{message.answer_text}}</p></div>
         </div>
       </li>
