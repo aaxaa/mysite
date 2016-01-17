@@ -7,6 +7,9 @@ from random import Random
 import time
 import xmltodict
 import requests
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -30,7 +33,7 @@ def build_sign(params):
         # sign不参与签名
         if key == 'sign':
             continue
-        array.append(u"%s=%s" % (key, params[key] if type(params[key]) == int else params[key].decode('utf8')))
+        array.append(u"%s=%s" % (key, params[key]))
     # 使用 URL 键值对的格式拼接成字符串string1
     string1 = u"&".join(array)
 
