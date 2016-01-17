@@ -67,6 +67,7 @@ def order(request):
         return render(request, 'order.html', {'order_list':order_list})
 
 def server(request):
+    notice_list = Notice.objects.filter(type='news')
     if 'customer' in request.session and request.session['customer']:
         customer_id = request.session['customer'].get('id')
         message_list = Message.objects.filter(customer__id=customer_id)
@@ -75,7 +76,6 @@ def server(request):
             message.question_text = message.question_text.split('\b')
             message_data.append(message)
     else:
-        notice_list = None
         customer_id = None
         message_data = None
 
@@ -544,7 +544,7 @@ def purchase(request):
             products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
 
         params = build_form_by_params({
-            'body': products_str.encode('utf8'),
+            'body': products_str.rstrip(', ').encode('utf8'),
             'out_trade_no' : str(order.id),
             'total_fee':int(order.total_price*100),
             'spbill_create_ip':get_client_ip(request),
