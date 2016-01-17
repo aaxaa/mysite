@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
-from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params, dict_to_xml
+from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params, dict_to_xml, generate_random_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
@@ -128,7 +128,19 @@ def beauty(request):
         relation_list = CustomerRelation.objects.filter(upper=customer)
         relation_list_sub = CustomerRelation.objects.filter(upper__in=set([row.customer for row in relation_list]))
 
-        return render(request, 'beauty.html', {'customer':customer, 'relation_list':relation_list, 'relation_list_sub':relation_list_sub})
+        data = {}
+        data['appId'] = WECHAT_APPID
+        data['timeStamp'] = str(int(time.time()))
+        data['nonceStr'] = generate_random_string()
+        wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+        data['signature'] = wx.generate_jsapi_signature(timestamp=data['timeStamp'], noncestr=data['nonceStr'], url="http://shop.baremeii.com/wxpay_test/")
+
+        share = {}
+        share['title'] = u'我是贝尔美医学美容医院的美丽代言人，快来支持我吧！'
+        share['desc'] = u'贝尔美，助您实现您的美丽人生'
+        share['img'] = 'http://www.baremeii.com/templets/images/logo.png'
+
+        return render(request, 'beauty.html', {'customer':customer, 'relation_list':relation_list, 'relation_list_sub':relation_list_sub, 'data':data , 'share':share})
     else:
         return redirect('/login?forward=customer')
 

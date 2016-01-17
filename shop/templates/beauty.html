@@ -7,9 +7,10 @@
   <div class="am-dropdown am-btn-block" data-am-dropdown="{boundary: '.am-btn-block'}">
         <button class="am-btn am-btn-beauty am-btn-block am-dropdown-toggle" data-am-dropdown-toggle>我要分享</button>
         <ul class="am-dropdown-content am-btn-block am-text-center">
-          <li><a href="#">分享到朋友圈</a></li>
-          <li><a href="#">分享给微信好友</a></li>
-          <li><a href="#">分享给QQ好友</a></li>
+          <li><a href="javascript:void(0);" id="ShareTimeline">分享到朋友圈</a></li>
+          <li><a href="javascript:void(0);" id="ShareAppMessage">分享给微信好友</a></li>
+          <li><a href="javascript:void(0);" id="ShareQQ">分享给QQ好友</a></li>
+          <li><a href="javascript:void(0);" id="ShareQZone">分享到QQ空间</a></li>
         </ul>
       </div>
   </div>
@@ -52,12 +53,106 @@
   </ul>
   {% endif %}
 </div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="share-success">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd am-text-success">
+      您分享成功了!^_^
+    </div>
+  </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="share-cancel">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd am-text-danger">
+      您确定不要分享了吗？T.T
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block script %}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+wx.config({
+    debug : true,
+    appId : '{{data.appId}}',
+    timestamp : '{{data.timeStamp}}',
+    nonceStr : '{{data.nonceStr}}',
+    signature : '{{data.signature}}',
+    jsApiList:[
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'onMenuShareQQ',
+      'onMenuShareQZone'
+    ]
+});
+wx.ready(function(){
+    $('#ShareTimeline').click(function(){
+      wx.onMenuShareTimeline({
+        title: '{{share.title}}', // 分享标题
+        link: '{% url 'code' customer.phone %}', // 分享链接
+        imgUrl: '{{share.img}}', // 分享图标
+        success: function () { 
+            // 用户确认分享后执行的回调函数
+          $('#share-success').modal();
+        },
+        cancel: function () { 
+            // 用户取消分享后执行的回调函数
+            $('#share-cancel').modal();
+        }
+    });
+    });
+    $('#ShareAppMessage').click(function(){
+      title: '{{share.title}}', // 分享标题
+      desc: '{{share.desc}}', // 分享描述
+      link: '{% url 'code' customer.phone %}', // 分享链接
+      imgUrl: '{{share.img}}', // 分享图标
+      success: function () { 
+          // 用户确认分享后执行的回调函数
+          $('#share-success').modal();
+      },
+      cancel: function () { 
+          // 用户取消分享后执行的回调函数
+          $('#share-cancel').modal();
+      }
+    });
+    $('#ShareQQ').click(function(){
+      title: '{{share.title}}', // 分享标题
+      desc: '{{share.desc}}', // 分享描述
+      link: '{% url 'code' customer.phone %}', // 分享链接
+      imgUrl: '{{share.img}}', // 分享图标
+      success: function () { 
+         // 用户确认分享后执行的回调函数
+         $('#share-success').modal();
+      },
+      cancel: function () { 
+         // 用户取消分享后执行的回调函数
+         $('#share-cancel').modal();
+      }
+    });
+    $('#ShareQZone').click(function(){
+      title: '{{share.title}}', // 分享标题
+      desc: '{{share.desc}}', // 分享描述
+      link: '{% url 'code' customer.phone %}', // 分享链接
+      imgUrl: '{{share.img}}', // 分享图标
+      success: function () { 
+         // 用户确认分享后执行的回调函数
+         $('#share-success').modal();
+      },
+      cancel: function () { 
+          // 用户取消分享后执行的回调函数
+          $('#share-cancel').modal();
+      }
+    });
+});
+</script>
 <script>
   $(function(){
     $('#qrcode').qrcode({'text':'{% url 'code' customer.phone %}', 'width':200,'height':200});
   });
-
 </script>
 {% endblock %}
