@@ -235,7 +235,7 @@ def shopcart(request):
 
         try:
             shopcart = Shopcart.objects.get(customer__pk=request.session['customer'].get('id'))
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             shopcart = Shopcart.objects.create(customer=customer)
             shopcart.save()
 
