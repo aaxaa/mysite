@@ -545,7 +545,7 @@ def purchase(request):
 
         params = build_form_by_params({
             'body': products_str.rstrip(', ').encode('utf8'),
-            'out_trade_no' : str(order.id),
+            'out_trade_no' : "O%s"%str(order.id),
             'total_fee':int(order.total_price*100),
             'spbill_create_ip':get_client_ip(request),
             'openid':request.session['openid']
