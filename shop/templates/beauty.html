@@ -97,6 +97,7 @@ wx.ready(function(){
         link:'{% url 'code' customer.phone %}', // 分享链接
         imgUrl:'{{share.img}}', // 分享图标
         success: function () { 
+          alert('success');
             // 用户确认分享后执行的回调函数
           $('#share-success').modal();
         },
