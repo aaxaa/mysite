@@ -175,3 +175,6 @@
 .checkout-box {
 	border:#eee solid 1px;
 }
+.am-dropdown-content:after, .am-dropdown-content:before {
+	border:none;
+}
