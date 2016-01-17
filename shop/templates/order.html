@@ -9,9 +9,9 @@
             <li><a href="">未使用</a></li>
         </ul>
         <div class="am-tabs-bd">
-        {% for order in order_list %}  
+        {% for order in order_list %}
+            <div class="am-tab-panel am-active">  
             {% for product in order.products_in_all %}
-            <div class="am-tab-panel am-active">
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
@@ -21,18 +21,22 @@
                         <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
-                            {% if product.status == 1 %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
-                            {% else %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:400-823-2833">电话预约</a>
+                            {% if order.status == 3 %}
+                                {% if product.status == 1 %}
+                                <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
+                                {% else %}
+                                <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:400-823-2833">电话预约</a>
+                                {% endif %}
+                            {% elif order.status == 2 %}
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
+            </div>
+            <div class="am-tab-panel">
             {% for product in order.products_in_s1 %}
-            <div class="am-tab-panel">
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
@@ -42,18 +46,22 @@
                         <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
-                            {% if product.status == 1 %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
-                            {% else %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                            {% if order.status == 3 %}
+                                {% if product.status == 1 %}
+                                <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
+                                {% else %}
+                                <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                                {% endif %}
+                            {% elif order.status == 2 %}
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
-            {% for product in order.products_in_s0 %}
+            </div>
             <div class="am-tab-panel">
+            {% for product in order.products_in_s0 %}
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
@@ -63,16 +71,20 @@
                         <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
-                            {% if product.status == 1 %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
-                            {% else %}
-                            <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                            {% if order.status == 3 %}
+                                {% if product.status == 1 %}
+                                <a class="am-btn am-btn-success am-btn-xs am-fr" disabled="disabled">已消费</a>
+                                {% else %}
+                                <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
+                                {% endif %}
+                            {% elif order.status == 2 %}
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}  
+            {% endfor %} 
+            </div> 
         {% endfor %}
         </div>
     </div>

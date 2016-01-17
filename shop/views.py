@@ -53,13 +53,11 @@ def order(request):
     if 'customer' in request.session and request.session['customer']:
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
-            order_list = Order.objects.filter(customer=customer)
+            order_list = Order.objects.filter(customer=customer, status__gt=1)
             for order in order_list:
                 order.products_in_all = order.products_in.all()
                 order.products_in_s0 = order.products_in.filter(status=0)
                 order.products_in_s1 = order.products_in.filter(status=1)
-
-
         except:
             order_list = {}
 
@@ -497,6 +495,8 @@ def shopcart_order_checkout(request):
 
         if order_id:
             order = Order.objects.get(id=order_id)
+            order.status = 1
+            order.save()
 
             data['order_id'] = order_id
             data['products'] = ''
@@ -535,13 +535,13 @@ def purchase(request):
         order.phone = data['phone']
         order.address = data['address']
         order.message = request.POST.get('message', '')
-        order.status = 3
+        order.status = 2
 
         order.save()
 
-        products_str = 'test'
-        # for product in order.products_in.all():
-        #     products_str += u"%s * %s = ￥%s, " % (unicode(product.product.name, 'utf8'), product.count, product.price)
+        products_str = ''
+        for product in order.products_in.all():
+            products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
 
         params = build_form_by_params({
             'body': products_str.encode('utf8'),
@@ -649,6 +649,11 @@ def wxpay_notify(request):
             order.status = 3
 
             order.save()
+
+            customer = order.customer
+            customer.realname = order.realname
+            customer.address = order.address
+            customer.save()
 
 
     return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
