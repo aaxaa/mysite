@@ -15,10 +15,10 @@
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
-                        <div class="am-u-sm-4 am-u-md-2 am-u-lg-1">
+                        <div class="am-u-sm-4">
                             <img src="{% static 'img/bing-1.jpg'%}" class="am-img-thumbnail product_img">
                         </div>
-                        <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
+                        <div class="am-u-sm-8">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
                             {% if order.status == 3 %}
@@ -28,7 +28,7 @@
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:400-823-2833">电话预约</a>
                                 {% endif %}
                             {% else %}
-                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order.order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
@@ -40,10 +40,10 @@
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
-                        <div class="am-u-sm-4 am-u-md-2 am-u-lg-1">
+                        <div class="am-u-sm-4">
                             <img src="{% static 'img/bing-1.jpg'%}" class="am-img-thumbnail product_img">
                         </div>
-                        <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
+                        <div class="am-u-sm-8">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
                             {% if order.status == 3 %}
@@ -53,7 +53,7 @@
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
                                 {% endif %}
                             {% else %}
-                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order.order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
@@ -65,10 +65,10 @@
                 <div class="order-box">
                     <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                     <div class="am-g">
-                        <div class="am-u-sm-4 am-u-md-2 am-u-lg-1">
+                        <div class="am-u-sm-4">
                             <img src="{% static 'img/bing-1.jpg'%}" class="am-img-thumbnail product_img">
                         </div>
-                        <div class="am-u-sm-8 am-u-md-10 am-u-lg-11">
+                        <div class="am-u-sm-8">
                             {{product.product.name}} * {{product.count}}<br/>
                             <small class="am-text-danger">¥{{product.price}}</small>
                             {% if order.status == 3 %}
@@ -78,7 +78,7 @@
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
                                 {% endif %}
                             {% else %}
-                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
+                                <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order.order_id}}">去付款</a>
                             {% endif %}
                         </div>
                     </div>
