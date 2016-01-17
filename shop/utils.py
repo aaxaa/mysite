@@ -30,9 +30,9 @@ def build_sign(params):
         # sign不参与签名
         if key == 'sign':
             continue
-        array.append("%s=%s" % (key, params[key]))
+        array.append(u"%s=%s" % (key, params[key]))
     # 使用 URL 键值对的格式拼接成字符串string1
-    string1 = "&".join(array)
+    string1 = u"&".join(array)
 
     # 在 string1 最后拼接上 key=Key(商户支付密钥)得到 stringSignTemp 字符串
     stringSignTemp = string1 + '&key=' + WECHAT_PAY_KEY
