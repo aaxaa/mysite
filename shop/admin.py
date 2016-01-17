@@ -67,10 +67,6 @@ class CustomerAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'register_at'
 
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-
 class CustomerPointLogAdmin(admin.ModelAdmin):
     list_display = ('customer', 'opertor', 'event_name', 'opertion', 'score', 'create_at')
     list_filter = ()

@@ -666,7 +666,7 @@ def customer(request):
             'customer': customer
         })
     else:
-        return redirect('/login?forward=customer')
+        return redirect('/login/?forward=customer')
 
 
 def login(request):

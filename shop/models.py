@@ -209,7 +209,7 @@ class Customer(models.Model):
         index_together = ('username', 'phone')
 
     def __unicode__(self):
-        return self.realname if self.realname else (u"手机帐号%s" % (self.phone)) 
+        return self.username if self.username else (u"手机帐号%s" % (self.phone)) 
 
 
 class CustomerConnect(models.Model):
