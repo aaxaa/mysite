@@ -742,6 +742,11 @@ def register(request):
 
                     customer_connect.save()
 
+                    customer.username = customer_connect.nickname
+                    customer.sex = customer_connect.sex
+                    customer.avatar = customer_connect.headimgurl
+                    customer.save()
+
                 request.session['customer'] = {
                     'id': customer.id,
                     'username': customer.username,
