@@ -356,7 +356,7 @@ def shopcart_update(request, op):
     #非登陆用户，从session内获取购物车信息，计算结果，并更新session
     else:
         #session内有数据
-        if 'shopcart' in request.session and request.session['customer']:
+        if 'shopcart' in request.session:
             shopcart = request.session['shopcart']
             #全选的情况，循环购物车产品列表，全部更新状态
             if op in ('check_all', 'uncheck_all'):
@@ -424,7 +424,7 @@ def shopcart_order(request):
                 products_list.update({product_in.product.id:{'count':product_in.count, 'price':product_in.price}})
 
 
-    if 'shopcart' in request.session and request.session['customer']:
+    if 'shopcart' in request.session:
         shopcart = request.session['shopcart']
 
         for _id,product in shopcart['products_list'].items():
