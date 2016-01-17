@@ -30,7 +30,7 @@ class ProductItemInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'model', 'type', 'price', 'stock', 'status', 'recommend')
+    list_display = ('name', 'model', 'type', 'price', 'status', 'recommend')
     list_filter = ('recommend', 'type', 'status')
 
     date_hierarchy = 'create_at'
@@ -95,9 +95,6 @@ class NoticeAdmin(admin.ModelAdmin):
     list_filter = ('type', 'status')
 
 
-class SettingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'values')
-
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
@@ -108,5 +105,4 @@ admin.site.register(CustomerPointLog, CustomerPointLogAdmin)
 admin.site.register(CustomerRelation, CustomerRelationAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Message, MessageAdmin)
-admin.site.register(Setting, SettingAdmin)
 admin.site.register(Shopcart, ShopcartAdmin)

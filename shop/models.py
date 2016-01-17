@@ -415,16 +415,3 @@ class Notice(models.Model):
     class Meta:
         verbose_name = u'公告'
         verbose_name_plural = u'促销公告'
-
-
-class Setting(models.Model):
-    key = models.CharField(u'字段', max_length=50)
-    name = models.CharField(u'说明', max_length=50)
-    values = models.TextField(u'值')
-
-    class Meta:
-        verbose_name = u'设置'
-        verbose_name_plural = u'站点设置'
-
-    def __unicode__(self):
-        return self.key
