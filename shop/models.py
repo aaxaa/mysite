@@ -102,7 +102,6 @@ class Product(models.Model):
     )
     create_at = models.DateField(u"创建时间", auto_now_add=True)
     open_at = models.DateField(u"上架时间", default=date.today())
-    close_at = models.DateField(u"下架时间", null=True, blank=True)
     status = models.SmallIntegerField(u"状态", choices=status_choices, default=0)
 
     def __unicode__(self):
@@ -223,7 +222,7 @@ class CustomerConnect(models.Model):
     )
     platform = models.CharField(max_length=10)
     access_token = models.CharField(max_length=255)
-    openid = models.CharField(max_length=50)
+    openid = models.CharField(max_length=50, unique=True)
     expires_at = models.IntegerField()
     nickname = models.CharField(max_length=50)
     sex = models.SmallIntegerField()
@@ -409,7 +408,6 @@ class Notice(models.Model):
         help_text=u'图片尺寸比例为2:1(长宽)'
     )
     create_at = models.DateField(u'创建时间', auto_now_add=True)
-    public_at = models.DateField(u'发布时间')
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=1)
 
     class Meta:
