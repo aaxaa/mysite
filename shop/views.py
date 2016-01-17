@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, F, Sum
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
 
 from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params, dict_to_xml, generate_random_string
