@@ -132,8 +132,8 @@ def beauty(request):
         data['appId'] = WECHAT_APPID
         data['timeStamp'] = str(int(time.time()))
         data['nonceStr'] = generate_random_string()
-        wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-        data['signature'] = wx.generate_jsapi_signature(timestamp=data['timeStamp'], noncestr=data['nonceStr'], url="http://shop.baremeii.com/wxpay_test/")
+        wx = WechatBasic(appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+        data['signature'] = wx.generate_jsapi_signature(timestamp=data['timeStamp'], noncestr=data['nonceStr'], url="http://shop.baremeii.com/beauty/")
 
         share = {}
         share['title'] = u'我是贝尔美医学美容医院的美丽代言人，快来支持我吧！'
