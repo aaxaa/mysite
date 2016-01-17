@@ -577,7 +577,8 @@ def wx_callback(request):
         data = r.json()
 
         r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
-
+        r2.encoding='utf8'
+        print r2.headers['content-type']
         if int(r2.status_code) == 200:
             userinfo = r2.json()
             try:
@@ -598,6 +599,7 @@ def wx_callback(request):
 
             except:
                 customer_connect = CustomerConnect.objects.create(
+                    platform='weixin',
                     access_token=data['access_token'],
                     openid=data['openid'],
                     expires_at=int(time.time())+int(data['expires_in']),
@@ -731,58 +733,58 @@ def register(request):
             del request.session['verifytoken']
             del request.session['verifytime']
 
-        try:
+        #try:
             
-            customer = Customer.objects.create(**data)
+        customer = Customer.objects.create(**data)
 
-            if customer.id:
-                if 'openid' in request.session and request.session['openid']:
-                    customer_connect = CustomerConnect.objects.get(openid=request.session['openid'])
-                    customer_connect.customer = customer
+        if customer.id:
+            if 'openid' in request.session and request.session['openid']:
+                customer_connect = CustomerConnect.objects.get(openid=request.session['openid'])
+                customer_connect.customer = customer
 
-                    customer_connect.save()
+                customer_connect.save()
 
-                    customer.username = customer_connect.nickname
-                    customer.sex = customer_connect.sex
-                    customer.avatar = customer_connect.headimgurl
-                    customer.save()
+                customer.username = customer_connect.nickname
+                customer.sex = customer_connect.sex
+                customer.avatar = customer_connect.headimgurl
+                customer.save()
 
-                request.session['customer'] = {
-                    'id': customer.id,
-                    'username': customer.username,
-                    'phone': customer.phone,
-                    'realname': customer.realname,
-                    'avatar': str(customer.avatar),
-                    'point': customer.point
-                }
-                if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
+            request.session['customer'] = {
+                'id': customer.id,
+                'username': customer.username,
+                'phone': customer.phone,
+                'realname': customer.realname,
+                'avatar': str(customer.avatar),
+                'point': customer.point
+            }
+            if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
+                try:
+                    #创建一级关系
+                    upper = Customer.objects.get(id=request.session['invite_customer_id'])
+                    customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
+                    customer_relation.save()
+                    #查找是否有二级关系，存在则创建二级关系
                     try:
-                        #创建一级关系
-                        upper = Customer.objects.get(id=request.session['invite_customer_id'])
-                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
+                        upper_relation = CustomerRelation.objects.get(customer=upper)
+
+                        customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
                         customer_relation.save()
-                        #查找是否有二级关系，存在则创建二级关系
-                        try:
-                            upper_relation = CustomerRelation.objects.get(customer=upper)
-
-                            customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
-                            customer_relation.save()
-                        except:
-                            pass
-
-                        del request.session['invite_customer_id']
                     except:
                         pass
 
-                if 'order_id' in request.session and request.session['order_id']:
-                    return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
-                else:
-                    return render(request, 'register.html', {'errors': None, 'status': 'success'})
-        except IntegrityError:
-            errors['message'] = u'手机号码已存在'
+                    del request.session['invite_customer_id']
+                except:
+                    pass
 
-        except:
-            errors['message'] = u'数据库创建出错'
+            if 'order_id' in request.session and request.session['order_id']:
+                return render(request, 'register.html', {'errors': None, 'status': 'success', 'order_id': request.session['order_id']})
+            else:
+                return render(request, 'register.html', {'errors': None, 'status': 'success'})
+        #except IntegrityError:
+        #    errors['message'] = u'手机号码已存在'
+
+        #except:
+        #    errors['message'] = u'数据库创建出错'
 
         return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
     #verify token
