@@ -174,11 +174,7 @@ class Customer(models.Model):
     realname = models.CharField(u'姓名', null=True, blank=True, max_length=15)
     phone = models.CharField(u'手机', max_length=15, unique=True)
     password = models.CharField(u'密码', max_length=50)
-    avatar = models.ImageField(u'头像',
-        null=True,
-        blank=True,
-        upload_to='upload/avatar/%Y/%m/%d/'
-    )
+    avatar = models.CharField(u'头像', null=True, blank=True, max_length=255)
     sex = models.SmallIntegerField(
         u'性别',
         choices=sex_choices,
