@@ -6,7 +6,7 @@ from django.db.models import Q, F, Sum
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from shop.models import Notice, Product, Setting, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
+from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params, dict_to_xml, generate_random_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
@@ -69,16 +69,6 @@ def order(request):
         return render(request, 'order.html', {'order_list':order_list})
 
 def server(request):
-    notice_list = Notice.objects.filter(type='news', status=1)
-    try:
-        tel = Setting.objects.get(key='tel')
-        traffic = Setting.objects.get(key='traffic')
-        address = Setting.objects.get(key='address')
-    except:
-        tel = ''
-        traffic = ''
-        address = ''
-
     if 'customer' in request.session and request.session['customer']:
         customer_id = request.session['customer'].get('id')
         message_list = Message.objects.filter(customer__id=customer_id)
@@ -93,9 +83,6 @@ def server(request):
 
     return render(request, 'server.html', {
         'notice_list': notice_list,
-        'tel': tel,
-        'traffic': traffic,
-        'address': address,
         'customer_id':customer_id,
         'message_data':message_data
     })
