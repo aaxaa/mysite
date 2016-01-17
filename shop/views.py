@@ -644,7 +644,7 @@ def wxpay_notify(request):
     if request.POST.get('return_code') == 'SUCCESS':
         if verify_notify_string(request.POST.get('return_msg')):
             params = notify_string_to_params(request.POST.get('return_msg'))
-            order_id = params['out_trade_no']
+            order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(id=order_id)
             order.status = 3
 
