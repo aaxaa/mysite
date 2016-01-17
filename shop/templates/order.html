@@ -27,7 +27,7 @@
                                 {% else %}
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:400-823-2833">电话预约</a>
                                 {% endif %}
-                            {% elif order.status == 2 %}
+                            {% else %}
                                 <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>
@@ -52,7 +52,7 @@
                                 {% else %}
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
                                 {% endif %}
-                            {% elif order.status == 2 %}
+                            {% else %}
                                 <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>
@@ -77,7 +77,7 @@
                                 {% else %}
                                 <a class="am-btn am-btn-default am-btn-xs am-fr" href="tel:">电话预约</a>
                                 {% endif %}
-                            {% elif order.status == 2 %}
+                            {% else %}
                                 <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}">去付款</a>
                             {% endif %}
                         </div>

@@ -53,7 +53,7 @@ def order(request):
     if 'customer' in request.session and request.session['customer']:
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
-            order_list = Order.objects.filter(customer=customer, status__gt=1)
+            order_list = Order.objects.filter(customer=customer, status__gt=0)
             for order in order_list:
                 order.products_in_all = order.products_in.all()
                 order.products_in_s0 = order.products_in.filter(status=0)
