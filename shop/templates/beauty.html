@@ -200,9 +200,9 @@ wx.ready(function(){
 <script>
   $(function(){
     $('#qrcode').qrcode({'text':'{% url 'code' customer.phone %}', 'width':200,'height':200});
-    $("#mcover").click(
+    $("#mcover").click(function(){
       $("#mcover").hide();
-    );
+    });
   });
 </script>
 {% endblock %}
