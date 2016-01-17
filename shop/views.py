@@ -136,8 +136,8 @@ def beauty(request):
         data['signature'] = wx.generate_jsapi_signature(timestamp=data['timeStamp'], noncestr=data['nonceStr'], url="http://shop.baremeii.com/beauty/")
 
         share = {}
-        share['title'] = u'我是贝尔美医学美容医院的美丽代言人，快来支持我吧！'
-        share['desc'] = u'贝尔美，助您实现您的美丽人生'
+        share['title'] = u'贝尔美医学美容医院，助您实现您的美丽人生'
+        share['desc'] = u'我是贝尔美医学美容医院的美丽代言人，快来支持我吧！'
         share['img'] = 'http://www.baremeii.com/templets/images/logo.png'
 
         return render(request, 'beauty.html', {'customer':customer, 'relation_list':relation_list, 'relation_list_sub':relation_list_sub, 'data':data , 'share':share})
