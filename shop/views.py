@@ -247,7 +247,7 @@ def shopcart(request):
             for pro in products:
                 product = _shopcart['products_list'][str(pro.id)]
                 if pro.id not in products_in_ids:
-                    product_in = ShopcartProduct.objects.create(product=pro, shopcart=shopcart, count=product.count, price=product.price, checked=product.checked)
+                    product_in = ShopcartProduct.objects.create(product=pro, shopcart=shopcart, count=product['count'], price=product.price, checked=product.checked)
                     product_in.save()
                 else:
                     ShopcartProduct.objects.filter(product=pro, shopcart=shopcart).update(count=F('count')+product['count'], price=F('price')+float(product['price']))
