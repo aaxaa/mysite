@@ -4,7 +4,7 @@
 <div class="am-container">
   <div class="am-margin-lg am-text-center" id="qrcode"></div>
 
-  <div class="am-dropdown am-btn-block" data-am-dropdown="{boundary: '.am-btn-block'}">
+  <div class="am-dropdown am-btn-block" data-am-dropdown="{boundary: '.am-btn-block'}" id="dropmenu">
         <button class="am-btn am-btn-beauty am-btn-block am-dropdown-toggle" data-am-dropdown-toggle>我要分享</button>
         <ul class="am-dropdown-content am-btn-block am-text-center">
           <li><a href="javascript:void(0);" id="ShareTimeline">分享到朋友圈</a></li>
@@ -110,7 +110,7 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 wx.config({
-    debug : true,
+    //debug : true,
     appId : '{{data.appId}}',
     timestamp : '{{data.timeStamp}}',
     nonceStr : '{{data.nonceStr}}',
@@ -139,6 +139,7 @@ wx.ready(function(){
           $('#share-cancel').modal();
         }
       });
+      $('#dropmenu').hide();
       $("#shareit").show();
     });
     $('#ShareAppMessage').click(function(){
@@ -159,6 +160,7 @@ wx.ready(function(){
           $('#share-cancel').modal();
         }
       });
+      $('#dropmenu').hide();
       $("#shareit").show();
     });
     $('#ShareQQ').click(function(){
@@ -178,6 +180,7 @@ wx.ready(function(){
           $('#share-cancel').modal();
         }
       });
+      $('#dropmenu').hide();
       $("#shareit").show();
     });
     $('#ShareQZone').click(function(){
@@ -197,6 +200,7 @@ wx.ready(function(){
           $('#share-cancel').modal();
         }
       });
+      $('#dropmenu').hide();
       $("#shareit").show();
     });
 });
