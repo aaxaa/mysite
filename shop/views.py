@@ -578,7 +578,6 @@ def wx_callback(request):
 
         r2 = requests.get('https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'%(data['access_token'], data['openid']))
         r2.encoding='utf8'
-        print r2.headers['content-type']
         if int(r2.status_code) == 200:
             userinfo = r2.json()
             try:
