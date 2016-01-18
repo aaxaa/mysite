@@ -584,7 +584,7 @@ def wx_callback(request):
             try:
                 customer_connect = CustomerConnect.objects.get(openid=data['openid'])
 
-                if customer_connect.customer.id:
+                if customer_connect.customer:
                     request.session['customer'] = {
                         'id': customer_connect.customer.id,
                         'username': customer_connect.customer.username,
