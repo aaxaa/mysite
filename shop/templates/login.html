@@ -7,7 +7,7 @@
     {% if status == 'errors' %}
     <div class="am-form-group am-form-error">
       <label class="am-form-label">帐号/手机</label>
-      <input type="text" name="login_account" placeholder="{{login_account}}" class="am-field-error am-active" required />
+      <input type="text" name="login_account" value="{{login_account}}" class="am-field-error am-active" required />
       <div class="am-alert am-alert-danger">{{message}}</div>
     </div>
     {% elif status == None %}
