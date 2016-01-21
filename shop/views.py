@@ -420,7 +420,7 @@ def shopcart_order(request):
         _shopcart = Shopcart.objects.get(customer=customer)
 
         for product_in in _shopcart.products_in.all():
-            if product_in.checked:
+            if product_in.checked and product_in.count>0:
                 ids.add(product_in.product.id)
                 products_list.update({product_in.product.id:{'count':product_in.count, 'price':product_in.price}})
 
@@ -429,7 +429,7 @@ def shopcart_order(request):
         shopcart = request.session['shopcart']
 
         for _id,product in shopcart['products_list'].items():
-            if product['checked']:
+            if product['checked'] and product['count']>0:
                 ids.add(int(_id))
                 if int(_id) in products_list:
                     p = products_list[int(_id)]
@@ -518,7 +518,7 @@ def shopcart_order_checkout(request):
 
 
 def purchase(request):
-    if  "customer" in request.session and request.method == 'POST':
+    if  "customer" in request.session and "openid" in request.session and request.method == 'POST':
         empty_fields = []
         data = {}
         for field in ('realname', 'phone', 'address', 'pay'):
@@ -640,7 +640,6 @@ def wxpay_test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
-
     if request.POST.get('return_code') == 'SUCCESS':
         if verify_notify_string(request.POST.get('return_msg')):
             params = notify_string_to_params(request.POST.get('return_msg'))

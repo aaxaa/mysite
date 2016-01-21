@@ -14,8 +14,8 @@
     <div class="am-text-center" style="margin-top:3rem">
         <h2>您已注册成功！{% if order_id %}您有未付款订单，是否继续？{% endif %}</h2>
 
-        <a href="{% url 'main' %}" class="am-btn am-btn-sm am-btn-success">去逛逛</a>
-        {% if order_id %}<a href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}" class="am-btn am-btn-sm am-btn-success">去付款</a>{% endif %}
+        <a href="{% url 'main' %}" class="am-btn am-btn-sm am-btn-beauty">去逛逛</a>
+        {% if order_id %}<a href="{% url 'shopcart_order_checkout' %}?order_id={{order_id}}" class="am-btn am-btn-sm am-btn-beauty">去付款</a>{% endif %}
 
     </div>
     {% elif status == 'field-failed' %}
@@ -29,17 +29,17 @@
         {% if 'verifycode' in errors %}
             <h3>密码不能为空！</h3>
         {% endif %}
-        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
+        <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'verify-failed' %}
     <div class="am-text-center" style="margin-top:3rem;">
         <h3>{{message}}，返回重试！</h3>
-        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
+        <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'db-failed' %}
     <div  class="am-text-center" style="margin-top:3rem;">
         <h3>{{errors.message}}</h3>
-        <a href="{% url 'register' %}" class="am-btn am-btn-success am-btn-sm am-center">返回</a>
+        <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% else %}
     <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">

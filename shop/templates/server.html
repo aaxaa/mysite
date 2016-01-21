@@ -9,7 +9,7 @@
   </ul>
 </div>
 <div data-am-widget="map" class="am-map am-map-default"
-    data-name="贝尔美医学美容医院" data-address="{{address.values}}" data-longitude="" data-latitude="" data-scaleControl="" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
+    data-name="贝尔美医学美容医院" data-address="中国广东省佛山市顺德区容桂镇桂洲大道东（桂洲大道与105国道交汇处/创富酒店旁）" data-longitude="" data-latitude="" data-scaleControl="" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
   <div id="bd-map"></div>
 </div>
 <div class="am-text-xs am-text-grey am-margin-xs am-padding-xs">
@@ -39,7 +39,7 @@
         途经公交：335路; 326路; 322路; 317路 ; 214路,; 217路 ; 211路到鹿茵酒店公交站下车
     </div>
   </div>
-  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:400-823-2833" target="_blank">我要预约</a>
+  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:075729292933" target="_blank">我要预约</a>
 </div>
 
 {% if customer_id %}
@@ -71,10 +71,7 @@
       </li>
       {% endif %}
     {% endfor %}
-    
     </ul>
-
-
 
   <form class="am-form am-magin-l" action="{% url "ask"%}" method="POST">
   {% csrf_token %}
