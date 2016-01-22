@@ -650,6 +650,7 @@ def wxpay_notify(request):
             order_id = int(params['out_trade_no'].lstrip('O'))
             print order_id
             order = Order.objects.get(id=order_id)
+            print order
             order.status = 3
 
             order.save()
