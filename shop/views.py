@@ -648,6 +648,7 @@ def wxpay_notify(request):
         if params['return_code'] == 'SUCCESS':
             order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(pk=order_id)
+            print params
             customer_connect = CustomerConnect(openid=params['openid'])
             print customer_connect.customer.id
 
