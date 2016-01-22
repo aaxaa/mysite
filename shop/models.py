@@ -109,7 +109,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = u'商品'
         verbose_name_plural = u'商品管理'
-        ordering = (('open_at'), ('status'),)
+        ordering = (('create_at'), ('status'),)
 
 
 class Item(models.Model):
