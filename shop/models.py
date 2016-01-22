@@ -220,15 +220,15 @@ class CustomerConnect(models.Model):
         blank=True,
     )
     platform = models.CharField(max_length=10)
-    access_token = models.CharField(max_length=255, null=True)
+    access_token = models.CharField(max_length=255, default='')
     openid = models.CharField(max_length=50, unique=True)
     expires_at = models.IntegerField()
-    nickname = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50, default='')
     sex = models.SmallIntegerField()
-    province = models.CharField(max_length=20)
-    city = models.CharField(max_length=20)
-    country = models.CharField(max_length=20)
-    headimgurl = models.CharField(max_length=255)
+    province = models.CharField(max_length=20, default='')
+    city = models.CharField(max_length=20, default='')
+    country = models.CharField(max_length=20, default='')
+    headimgurl = models.CharField(max_length=255, default='')
     unionid = models.CharField(max_length=50, blank=True, null=True)
 
 
