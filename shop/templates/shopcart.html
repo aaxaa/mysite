@@ -147,11 +147,12 @@ function check_all(){
 }
 $(function(){
   $('.product-item').swipe({
-    swipeLeft:function(event, direction, distance, duration, fingerCount){
+    swipeLeft:function(){
+      alert($(this).find('input[name="pid"]').val());
       $(this).find('.selectbox').hide();
       $(this).append('<div class="am-u-sm-2 am-text-center product-delete"><a href="#">删除</a></div>');
     },
-    swipeRight:function(event, direction, distance, duration, fingerCount){
+    swipeRight:function(){
       $(this).find('.product-delete').remove();
       $(this).find('.selectbox').show();
     },
