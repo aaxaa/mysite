@@ -640,7 +640,7 @@ def wxpay_test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
-    print request.POST
+    print request.raw_post_data
     print request.POST.get('return_code')
     if request.POST.get('return_code') == 'SUCCESS':
         print request.POST.get('return_msg')
@@ -658,7 +658,8 @@ def wxpay_notify(request):
             customer.save()
 
 
-    return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+    #return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+    return HttpResponse('o')
 
 
 def customer(request):
