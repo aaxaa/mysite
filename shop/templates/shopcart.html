@@ -201,7 +201,6 @@ $(function(){
           $('#order_id').html(res['order_id']);
           $('#order_products').html(res['products']);
           $('#order_total_price').html(res['total_price']);
-
           if(res['login']){
             $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id']);
           }else{

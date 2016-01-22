@@ -61,10 +61,6 @@ def order(request):
                 order.products_in_s1 = order.products_in.filter(status=1)
         except:
             order_list = {}
-
-
-
-
         return render(request, 'order.html', {'order_list':order_list})
 
 def server(request):
@@ -395,7 +391,6 @@ def shopcart_update(request, op):
 
             if op in ('up', 'down'):
                 shopcart['total_price'] = sum([float(pro['price']) for pro in shopcart['products_list'].values()])
-
                 data['status'] = 'success'
                 data['count'] = product['count']
                 data['price'] = "%0.2f"%float(product['price'])
@@ -411,7 +406,7 @@ def shopcart_update(request, op):
 
 def shopcart_order(request):
     data = {}
-    
+    quick_id = int(request.GET.get('quick_id',0))
     customer = None if 'customer' not in request.session else Customer.objects.get(id=request.session['customer'].get('id'))
     data['login'] = True if customer else False
     data['status'] = 'ok'     
@@ -420,27 +415,29 @@ def shopcart_order(request):
     ids = set()
     products_list = {}
     total_price = 0
+    if quick_id:
+        ids.add(quick_id)
+    else:
+        if customer:
+            _shopcart = Shopcart.objects.get(customer=customer)
 
-    if customer:
-        _shopcart = Shopcart.objects.get(customer=customer)
-
-        for product_in in _shopcart.products_in.all():
-            if product_in.checked and product_in.count>0:
-                ids.add(product_in.product.id)
-                products_list.update({product_in.product.id:{'count':product_in.count, 'price':product_in.price}})
+            for product_in in _shopcart.products_in.all():
+                if product_in.checked and product_in.count>0:
+                    ids.add(product_in.product.id)
+                    products_list.update({product_in.product.id:{'count':product_in.count, 'price':product_in.price}})
 
 
-    if 'shopcart' in request.session:
-        shopcart = request.session['shopcart']
+        if 'shopcart' in request.session:
+            shopcart = request.session['shopcart']
 
-        for _id,product in shopcart['products_list'].items():
-            if product['checked'] and product['count']>0:
-                ids.add(int(_id))
-                if int(_id) in products_list:
-                    p = products_list[int(_id)]
-                    products_list.update({int(_id):{'count':product['count']+p['count'], 'price':float(product['price'])+float(p['price'])}})
-                else:
-                    products_list.update({int(_id):product})
+            for _id,product in shopcart['products_list'].items():
+                if product['checked'] and product['count']>0:
+                    ids.add(int(_id))
+                    if int(_id) in products_list:
+                        p = products_list[int(_id)]
+                        products_list.update({int(_id):{'count':product['count']+p['count'], 'price':float(product['price'])+float(p['price'])}})
+                    else:
+                        products_list.update({int(_id):product})
     
     if ids:
         for _id in ids:
