@@ -658,8 +658,6 @@ def wxpay_notify(request):
                 customer_connect.customer.address = order.address
                 customer_connect.customer.save()
 
-                print customer_connect.customer.realname 
-
                 order.status = 3
                 order.save()
                 print order.status
