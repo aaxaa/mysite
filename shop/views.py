@@ -474,6 +474,10 @@ def shopcart_order(request):
             data['order_id'] = order.id
             request.session['order_id'] = order.id
 
+
+        if quick_id:
+            order.products_in.clear()
+        
         for prod in products:
             data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
 
