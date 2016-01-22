@@ -4,7 +4,7 @@
 <div class="am-container am-text-dgrey">
   {% if products_in %}
     {% for row in products_in %}
-    <div class="am-g am-margin-vertical-sm am-text-sm">
+    <div class="am-g am-margin-vertical-sm am-text-sm product-item">
       <div class="am-u-sm-1">
         <label class="am-checkbox am-danger">
           <input type="checkbox" name="pid" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
@@ -88,6 +88,7 @@
 </div>
 {% endblock %}
 {% block script %}
+<script type="text/javascript" src="{% static "js/jquery.touchSwipe.min.js" %}"></script>
 <script>
 function shopcart_up(product_id){
   $.get('{% url "shopcart_update" "up" %}', {"id":product_id}, function(res){
@@ -148,6 +149,11 @@ function check_all(){
   }
 }
 $(function(){
+  $('.product-item').swipe({
+    swipeLeft:function(event, direction, distance, duration, fingerCount){
+      $(this).append("你用"+fingerCount+"个手指以"+duration+"秒的速度向" + direction + "滑动了" +distance+ "像素 " );
+    },
+  });
   $('#select_all').on('click', function(evt){
     if($('#select_all').is(':checked')){
       $('input[type="checkbox"]').uCheck('check');
