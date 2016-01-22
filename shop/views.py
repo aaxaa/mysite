@@ -653,7 +653,7 @@ def wxpay_notify(request):
             print order
             order.status = 3
 
-            print order.save()
+            order.save()
 
             customer = order.customer
             customer.realname = order.realname
@@ -663,9 +663,12 @@ def wxpay_notify(request):
             #shopcart = Shopcart.objects.get(customer=order.customer)
             #shopcart.delete()
 
-            pids = [product.id for product in order.products_in_set.all()]
-            print pids
+            Shopcart.objects.filter(customer=order.customer, )
+
+            pids = [int(product.id) for product in order.products_in.all()]
+            
             sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
+            print sps
             sps.delete()
 
             return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
