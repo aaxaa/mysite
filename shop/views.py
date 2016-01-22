@@ -655,7 +655,7 @@ def wxpay_notify(request):
 
             order.save()
 
-            customer = order.customer
+            customer = Customer(pk=order.customer.id)
             customer.realname = order.realname
             customer.address = order.address
             customer.save()
