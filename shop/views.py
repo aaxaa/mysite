@@ -457,7 +457,7 @@ def shopcart_order(request):
             except ObjectDoesNotExist:
                 pass
         #最新的订单结束，则创建薪订单
-        if not order or order.status > 1:
+        if (not order) or order.status > 1:
             order = Order.objects.create(
                 customer=customer,
                 status=0,
