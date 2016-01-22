@@ -149,6 +149,7 @@ function shopcart_delete_product(product_id){
   $.get('{% url "shopcart_update" "delete" %}', {"id":product_id}, function(res){
     if(res['status']=='success'){
       $('#product-item-'+product_id).remove();
+      $('#total_price').html(res['total_price']);
     }
   });
 }
