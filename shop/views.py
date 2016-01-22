@@ -312,6 +312,9 @@ def shopcart_update(request, op):
         if op in ('check_all', 'uncheck_all'):
             checked = True if op == 'check_all' else False
             shopcart_product = ShopcartProduct.objects.filter(shopcart__customer__pk=request.session['customer'].get('id')).update(checked=checked)
+        elif op == 'delete':
+            shopcart_product = ShopcartProduct.objects.get(shopcart__customer__pk=request.session['customer'].get('id'), product__pk=id)
+            shopcart_product.delete()
         else:
             product = Product.objects.get(pk=id)
             #从关联表中获取购物车中该产品的信息
@@ -365,6 +368,8 @@ def shopcart_update(request, op):
                     pro['checked'] = True if op == 'check_all' else False
                     shopcart['products_list'].update({i:pro})
             #其他的，数量加减，单个勾选的情况，按操作进行  
+            elif op == 'delete':
+                shopcart['products_list'].pop(id)
             else:
                 #取出购物车相应产品
                 if 'products_list' in shopcart:
