@@ -646,23 +646,25 @@ def wxpay_notify(request):
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
-            print params
             order_id = int(params['out_trade_no'].lstrip('O'))
-            print order_id
             order = Order.objects.get(pk=order_id)
-            print order.status
-            order.status = 3
+            customer_connect = CustomerConnect(openid=params['openid'])
+            print customer_connect.customer.id
 
-            order.save()
+            if order.customer.id == customer_connect.customer.id:
 
-            customer = Customer(pk=order.customer.id)
-            customer.realname = order.realname
-            customer.address = order.address
-            customer.save()
-            print customer
+                customer_connect.customer.realname = order.realname
+                customer_connect.customer.address = order.address
+                customer_connect.customer.save()
 
-            shopcart = Shopcart.objects.get(customer__id=order.customer.id)
-            shopcart.delete()
+                print customer_connect.customer.realname 
+
+                order.status = 3
+                order.save()
+                print order.status
+
+                shopcart = Shopcart.objects.get(customer=customer_connect.customer)
+                shopcart.delete()
 
             # pids = [int(product.id) for product in order.products_in.all()]
             
@@ -670,7 +672,7 @@ def wxpay_notify(request):
             # print sps
             # sps.delete()
 
-            return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+                return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
 
 
