@@ -1,7 +1,7 @@
 {% extends "libs/base.html" %}
 {% load staticfiles %}
 {% block container %}
-<div class="am-container am-text-dgrey">
+<div class="am-container am-text-dgrey" id="container">
   {% if products_in %}
     {% for row in products_in %}
     <div class="am-g am-margin-vertical-sm am-text-sm product-item" id="product-item-{{row.product.id}}">
@@ -151,7 +151,7 @@ function shopcart_delete_product(product_id){
       $('#product-item-'+product_id).remove();
       $('#total_price').html(res['total_price']);
       if($('.product-item').length==0){
-        $('.product-item').parent().append('<div class="am-margin-lg"><p class="am-center am-text-beauty am-text-center">购物车空空如也～</p><a href="{% url "main" %}" class="am-btn am-btn-beauty am-center"><i class="am-icon-shopping-cart"></i> 去逛逛</a></div>');
+        $('#container').append('<div class="am-margin-lg"><p class="am-center am-text-beauty am-text-center">购物车空空如也～</p><a href="{% url "main" %}" class="am-btn am-btn-beauty am-center"><i class="am-icon-shopping-cart"></i> 去逛逛</a></div>');
       }
     }
   });
