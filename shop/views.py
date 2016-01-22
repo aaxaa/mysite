@@ -551,7 +551,7 @@ def purchase(request):
                 'spbill_create_ip':get_client_ip(request),
                 'openid':request.session['openid']
             })
-            if params['prepay_id']:
+            if params['paySign']:
                 params['order_id'] = str(order.id)
 
                 wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
