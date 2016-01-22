@@ -407,6 +407,7 @@ def shopcart_update(request, op):
 def shopcart_order(request):
     data = {}
     quick_id = int(request.GET.get('quick_id',0))
+    count = int(request.GET.get('count',0))
     customer = None if 'customer' not in request.session else Customer.objects.get(id=request.session['customer'].get('id'))
     data['login'] = True if customer else False
     data['status'] = 'ok'     
@@ -416,7 +417,9 @@ def shopcart_order(request):
     products_list = {}
     total_price = 0
     if quick_id:
+        product = Product.objects.get(id=quick_id)
         ids.add(quick_id)
+        products_list.update({product.id:{'count':count, 'price':product.price*count}})
     else:
         if customer:
             _shopcart = Shopcart.objects.get(customer=customer)
