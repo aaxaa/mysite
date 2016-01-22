@@ -13,7 +13,7 @@
       <div class="am-u-sm-3 am-padding-0">
         <img src="{{row.product.cover}}" class="am-img-thumbnail shopcart_product_img am-center" />
       </div>
-      <div class="am-u-sm-8">
+      <div class="am-u-sm-7">
           <div class="am-g">
             <dic class="am-u-sm-6">
               <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
@@ -149,7 +149,11 @@ $(function(){
   $('.product-item').swipe({
     swipeLeft:function(event, direction, distance, duration, fingerCount){
       $(this).find('.selectbox').hide();
-      $(this).append('<div class="am-u-sm-1 am-text-center"><a href="#">删除</a></div>');
+      $(this).append('<div class="am-u-sm-2 am-text-center product-delete"><a href="#">删除</a></div>');
+    },
+    swipeRight:function(event, direction, distance, duration, fingerCount){
+      $(this).find('.product-delete').remove();
+      $(this).find('.selectbox').show();
     },
   });
   $('#select_all').on('click', function(evt){

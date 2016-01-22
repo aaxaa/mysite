@@ -37,6 +37,13 @@
 	font-size: 1.2rem;
 	
 }
+.product-delete {
+	background-color: rgb(253,241,247);
+	width:100%;
+}
+.product-delete a {
+	color: #fff;
+}
 .am-btn-beauty ,.am-btn-beauty:hover {
 	color: #fff;
 	background-color: rgb(227, 48, 140);
