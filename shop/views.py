@@ -533,7 +533,7 @@ def purchase(request):
         try:
             order = Order.objects.get(id=order_id)
 
-            if order.status >= 2: 
+            if order.status == 3:
                 return redirect('/order/')
             else:
                 order.realname = data['realname']
