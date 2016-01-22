@@ -649,7 +649,7 @@ def wxpay_notify(request):
             order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(pk=order_id)
             print params
-            customer_connect = CustomerConnect(openid=params['openid'])
+            customer_connect = CustomerConnect.objects.get(openid=params['openid'])
             print customer_connect.customer.id
 
             if order.customer.id == customer_connect.customer.id:
