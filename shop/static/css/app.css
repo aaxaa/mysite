@@ -38,8 +38,9 @@
 	
 }
 .product-delete {
-	background-color: rgb(253,241,247);
-	width:100%;
+	background-color: rgb(227, 48, 140);
+	height:45px;
+	line-height: 45px;
 }
 .product-delete a {
 	color: #fff;
