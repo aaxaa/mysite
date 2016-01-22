@@ -646,6 +646,7 @@ def wxpay_notify(request):
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
+            print params
             order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(id=order_id)
             order.status = 3
