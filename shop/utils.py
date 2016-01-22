@@ -97,7 +97,7 @@ def build_form_by_params(params):
     if response_dict['return_code'] == 'SUCCESS' and response_dict['result_code']=='SUCCESS':
         return build_form_by_prepay_id(response_dict['prepay_id'])
     else:
-        print {'prepay_id':None, 'err_code_des':response_dict['err_code_des']}
+        return {'prepay_id':None, 'err_code_des':response_dict['err_code_des']}
 
 def notify_string_to_params(string):
     params = {}
