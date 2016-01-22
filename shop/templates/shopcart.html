@@ -171,7 +171,7 @@ $(function(){
     $.get('{% url "shopcart_order"%}', function(res){
       if(res['status']=='ok'){
         if(res['products']==''){
-          $('#tips_message').html('请选择至少一个商品！');
+          $('#tips_message').html('请选择至少一个商品并且数量大于0！');
           $('#tips').modal({
             'closeViaDimmer' : 0,
             'width': 300,
