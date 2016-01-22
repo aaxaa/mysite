@@ -5,7 +5,7 @@
   {% if products_in %}
     {% for row in products_in %}
     <div class="am-g am-margin-vertical-sm am-text-sm product-item">
-      <div class="am-u-sm-1">
+      <div class="am-u-sm-2">
         <label class="am-checkbox am-danger">
           <input type="checkbox" name="pid" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
         </label>
@@ -13,7 +13,7 @@
       <div class="am-u-sm-3 am-padding-0">
         <img src="{{row.product.cover}}" class="am-img-thumbnail shopcart_product_img am-center" />
       </div>
-      <div class="am-u-sm-8">
+      <div class="am-u-sm-7">
           <div class="am-g">
             <dic class="am-u-sm-6">
               <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
@@ -96,7 +96,6 @@ function shopcart_up(product_id){
       $('#product_'+product_id).val(res['count']);
       $('#total_'+product_id).html(parseFloat(res['price']).toFixed(2));
       $('#total_price').html(parseFloat(res['total_price']).toFixed(2));
-
       if(res['count']==1){
         $('#btn_down_'+product_id).removeAttr('disabled')
       }
@@ -121,15 +120,13 @@ function shopcart_down(product_id){
 }
 function shopcart_select(obj){
   if($(obj).is(':checked')){
-    $.get('{% url "shopcart_update" "check" %}', {"id":$(obj).val()}, function(res){
-        
+    $.get('{% url "shopcart_update" "check" %}', {"id":$(obj).val()}, function(res){  
         if(res['status']=='success'){
           $('#total_price').html(res['total_price']);
         }
       });
   }else{
     $.get('{% url "shopcart_update" "uncheck" %}', {"id":$(obj).val()}, function(res){
-        
         if(res['status']=='success'){
           $('#total_price').html(res['total_price']);
         }
