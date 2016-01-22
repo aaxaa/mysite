@@ -502,7 +502,7 @@ def shopcart_order_checkout(request):
             data['order_id'] = order_id
             data['products'] = ''
             total_price = 0
-            for product in order.products_in.all():
+            for product in order.products_in.filter(checked=True):
                 data['products'] += u"%s * %s = ￥%s<br/>" % (product.product.name, product.count, product.price)
                 total_price += float(product.price)
 
