@@ -4,7 +4,7 @@
 <div class="am-container am-text-dgrey">
   {% if products_in %}
     {% for row in products_in %}
-    <div class="am-g am-margin-vertical-sm am-text-sm product-item">
+    <div class="am-g am-margin-vertical-sm am-text-sm product-item" id="product-item-{{row.product.id}}">
       <div class="am-u-sm-1 selectbox">
         <label class="am-checkbox am-danger">
           <input type="checkbox" name="pid" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
@@ -145,10 +145,10 @@ function check_all(){
     $('#select_all').uCheck('uncheck');
   }
 }
-function shopcart_delete_product(product_id, obj){
+function shopcart_delete_product(product_id){
   $.get('{% url "shopcart_update" "delete" %}', {"id":product_id}, function(res){
     if(res['status']=='success'){
-      $(obj).remove();
+      $('#product-item-'+product_id).remove();
     }
   });
 }
@@ -157,7 +157,7 @@ $(function(){
     swipeLeft:function(){
       var pid = $(this).find('input[name="pid"]').val();
       $(this).find('.selectbox').hide();
-      $(this).append('<div class="am-u-sm-2 am-text-center product-delete"><a href="javascript:void(0)" onclick="shopcart_delete_product('+pid+', this)">删除</a></div>');
+      $(this).append('<div class="am-u-sm-2 am-text-center product-delete"><a href="javascript:void(0)" onclick="shopcart_delete_product('+pid+')">删除</a></div>');
     },
     swipeRight:function(){
       $(this).find('.product-delete').remove();
