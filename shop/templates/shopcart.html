@@ -151,7 +151,7 @@ function check_all(){
 $(function(){
   $('.product-item').swipe({
     swipeLeft:function(event, direction, distance, duration, fingerCount){
-      $(this).append("你用"+fingerCount+"个手指以"+duration+"秒的速度向" + direction + "滑动了" +distance+ "像素 " );
+      $(this).append('<div class="am-u-sm-2"><a href="#">删除</a></div>');
     },
   });
   $('#select_all').on('click', function(evt){
