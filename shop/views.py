@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 
 from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
-from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_string_to_params, dict_to_xml, generate_random_string
+from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_xml_string_to_dict, dict_to_xml, generate_random_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
