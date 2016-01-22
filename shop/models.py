@@ -220,7 +220,7 @@ class CustomerConnect(models.Model):
         blank=True,
     )
     platform = models.CharField(max_length=10)
-    access_token = models.CharField(max_length=255)
+    access_token = models.CharField(max_length=255, null=True)
     openid = models.CharField(max_length=50, unique=True)
     expires_at = models.IntegerField()
     nickname = models.CharField(max_length=50)
