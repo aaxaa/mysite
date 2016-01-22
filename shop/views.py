@@ -532,33 +532,37 @@ def purchase(request):
         order_id = request.POST.get('order_id')
         try:
             order = Order.objects.get(id=order_id)
-            order.realname = data['realname']
-            order.phone = data['phone']
-            order.address = data['address']
-            order.message = request.POST.get('message', '')
-            order.status = 2
 
-            order.save()
-
-            products_str = ''
-            for product in order.products_in.all():
-                products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
-
-            params = build_form_by_params({
-                'body': products_str.rstrip(', ').encode('utf8'),
-                'out_trade_no' : "O%s"%str(order.id),
-                'total_fee':int(order.total_price*100),
-                'spbill_create_ip':get_client_ip(request),
-                'openid':request.session['openid']
-            })
-            if params['paySign']:
-                params['order_id'] = str(order.id)
-
-                wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-                params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/purchase/")
-                return render(request, 'purchase.html', params)
+            if order.status >= 2: 
+                return redirect('/order/')
             else:
-                return HttpResponse(params['err_code_des'])
+                order.realname = data['realname']
+                order.phone = data['phone']
+                order.address = data['address']
+                order.message = request.POST.get('message', '')
+                order.status = 2
+
+                order.save()
+
+                products_str = ''
+                for product in order.products_in.all():
+                    products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
+
+                params = build_form_by_params({
+                    'body': products_str.rstrip(', ').encode('utf8'),
+                    'out_trade_no' : "O%s"%str(order.id),
+                    'total_fee':int(order.total_price*100),
+                    'spbill_create_ip':get_client_ip(request),
+                    'openid':request.session['openid']
+                })
+                if params['paySign']:
+                    params['order_id'] = str(order.id)
+
+                    wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+                    params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/purchase/")
+                    return render(request, 'purchase.html', params)
+                else:
+                    return HttpResponse(params['err_code_des'])
 
         except:
             return HttpResponse(u'禁止支付不属于自己的订单')
