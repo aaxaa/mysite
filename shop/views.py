@@ -664,16 +664,15 @@ def wxpay_notify(request):
 
                 order.status = 3
                 order.save()
-                print order.status
 
-                shopcart = Shopcart.objects.get(customer=customer_connect.customer)
-                shopcart.delete()
+                #shopcart = Shopcart.objects.get(customer=customer_connect.customer)
+                #shopcart.delete()
 
-            # pids = [int(product.id) for product in order.products_in.all()]
-            
-            # sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
-            # print sps
-            # sps.delete()
+                pids = [int(product.id) for product in order.products_in.all()]
+                
+                sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
+                print sps
+                sps.delete()
 
                 return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
