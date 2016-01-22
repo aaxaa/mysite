@@ -476,8 +476,8 @@ def shopcart_order(request):
 
 
         if quick_id:
-            order.products_in.clear()
-        
+            order.products_in_set.clear()
+
         for prod in products:
             data['products'] += "%s * %s = %s <br/>" % (prod.name, products_list[prod.id]['count'], products_list[prod.id]['price'])
 
