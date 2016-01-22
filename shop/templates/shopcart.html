@@ -150,6 +150,9 @@ function shopcart_delete_product(product_id){
     if(res['status']=='success'){
       $('#product-item-'+product_id).remove();
       $('#total_price').html(res['total_price']);
+      if($('.product-item').length==0){
+        $('.product-item').parent().append('<div class="am-margin-lg"><p class="am-center am-text-beauty am-text-center">购物车空空如也～</p><a href="{% url "main" %}" class="am-btn am-btn-beauty am-center"><i class="am-icon-shopping-cart"></i> 去逛逛</a></div>');
+      }
     }
   });
 }
