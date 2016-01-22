@@ -653,7 +653,7 @@ def wxpay_notify(request):
             print order
             order.status = 3
 
-            order.save()
+            print order.save()
 
             customer = order.customer
             customer.realname = order.realname
