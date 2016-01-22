@@ -648,6 +648,7 @@ def wxpay_notify(request):
         if params['return_code'] == 'SUCCESS':
             print params
             order_id = int(params['out_trade_no'].lstrip('O'))
+            print order_id
             order = Order.objects.get(id=order_id)
             order.status = 3
 
@@ -662,6 +663,7 @@ def wxpay_notify(request):
             #shopcart.delete()
 
             pids = [product.id for product in order.products_in.all()]
+            print pids
             sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
             sps.delete()
 
