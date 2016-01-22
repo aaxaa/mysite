@@ -5,7 +5,7 @@
   {% if products_in %}
     {% for row in products_in %}
     <div class="am-g am-margin-vertical-sm am-text-sm product-item">
-      <div class="am-u-sm-2">
+      <div class="am-u-sm-1 selectbox">
         <label class="am-checkbox am-danger">
           <input type="checkbox" name="pid" value="{{row.product.id}}" data-am-ucheck {% if row.checked %}checked="checked" checked{% endif %} onclick="shopcart_select(this)"/>
         </label>
@@ -13,7 +13,7 @@
       <div class="am-u-sm-3 am-padding-0">
         <img src="{{row.product.cover}}" class="am-img-thumbnail shopcart_product_img am-center" />
       </div>
-      <div class="am-u-sm-7">
+      <div class="am-u-sm-8">
           <div class="am-g">
             <dic class="am-u-sm-6">
               <div class="am-g"><dic class="am-u-sm-12">{{row.product.name}}</dic></div>
@@ -148,7 +148,8 @@ function check_all(){
 $(function(){
   $('.product-item').swipe({
     swipeLeft:function(event, direction, distance, duration, fingerCount){
-      $(this).append('<div class="am-u-sm-2"><a href="#">删除</a></div>');
+      $(this).find('.selectbox').hide();
+      $(this).append('<div class="am-u-sm-1 am-text-center"><a href="#">删除</a></div>');
     },
   });
   $('#select_all').on('click', function(evt){
