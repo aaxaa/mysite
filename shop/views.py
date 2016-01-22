@@ -640,12 +640,10 @@ def wxpay_test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
-    print request.body
-    print request.POST.get('return_code')
-    if request.POST.get('return_code') == 'SUCCESS':
-        print request.POST.get('return_msg')
-        if verify_notify_string(request.POST.get('return_msg')):
-            params = notify_string_to_params(request.POST.get('return_msg'))
+
+    if verify_notify_string(request.body):
+        params = notify_string_to_params(request.body)
+        if params['return_code'] == 'SUCCESS':
             order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(id=order_id)
             order.status = 3
@@ -657,9 +655,15 @@ def wxpay_notify(request):
             customer.address = order.address
             customer.save()
 
+            #shopcart = Shopcart.objects.get(customer=order.customer)
+            #shopcart.delete()
 
-    #return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
-    return HttpResponse('o')
+            pids = [product.id for product in order.products_in.all()]
+            sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
+            sps.delete()
+
+            return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+    return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
 
 
 def customer(request):
