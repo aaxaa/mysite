@@ -659,8 +659,9 @@ def wxpay_notify(request):
             customer.realname = order.realname
             customer.address = order.address
             customer.save()
+            print customer
 
-            shopcart = Shopcart.objects.get(customer=order.customer)
+            shopcart = Shopcart.objects.get(customer__id=order.customer.id)
             shopcart.delete()
 
             # pids = [int(product.id) for product in order.products_in.all()]
