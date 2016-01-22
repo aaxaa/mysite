@@ -76,6 +76,14 @@
       </div>
     </div>
   </div>
+  <div class="am-modal am-modal-no-btn" tabindex="-1" id="tips">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd"><a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a></div>
+    <div class="am-modal-bd">
+    <p id="tips_message"></p>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}
 {% block script %}
@@ -161,18 +169,27 @@ $(function(){
   $('button[name="checkout"]').click(function(){
     $.get('{% url "shopcart_order"%}', function(res){
       if(res['status']=='ok'){
-        $('#order_id').html(res['order_id']);
-        $('#order_products').html(res['products']);
-        $('#order_total_price').html(res['total_price']);
-
-        if(res['login']){
-          $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id']);
+        if(res['products']==''){
+          $('#tips_message').html('请选择至少一个商品！');
+          $('#tips').modal({
+            'closeViaDimmer' : 0,
+            'width': 300,
+            'height': 120, 
+          });
         }else{
-          $('#order_checkout').attr('href','{% url 'login' %}?forward=shopcart_order_checkout&order_id='+res['order_id'])
+          $('#order_id').html(res['order_id']);
+          $('#order_products').html(res['products']);
+          $('#order_total_price').html(res['total_price']);
+
+          if(res['login']){
+            $('#order_checkout').attr('href','{% url 'shopcart_order_checkout' %}?order_id='+res['order_id']);
+          }else{
+            $('#order_checkout').attr('href','{% url 'login' %}?forward=shopcart_order_checkout&order_id='+res['order_id']);
+            $('#checkout').offCanvas('open',{effect: 'overlay'});
+          }
         }
       }
     });
-    $('#checkout').offCanvas('open',{effect: 'overlay'});
   });
   check_all();
 

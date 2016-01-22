@@ -481,9 +481,7 @@ def shopcart_order(request):
                 )
                 order_product.save()
             else:
-                OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])
-
-                
+                OrderProduct.objects.filter(order=order, product=prod).update(count=products_list[prod.id]['count'],price=products_list[prod.id]['price'])  
         
     return HttpResponse(json.dumps(data), content_type="application/json")
 
