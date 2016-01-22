@@ -663,7 +663,7 @@ def wxpay_notify(request):
             #shopcart = Shopcart.objects.get(customer=order.customer)
             #shopcart.delete()
 
-            pids = [product.id for product in order.products_in.all()]
+            pids = [product.id for product in order.products_in_set.all()]
             print pids
             sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
             sps.delete()
