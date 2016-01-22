@@ -34,6 +34,7 @@
             <dic class="am-u-sm-6 am-vertical-align" style="height:3.5rem;"><span class="am-vertical-align-xs am-text-danger">¥<label id="total_{{row.product.id}}">{{row.price}}</label></span></dic>
           </div>
       </div>
+      <div class="am-u-sm-2 am-text-center product-delete"><a href="javascript:void(0)" onclick="shopcart_delete_product('{{row.product.id}}')">删除</a></div>
     </div>
     {% endfor %}
     <div class="am-shopcart am-cf">
@@ -159,9 +160,8 @@ function shopcart_delete_product(product_id){
 $(function(){
   $('.product-item').swipe({
     swipeLeft:function(){
-      var pid = $(this).find('input[name="pid"]').val();
       $(this).find('.selectbox').hide();
-      $(this).append('<div class="am-u-sm-2 am-text-center product-delete"><a href="javascript:void(0)" onclick="shopcart_delete_product('+pid+')">删除</a></div>');
+      $(this).find('.product-delete').show();
     },
     swipeRight:function(){
       $(this).find('.product-delete').remove();
