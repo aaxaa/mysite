@@ -101,7 +101,6 @@ class Product(models.Model):
         help_text=u'图片尺寸比例为4:3(长宽)'
     )
     create_at = models.DateField(u"创建时间", auto_now_add=True)
-    open_at = models.DateField(u"上架时间", default=date.today())
     status = models.SmallIntegerField(u"状态", choices=status_choices, default=0)
 
     def __unicode__(self):
