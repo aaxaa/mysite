@@ -644,7 +644,7 @@ def wxpay_test(request):
 def wxpay_notify(request):
 
     if verify_notify_string(request.body):
-        params = notify_string_to_params(request.body)
+        params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
             order_id = int(params['out_trade_no'].lstrip('O'))
             order = Order.objects.get(id=order_id)
