@@ -48,6 +48,8 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer',  'total_price', 'create_at', 'status')
     list_filter = ('status',)
 
+    search_fields = ['customer__realname', 'customer__phone']
+
     date_hierarchy = 'create_at'
 
     inlines = (OrderProductInline, )
