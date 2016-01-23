@@ -145,6 +145,9 @@
 .am-tabs-bd {
   border:none;  
 }
+.am-comment-avatar {
+  border-radius:none;
+}
 .am-nav-tabs.am-nav-justify > li > a {
   border:none;
   background-color: #eee;
