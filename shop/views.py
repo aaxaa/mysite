@@ -483,14 +483,12 @@ def shopcart_order(request):
             order.save()
 
             order.order_txt = "%s%04d" % (datetime.today().strftime("%Y%m%d"), order.id)
-            print order.order_txt
             order.save()
-
-            data['order_id'] = order.id
-            data['order_txt'] = order.order_txt
-            request.session['order_id'] = order.id
-
-
+            
+        data['order_txt'] = order.order_txt
+        data['order_id'] = order.id
+        request.session['order_id'] = order.id
+        
         if quick_id:
             order.products.clear()
 
