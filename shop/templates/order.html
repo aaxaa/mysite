@@ -4,7 +4,7 @@
 <div class="am-container am-padding-lg">
     <div class="am-tabs">
         <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
-            <li {% if tab == 'all' %}class="am-active"{% endif %}><a href="/order?tab=all">全部{% if tab == 'all' %}none{% endif %}</a></li>
+            <li {% if tab == 'all' %}class="am-active"{% endif %}><a href="/order?tab=all">全部{% if tab == '' %}none{% endif %}</a></li>
             <li {% if tab == 'unuse' %}class="am-active"{% endif %}><a href="/order?tab=unuse">已使用</a></li>
             <li {% if tab == 'used' %}class="am-active"{% endif %}><a href="/order?tab=used">未使用</a></li>
         </ul>
