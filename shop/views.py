@@ -692,7 +692,7 @@ def wxpay_notify(request):
                 
                 #积分计算
                 print pids
-                print ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids).delete()
+                print ShopcartProduct.objects.filter(shopcart__customer=customer_connect.customer, product__id__in=pids).delete()
 
                 return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
