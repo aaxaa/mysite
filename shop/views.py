@@ -672,7 +672,7 @@ def wxpay_notify(request):
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
-            order_txt = int(params['out_trade_no']
+            order_txt = params['out_trade_no']
             order = Order.objects.get(order_txt=order_txt)
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
 
