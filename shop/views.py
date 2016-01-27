@@ -52,24 +52,26 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
-        tab = request.GET.get('tab', 'all')
+        tabstatus = request.GET.get('tabstatus', 'all')
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
             order_list = Order.objects.filter(customer=customer, status__gt=0)
             for order in order_list:
-                if tab == 'all':
+                if tabstatus == 'all':
                     order.products_in_all = order.products_in.all()
-                elif tab == 'unuse':
+                elif tabstatus == 'unuse':
                     order.products_in_s0 = order.products_in.filter(status=0)
-                elif tab == 'used':
+                elif tabstatus == 'used':
                     order.products_in_s1 = order.products_in.filter(status=1)
 
                 order_data.append(order)
         except:
             pass
             
-        return render(request, 'order.html', {'order_list':order_data, 'tab':tab})
+        return render(request, 'order.html', {'order_list':order_data, 'tabstatus':tabstatus})
+    else:
+        return redirect('/login/?forward=order')
 
 def server(request):
     notice_list = Notice.objects.filter(type='news')
@@ -110,7 +112,7 @@ def ask(request):
 
                 return redirect(reverse('server'))
     else:
-        return redirect('/login?forward=ask')
+        return redirect('/login/?forward=ask')
 
 
 def beauty(request):
@@ -133,7 +135,7 @@ def beauty(request):
 
         return render(request, 'beauty.html', {'customer':customer, 'relation_list':relation_list, 'relation_list_sub':relation_list_sub, 'data':data , 'share':share})
     else:
-        return redirect('/login?forward=customer')
+        return redirect('/login/?forward=customer')
 
 def addtocart(request, id):
     data = {}

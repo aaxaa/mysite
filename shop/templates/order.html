@@ -4,9 +4,9 @@
 <div class="am-container am-padding-lg">
     <div class="am-tabs">
         <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
-            <li {% if tab == 'all' %}class="am-active"{% endif %}><a href="/order?tab=all">全部{% if tab == '' %}none{% endif %}</a></li>
-            <li {% if tab == 'unuse' %}class="am-active"{% endif %}><a href="/order?tab=unuse">已使用</a></li>
-            <li {% if tab == 'used' %}class="am-active"{% endif %}><a href="/order?tab=used">未使用</a></li>
+            <li {% if tabstatus == 'all' %}class="am-active"{% endif %}><a href="/order?tabstatus=all">全部</a></li>
+            <li {% if tabstatus == 'unuse' %}class="am-active"{% endif %}><a href="/order?tabstatus=unuse">已使用</a></li>
+            <li {% if tabstatus == 'used' %}class="am-active"{% endif %}><a href="/order?tabstatus=used">未使用</a></li>
         </ul>
         <div class="am-tabs-bd">
             <div class="am-tab-panel am-active">
