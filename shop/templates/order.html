@@ -2,8 +2,8 @@
 {% load staticfiles %}
 {% block container %}
 <div class="am-container am-padding-lg">
-    <div class="am-tabs" id="doc-my-tabs">
-        <ul class="am-tabs-nav am-nav am-nav-tabs">
+    <div class="am-tabs" data-am-tabs>
+        <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
             <li class="am-active"><a href="">全部</a></li>
             <li><a href="">已使用</a></li>
             <li><a href="">未使用</a></li>
@@ -105,10 +105,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
-{% block script %}
-<script>
-    $(function(){$('#doc-my-tabs').tabs();})
-</script>
-{% endblock%}
