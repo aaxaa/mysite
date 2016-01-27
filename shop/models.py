@@ -329,6 +329,7 @@ class Order(models.Model):
         (2, u'未支付'),
         (3, u'已付款'),
     ]
+    order_txt = models.CharField(u'订单号', max_length=12, default='')
     customer = models.ForeignKey(
         Customer,
         verbose_name=u'客户',
