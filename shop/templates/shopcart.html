@@ -161,7 +161,6 @@ $(function(){
     if($('#select_all').is(':checked')){
       $('input[type="checkbox"]').uCheck('check');
       $.get('{% url "shopcart_update" "check_all" %}', function(res){
-        
         if(res['status']=='success'){
           $('#total_price').html(res['total_price']);
         }
@@ -169,7 +168,6 @@ $(function(){
     }else{
       $('input[type="checkbox"]').uCheck('uncheck');
       $.get('{% url "shopcart_update" "uncheck_all" %}', function(res){
-        
         if(res['status']=='success'){
           $('#total_price').html(res['total_price']);
         }
@@ -187,7 +185,7 @@ $(function(){
             'height': 120, 
           });
         }else{
-          $('#order_id').html(res['order_id']);
+          $('#order_id').html(res['order_txt']);
           $('#order_products').html(res['products']);
           $('#order_total_price').html(res['total_price']);
           if(res['login']){

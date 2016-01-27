@@ -13,6 +13,7 @@ from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPS
 
 from decimal import *
 import json, time, random, requests, xmltodict
+from datetime import datetime
 
 from wechat_sdk.basic import WechatBasic
 
@@ -481,7 +482,11 @@ def shopcart_order(request):
             )
             order.save()
 
+            order.order_txt = "%s%4d" % (datetime.today().strftime("%Y%m%d"), order.id)
+            order.save()
+
             data['order_id'] = order.id
+            data['order_txt'] = order.order_txt
             request.session['order_id'] = order.id
 
 

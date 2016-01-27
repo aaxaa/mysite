@@ -45,10 +45,10 @@ class OrderProductInline(admin.TabularInline):
     model = OrderProduct
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer',  'total_price', 'create_at', 'status')
+    list_display = ('order_txt', 'customer',  'total_price', 'create_at', 'status')
     list_filter = ('status',)
 
-    search_fields = ['customer__realname', 'customer__phone']
+    search_fields = ['customer__realname', 'customer__phone', 'order_txt']
 
     date_hierarchy = 'create_at'
 
