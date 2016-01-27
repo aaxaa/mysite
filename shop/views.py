@@ -61,9 +61,9 @@ def order(request):
                 if tabstatus == 'all':
                     order.products_in_all = order.products_in.all()
                 elif tabstatus == 'unuse':
-                    order.products_in_s0 = order.products_in.filter(status=0)
+                    order.products_in_all = order.products_in.filter(status=0)
                 elif tabstatus == 'used':
-                    order.products_in_s1 = order.products_in.filter(status=1)
+                    order.products_in_all = order.products_in.filter(status=1)
 
                 order_data.append(order)
         except:
