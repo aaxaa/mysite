@@ -4,9 +4,9 @@
 <div class="am-container am-padding-lg">
     <div class="am-tabs">
         <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
-            <li {% if tabstatus == 'all' %}class="am-active"{% endif %}><a href="/order?tabstatus=all">全部</a></li>
-            <li {% if tabstatus == 'unuse' %}class="am-active"{% endif %}><a href="/order?tabstatus=unuse">已使用</a></li>
-            <li {% if tabstatus == 'used' %}class="am-active"{% endif %}><a href="/order?tabstatus=used">未使用</a></li>
+            <li {% if tabstatus == 'all' %}class="am-active"{% endif %}><a href="/order/?tabstatus=all">全部</a></li>
+            <li {% if tabstatus == 'unuse' %}class="am-active"{% endif %}><a href="/order/?tabstatus=unuse">已使用</a></li>
+            <li {% if tabstatus == 'used' %}class="am-active"{% endif %}><a href="/order/?tabstatus=used">未使用</a></li>
         </ul>
         <div class="am-tabs-bd">
             <div class="am-tab-panel am-active">
@@ -15,7 +15,7 @@
                     <div class="order-box am-padding-xs am-margin-xs">
                         <div class="am-g">
                             <div class="am-u-sm-12">
-                                <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                                <p class="am-text-xs am-margin-xs">订单号：{{tabstatus}}{{order.id}}</p>
                             </div>
                         </div>
                         <div class="am-g">
