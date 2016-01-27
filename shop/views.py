@@ -57,7 +57,7 @@ def order(request):
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
-            order_list = Order.objects.filter(customer=customer, status__gt=0)
+            order_list = Order.objects.filter(customer=customer, status__gt = 2 if tabstatus == 'unuse' else 0)
             for order in order_list:
                 if tabstatus == 'all':
                     order.products_in_all = order.products_in.all()
@@ -484,7 +484,7 @@ def shopcart_order(request):
 
             order.order_txt = "%s%04d" % (datetime.today().strftime("%Y%m%d"), order.id)
             order.save()
-            
+
         data['order_txt'] = order.order_txt
         data['order_id'] = order.id
         request.session['order_id'] = order.id
