@@ -523,6 +523,7 @@ def shopcart_order_checkout(request):
             order.save()
 
             data['order_id'] = order_id
+            data['order_txt'] = order.order_txt
             data['products'] = ''
             total_price = 0
             for product in order.products_in.all():
