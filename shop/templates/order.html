@@ -17,7 +17,7 @@
                         <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                         <div class="am-g">
                             <div class="am-u-sm-4">
-                                <img src="{% static product.product.cover %}" class="am-img-thumbnail product_img" />
+                                <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
                             </div>
                             <div class="am-u-sm-8">
                                 {{product.product.name}} * {{product.count}}<br/>
@@ -44,7 +44,7 @@
                         <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                         <div class="am-g">
                             <div class="am-u-sm-4">
-                                <img src="{% static product.product.cover %}" class="am-img-thumbnail product_img" />
+                                <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
                             </div>
                             <div class="am-u-sm-8">
                                 {{product.product.name}} * {{product.count}}<br/>
@@ -71,7 +71,7 @@
                         <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
                         <div class="am-g">
                             <div class="am-u-sm-4">
-                                <img src="{% static product.product.cover %}" class="am-img-thumbnail product_img" />
+                                <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
                             </div>
                             <div class="am-u-sm-8">
                                 {{product.product.name}} * {{product.count}}<br/>
