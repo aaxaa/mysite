@@ -572,7 +572,7 @@ def purchase(request):
 
                 params = build_form_by_params({
                     'body': products_str.rstrip(', ').encode('utf8'),
-                    'out_trade_no' : "O%s"%str(order.id),
+                    'out_trade_no' : "%s"%str(order.order_txt),
                     'total_fee':int(order.total_price*100),
                     'spbill_create_ip':get_client_ip(request),
                     'openid':request.session['openid']
@@ -672,11 +672,9 @@ def wxpay_notify(request):
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
-            order_id = int(params['out_trade_no'].lstrip('O'))
-            order = Order.objects.get(pk=order_id)
-
+            order_txt = int(params['out_trade_no']
+            order = Order.objects.get(order_txt=order_txt)
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
-            print customer_connect.customer.id
 
             if order.customer.id == customer_connect.customer.id:
 
@@ -693,9 +691,8 @@ def wxpay_notify(request):
                 pids = [int(product.id) for product in order.products_in.all()]
                 
                 #积分计算
-
-                sps = ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids)
-                sps.delete()
+                print pids
+                print ShopcartProduct.objects.filter(shopcart__customer=order.customer, product__id__in=pids).delete()
 
                 return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
