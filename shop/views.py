@@ -483,6 +483,7 @@ def shopcart_order(request):
             order.save()
 
             order.order_txt = "%s%4d" % (datetime.today().strftime("%Y%m%d"), order.id)
+            print order.order_txt
             order.save()
 
             data['order_id'] = order.id
