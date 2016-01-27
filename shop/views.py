@@ -678,9 +678,12 @@ def wxpay_notify(request):
 
             if order.customer.id == customer_connect.customer.id:
 
-                customer_connect.customer.realname = order.realname
-                customer_connect.customer.address = order.address
-                customer_connect.customer.save()
+                customer = Customer.objects.get(pk=order.customer.id)
+
+                customer.realname = order.realname
+                customer.address = order.address
+                customer.save()
+                print customer
 
                 order.status = 3
                 order.save()
@@ -692,7 +695,9 @@ def wxpay_notify(request):
                 
                 #积分计算
                 print pids
-                print ShopcartProduct.objects.filter(shopcart__customer=customer_connect.customer, product__id__in=pids).delete()
+                sp = ShopcartProduct.objects.filter(shopcart__customer=customer, product__id__in=pids)
+                print sp
+                sp.delete()
 
                 return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
