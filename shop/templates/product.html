@@ -127,7 +127,7 @@ $(function(){
 
     	$.get('{% url "shopcart_order"%}?quick_id='+$(this).attr('data-product-id')+'&count='+num, function(r){
 			if(r['status']=='ok'){
-				$('#order_id').html(r['order_id']);
+				$('#order_id').html(r['order_txt']);
 				$('#order_products').html(r['products']);
 				$('#order_total_price').html(r['total_price']);
 
