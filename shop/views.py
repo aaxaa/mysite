@@ -52,14 +52,18 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
+        tabid = request.GET.get('tab', 0)
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
             order_list = Order.objects.filter(customer=customer, status__gt=0)
             for order in order_list:
-                order.products_in_all = order.products_in.all()
-                order.products_in_s0 = order.products_in.filter(status=0)
-                order.products_in_s1 = order.products_in.filter(status=1)
+                if tabid == 0:
+                    order.products_in_all = order.products_in.all()
+                elif tabid == 1:
+                    order.products_in_s0 = order.products_in.filter(status=0)
+                elif tabid == 2:
+                    order.products_in_s1 = order.products_in.filter(status=1)
 
                 order_data.append(order)
         except:
