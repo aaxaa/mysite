@@ -52,24 +52,24 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
-        tabid = int(request.GET.get('tab', 0))
+        tab = request.GET.get('tab', 'all')
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
             order_list = Order.objects.filter(customer=customer, status__gt=0)
             for order in order_list:
-                if tabid == 0:
+                if tab == 'all':
                     order.products_in_all = order.products_in.all()
-                elif tabid == 1:
+                elif tab == 'unuse':
                     order.products_in_s0 = order.products_in.filter(status=0)
-                elif tabid == 2:
+                elif tab == 'used':
                     order.products_in_s1 = order.products_in.filter(status=1)
 
                 order_data.append(order)
         except:
             pass
             
-        return render(request, 'order.html', {'order_list':order_data, 'tab':tabid})
+        return render(request, 'order.html', {'order_list':order_data, 'tab':tab})
 
 def server(request):
     notice_list = Notice.objects.filter(type='news')
