@@ -1,7 +1,7 @@
 {% extends "libs/base.html" %}
 {% load staticfiles %}
 {% block container %}
-<div class="am-container">
+<div class="am-container am-padding-ms">
     <div class="am-tabs" id="doc-my-tabs">
         <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
             <li class="am-active"><a href="">全部</a></li>
@@ -9,12 +9,15 @@
             <li><a href="">未使用</a></li>
         </ul>
         <div class="am-tabs-bd">
-        
             <div class="am-tab-panel am-active">
             {% for order in order_list %}  
                 {% for product in order.products_in_all %}
-                    <div class="order-box">
-                        <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                    <div class="order-box am-padding-xs am-margin-xs">
+                        <div class="am-g">
+                            <div class="am-u-sm-12">
+                                <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                            </div>
+                        </div>
                         <div class="am-g">
                             <div class="am-u-sm-4">
                                 <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
@@ -40,8 +43,12 @@
             <div class="am-tab-panel">
             {% for order in order_list %}  
                 {% for product in order.products_in_s1 %}
-                    <div class="order-box">
-                        <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                    <div class="order-box am-padding-xs am-margin-xs">
+                        <div class="am-g">
+                            <div class="am-u-sm-12">
+                                <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                            </div>
+                        </div>
                         <div class="am-g">
                             <div class="am-u-sm-4">
                                 <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
@@ -67,8 +74,12 @@
             <div class="am-tab-panel">
             {% for order in order_list %}
                 {% for product in order.products_in_s0 %}
-                    <div class="order-box">
-                        <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                    <div class="order-box am-padding-xs am-margin-xs">
+                        <div class="am-g">
+                            <div class="am-u-sm-12">
+                                <p class="am-text-xs am-margin-xs">订单号：{{order.id}}</p>
+                            </div>
+                        </div>
                         <div class="am-g">
                             <div class="am-u-sm-4">
                                 <img src="{{product.product.cover}}" class="am-img-thumbnail product_img" />
@@ -78,7 +89,7 @@
                                 <small class="am-text-danger">¥{{product.price}}</small>
                                 {% if order.status == 3 %}
                                     {% if product.status == 1 %}
-                                    <a class="am-btn am-btn-success am-btn-xs am-fr" disabled="disabled">已消费</a>
+                                    <a class="am-btn am-btn-default am-btn-xs am-fr" disabled="disabled">已消费</a>
                                     {% else %}
                                     <a class="am-btn am-btn-beauty am-btn-xs am-fr" href="tel:075729292933">电话预约</a>
                                     {% endif %}
