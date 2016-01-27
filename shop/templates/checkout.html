@@ -19,7 +19,7 @@
   <input type="hidden" value="{{order_id}}" name="order_id">
   <div class="am-g am-margin-xs am-padding-top-xs am-text-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">姓名:</label></div>
-    <div class="am-u-sm-10"><input type="text" name="realname" value="{{order.realname|default_if_none:''}}" class="am-input-sm" required></div>
+    <div class="am-u-sm-10"><input type="text" name="realname" value="{{order.realname|default_if_none:customer.realname}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">电话:</label></div>
@@ -27,7 +27,7 @@
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">地址:</label></div>
-    <div class="am-u-sm-10"><input type="text" name="address" value="{{order.address|default_if_none:''}}" class="am-input-sm" required></div>
+    <div class="am-u-sm-10"><input type="text" name="address" value="{{order.address|default_if_none:customer.address}}" class="am-input-sm" required></div>
   </div>
   <div class="am-g am-text-xs am-margin-xs am-padding-top-xs">
     <div class="am-u-sm-2 am-padding-0"><label class="am-fr">附言:</label></div>
