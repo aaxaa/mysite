@@ -52,7 +52,7 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
-        tabid = request.GET.get('tab', 0)
+        tabid = int(request.GET.get('tab', 0))
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
@@ -69,7 +69,7 @@ def order(request):
         except:
             pass
             
-        return render(request, 'order.html', {'order_list':order_data})
+        return render(request, 'order.html', {'order_list':order_data, 'tab':tabid})
 
 def server(request):
     notice_list = Notice.objects.filter(type='news')
