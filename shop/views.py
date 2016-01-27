@@ -692,9 +692,9 @@ def wxpay_notify(request):
                 #shopcart.delete()
 
                 pids = [int(product.id) for product in order.products_in.all()]
-                
+                print pids
                 #积分计算
-                sp = ShopcartProduct.objects.filter(shopcart__customer=customer, product__id__in=pids)
+                sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
                 print sp
                 print sp.delete()
 
