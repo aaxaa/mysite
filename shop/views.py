@@ -52,7 +52,7 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
-        tabstatus = 'all'
+        tabstatus = request.GET.get('tabstatus', 'all')
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
