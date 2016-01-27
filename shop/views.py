@@ -52,25 +52,20 @@ def notice(request, id=0):
 
 def order(request):
     if 'customer' in request.session and request.session['customer']:
+        order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
             order_list = Order.objects.filter(customer=customer, status__gt=0)
-            pids = []
-            product_cover_list = {}
             for order in order_list:
                 order.products_in_all = order.products_in.all()
                 order.products_in_s0 = order.products_in.filter(status=0)
                 order.products_in_s1 = order.products_in.filter(status=1)
 
-                pids += [p.id for p in order.products_in_all]
-
-            product_list = Product.objects.filter(id__in=pids)
-            for p in product_list:
-                product_cover_list.update({p.id:p.cover})
+                order_data.append(order)
         except:
-            order_list = {}
-            product_cover_list = {}
-        return render(request, 'order.html', {'order_list':order_list, 'product_cover_list':product_cover_list})
+            pass
+            
+        return render(request, 'order.html', {'order_list':order_data})
 
 def server(request):
     notice_list = Notice.objects.filter(type='news')
