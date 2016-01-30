@@ -25,12 +25,12 @@
   <ul data-am-widget="gallery" class="am-gallery am-avg-sm-4 am-avg-md-8 am-avg-lg-16 am-gallery-default">
     {% for row in relation_list%}
     <li>
-      <div class="am-gallery-item">
-          {% if row.customer.avatar %}
-          <img src="{{row.customer.avatar}}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-          {% else %}
-          <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-          {% endif %}
+      <div class="am-gallery-item am-circle-fixbug-sm">
+        {% if row.customer.avatar %}
+        <img src="{{row.customer.avatar}}" width="60px" height="60px" alt="{{row.customer.phone}}"/>
+        {% else %}
+        <img src="{% static "img/no-pic.png" %}" width="60px" height="60px"  alt="{{row.customer.phone}}"/>
+        {% endif %}
       </div>
     </li>
     {% endfor %}
@@ -40,7 +40,7 @@
         {% if row.customer.avatar %}
         <img src="{{row.customer.avatar}}" width="60px" height="60px" alt="{{row.customer.phone}}"/>
         {% else %}
-        <img src="{% static "img/no-pic.png" %}" class="user-image"  alt="{{row.customer.phone}}"/>
+        <img src="{% static "img/no-pic.png" %}" width="60px" height="60px" alt="{{row.customer.phone}}"/>
         {% endif %}
       </div>
     </li>
