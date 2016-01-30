@@ -851,13 +851,16 @@ def register(request):
     return render(request, 'register.html', {'errors': None, 'status': 'None', 'verify_token':verify_token})
 
 def code(request, code):
-    try:
-        customer = Customer.objects.get(phone=code)
-        request.session['invite_customer_id'] = customer.id
-    except:
-        pass
+    if 'customer' in request.session and request.session['customer']:
+        return redirect(reverse('main'))
+    else:
+        try:
+            customer = Customer.objects.get(phone=code)
+            request.session['invite_customer_id'] = customer.id
+        except:
+            pass
 
-    return redirect(reverse('register'))
+        return redirect(reverse('register'))
 
 def verify(request):
     ret = {}
