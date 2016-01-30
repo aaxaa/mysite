@@ -193,3 +193,8 @@
 	width: 120px;
 	overflow: hidden;
 }
+.am-circle-fixbug-sm {
+	border-radius: 50%;
+	width: 60px;
+	overflow: hidden;
+}
