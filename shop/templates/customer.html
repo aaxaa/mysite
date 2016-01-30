@@ -5,9 +5,9 @@
 	<div class="am-margin-vertical-xl">
 		<div class="am-circle am-center" style="width:120px;height:120px;">
 		{% if customer.avatar %}
-			<img src="{{customer.avatar}}" class="am-img-thumbnail" width="120px" height="120px" />
+			<img src="{{customer.avatar}}" class="am-circle am-img-thumbnail" width="120px" height="120px" />
 		{% else %}
-			<img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail" width="120px" height="120px" />
+			<img src="{% static "img/no-pic.png" %}" class="am-circle am-img-thumbnail" width="120px" height="120px" />
 
 		{% endif %}
 		</div>
