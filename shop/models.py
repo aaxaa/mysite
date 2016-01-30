@@ -258,7 +258,7 @@ class CustomerPointLog(models.Model):
         default='+'
     )
     score = models.IntegerField(u'分值')
-    create_at = models.DateField(u'发生时间')
+    create_at = models.DateField(u'发生时间', auto_now_add=True)
 
     def __unicode__(self):
         return "%s %s %d" % (self.event_name, self.opertion, self.score)

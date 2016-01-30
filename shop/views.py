@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 
-from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message
+from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message, CustomerPointLog
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_xml_string_to_dict, dict_to_xml, generate_random_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
@@ -810,6 +810,8 @@ def register(request):
                         #给一级关系加积分
                         upper.point = F('point') + 10
                         upper.save()
+                        cpl = CustomerPointLog.objects.create(customer=upper, opertor=customer, event_name=u'邀请注册', opertion='+', score=10)
+                        cpl.save()
                         #查找是否有二级关系，存在则创建二级关系
                         try:
                             upper_relation = CustomerRelation.objects.get(customer=upper)
@@ -820,7 +822,10 @@ def register(request):
                             #给二级关系加积分
                             upper_relation.customer.point = F('point') + 2
                             upper_relation.customer.save()
-                            
+
+                            cpl = CustomerPointLog.objects.create(customer=upper_relation.customer, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=2)
+                            cpl.save()
+
                         except:
                             pass
 
