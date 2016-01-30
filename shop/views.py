@@ -807,12 +807,20 @@ def register(request):
                         upper = Customer.objects.get(id=request.session['invite_customer_id'])
                         customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
                         customer_relation.save()
+                        #给一级关系加积分
+                        upper.point = F('point') + 10
+                        upper.save()
                         #查找是否有二级关系，存在则创建二级关系
                         try:
                             upper_relation = CustomerRelation.objects.get(customer=upper)
 
                             customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
                             customer_relation.save()
+
+                            #给二级关系加积分
+                            upper_relation.customer.point = F('point') + 2
+                            upper_relation.customer.save()
+                            
                         except:
                             pass
 
