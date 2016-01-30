@@ -843,7 +843,7 @@ def code(request, code):
     except:
         pass
 
-    return redirect(reverse('main'))
+    return redirect(reverse('register'))
 
 def verify(request):
     ret = {}
