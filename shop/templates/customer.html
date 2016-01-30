@@ -3,14 +3,11 @@
 {% block container %}
 <div class="am-container">
 	<div class="am-margin-vertical-xl">
-		<div class="am-circle am-center am-img-thumbnail" style="width:120px;height:120px;">
-		{% if customer.avatar %}
-			<img src="{{customer.avatar}}" width="120px" height="120px" />
-		{% else %}
-			<img src="{% static "img/no-pic.png" %}" width="120px" height="120px" />
-
-		{% endif %}
-		</div>
+	{% if customer.avatar %}
+		<img src="{{customer.avatar}}" class="am-img-thumbnail am-center" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px;" />
+	{% else %}
+		<img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-center" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px;" />
+	{% endif %}
 	</div>
 	<div class="am-margin-vertical-xl">
 		<p class="am-text-center am-text-lg"><strong>{{customer.username}}</strong></p>
