@@ -189,6 +189,8 @@
 	border:none;
 }
 .am-circle-fixbug {
+	border:none;
+	border-radius: 50%;
 	background-color: #fff;
 	background-clip: padding-box;
 }
