@@ -26,26 +26,22 @@
     {% for row in relation_list%}
     <li>
       <div class="am-gallery-item">
-          <a href="{% static "img/a.jgp" %}" class="">
-            {% if row.customer.avator %}
-            <img src="{% static "img/a.jpg" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-            {% else %}
-            <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-            {% endif %}
-          </a>
+          {% if row.customer.avatar %}
+          <img src="{{row.customer.avatar}}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          {% else %}
+          <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          {% endif %}
       </div>
     </li>
     {% endfor %}
     {% for row in relation_list_sub%}
     <li>
       <div class="am-gallery-item">
-          <a href="{% static "img/a.jgp" %}" class="">
-            {% if row.customer.avator %}
-            <img src="{% static "img/a.jpg" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-            {% else %}
-            <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
-            {% endif %}
-          </a>
+          {% if row.customer.avatar %}
+          <img src="{{row.customer.avatar}}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          {% else %}
+          <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          {% endif %}
       </div>
     </li>
     {% endfor %}
