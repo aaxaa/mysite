@@ -189,11 +189,21 @@
 	border:none;
 }
 .am-circle-fixbug {
+
 	display: inline-block;
 	vertical-align: middle;
+	border-top-left-radius: 999px; 
+	border-top-right-radius: 999px; 
+	border-bottom-right-radius: 999px;
+	border-bottom-left-radius: 999px;
 	border-radius: 999px;
 	width: 120px;
+	height: 120px;
+	background-color: #ccc;
+	background-clip: padding-box;
 }
 .am-circle-fixbug img {
 	border:none;
+	width: 120px;
+	height: 120px;
 }
