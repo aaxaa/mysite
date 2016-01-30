@@ -868,6 +868,7 @@ def verify(request):
 
     try:
         code = random.randint(100000,999999)
+        print code
         
         r = requests.post('http://hprpt2.eucp.b2m.cn:8080/sdkproxy/sendsms.action', data={
             'cdkey':EMAY_KEY,
