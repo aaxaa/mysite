@@ -37,11 +37,13 @@
     {% for row in relation_list_sub%}
     <li>
       <div class="am-gallery-item">
+        <div class="am-circle-fixbug">
           {% if row.customer.avatar %}
-          <img src="{{row.customer.avatar}}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          <img src="{{row.customer.avatar}}" class="user-image"  alt="{{row.customer.phone}}"/>
           {% else %}
-          <img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail am-circle user-image"  alt="{{row.customer.phone}}"/>
+          <img src="{% static "img/no-pic.png" %}" class="user-image"  alt="{{row.customer.phone}}"/>
           {% endif %}
+        </div>
       </div>
     </li>
     {% endfor %}
