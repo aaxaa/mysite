@@ -189,11 +189,7 @@
 	border:none;
 }
 .am-circle-fixbug {
-	border:none;
 	border-radius: 50%;
 	width: 120px;
-}
-.am-circle-fixbug img {
-	width: 120px;
-	height: 120px;
+	overflow: hidden;
 }
