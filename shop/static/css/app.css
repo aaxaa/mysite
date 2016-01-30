@@ -194,3 +194,6 @@
 	border-radius: 999px;
 	width: 120px;
 }
+.am-circle-fixbug img {
+	border:none;
+}
