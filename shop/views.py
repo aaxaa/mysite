@@ -701,7 +701,8 @@ def wxpay_notify(request):
 
 def customer(request):
     if 'customer' in request.session and request.session['customer']:
-        customer = request.session.get('customer')
+        c = request.session.get('customer')
+        customer = Customer.objects.get(c['id'])
         return render(request, 'customer.html', {
             'customer': customer
         })
