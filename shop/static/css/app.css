@@ -188,3 +188,9 @@
 .am-dropdown-content:after, .am-dropdown-content:before {
 	border:none;
 }
+.am-circle-fixbug {
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 999px;
+	width: 120px;
+}
