@@ -2,11 +2,11 @@
 {% load staticfiles %}
 {% block container %}
 <div class="am-container">
-	<div class="am-margin-vertical-xl am-center">
+	<div class="am-margin-vertical-xl am-text-center">
 	{% if customer.avatar %}
-		<img src="{{customer.avatar}}" class="am-img-thumbnail" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px;" />
+		<img src="{{customer.avatar}}" class="am-img-thumbnail" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px; padding:none;" />
 	{% else %}
-		<img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px;" />
+		<img src="{% static "img/no-pic.png" %}" class="am-img-thumbnail" width="120px" height="120px" style="border-radius:9999px 9999px 9999px 9999px; padding:none;" />
 	{% endif %}
 	</div>
 	<div class="am-margin-vertical-xl">
