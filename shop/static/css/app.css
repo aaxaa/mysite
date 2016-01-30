@@ -191,7 +191,7 @@
 .am-circle-fixbug {
 	border:none;
 	border-radius: 50%;
-	overflow: hidden;
+	width: 120px;
 }
 .am-circle-fixbug img {
 	width: 120px;
