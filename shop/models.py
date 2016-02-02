@@ -413,3 +413,4 @@ class Notice(models.Model):
     class Meta:
         verbose_name = u'公告'
         verbose_name_plural = u'促销公告'
+        ordering = (('create_at'), )
