@@ -677,21 +677,42 @@ def wxpay_notify(request):
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
 
             if order.customer.id == customer_connect.customer.id:
-
-                customer = Customer.objects.get(pk=order.customer.id)
-
-                customer.realname = order.realname
-                customer.address = order.address
-                customer.save()
-
                 order.status = 3
                 order.save()
 
-                #shopcart = Shopcart.objects.get(customer=customer_connect.customer)
-                #shopcart.delete()
+                customer = Customer.objects.get(pk=order.customer.id)
+                customer.realname = order.realname
+                customer.address = order.address
+                #加积分
+                point = sum([int(product.product.point) for product in order.products_in.all()])
+                customer.point = F('point') + point
+                customer.save()
 
+                cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'支付订单', opertion='+', score=point)
+                cpl.save()
+
+                try:
+                    customer_relation = CustomerRelation.objects.get(customer=customer)
+                    customer_relation.upper.point = F('point') + point * 0.5
+                    customer_relation.upper.save()
+
+                    cpl = CustomerPointLog.objects.create(customer=customer_relation.upper, opertor=customer, event_name=u'二级代言支付订单', opertion='+', score=point * 0.5)
+                    cpl.save()
+
+                    if customer_relation.level == 2:
+                        upper_relation = CustomerRelation.objects.get(customer=customer_relation.upper)
+                        upper_relation.upper.point = F('point') + point * 0.2
+                        upper_relation.upper.save()
+
+                        cpl = CustomerPointLog.objects.create(customer=upper_relation.upper, opertor=customer, event_name=u'三级代言支付订单', opertion='+', score=point * 0.2)
+                        cpl.save()
+
+                except:
+                    pass
+
+
+                #从购物车内删除
                 pids = [int(product.product.id) for product in order.products_in.all()]
-                #积分计算
                 sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
                 sp.delete()
 
