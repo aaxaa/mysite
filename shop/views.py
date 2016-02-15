@@ -869,7 +869,45 @@ def register(request):
     #verify token
     verify_token = random.randint(100000000,999999999)
     request.session['verifytoken'] = verify_token
-    return render(request, 'register.html', {'errors': None, 'status': 'None', 'verify_token':verify_token})
+    return render(request, 'register.html', {'errors': None, 'status': None, 'verify_token':verify_token})
+
+def repw(request):
+    if not ('customer' in request.session and request.session['customer']):
+        return redirect('/login/?forward=repw')
+
+    if request.method == 'POST':
+        errors = {}
+        empty_fields = []
+        data = {}
+
+        for field in ('newpassword', 'oldpassword'):
+            data[field] = request.POST.get(field)
+            if data[field] is None or data[field] == '':
+                empty_fields.append(field)
+
+        if len(empty_fields):
+            return render(request, 'repw.html', {'errors': empty_fields, 'status': 'field-failed'})
+
+        s_customer = request.session['customer']
+        customer = Customer.objects.get(id=s_customer['id'])
+        try:
+            if customer.check_password(data['password']):
+                customer.password = data['newpassword']
+
+                customer.save()
+
+                return render(request, 'repw.html', {'errors': None, 'status': 'success'})
+
+            else:
+                errors['message'] = u'旧密码不正确'
+
+        except:
+            errors['message'] = u'数据库出错'
+
+        return render(request, 'repw.html', {'errors': errors, 'status': 'db-failed'})
+
+
+    return render(request, 'repw.html', {'errors': None, 'status': None})
 
 def code(request, code):
     if 'customer' in request.session and request.session['customer']:
