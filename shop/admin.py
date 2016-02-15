@@ -87,10 +87,10 @@ class MessageListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'close':
-            return queryset.filter(answer_text__neq='')
+            return queryset.filter(answer_text__isnull=False)
 
         if self.value() == 'open':
-            return queryset.filter(answer_text__eq=None)
+            return queryset.filter(answer_text__isnull=True)
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_html', 'create_at')
