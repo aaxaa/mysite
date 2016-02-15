@@ -75,10 +75,26 @@ class CustomerRelationAdmin(admin.ModelAdmin):
     list_display = ('customer', 'upper', 'level', 'create_at')
     list_filter = ('create_at',)
     
+class MessageListFilter(admin.SimpleListFilter):
+    title = u'类型'
+    parameter_name = 'message_type'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('close', u'已答复'),
+            ('open', u'未答复')
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'close':
+            return queryset.filter(answer_text__neq='')
+
+        if self.value() == 'open':
+            return queryset.filter(answer_text__eq=None)
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_html', 'create_at')
-    list_filter = ('create_at',)
+    list_filter = (MessageListFilter,)
 
 
 class NoticeAdmin(admin.ModelAdmin):

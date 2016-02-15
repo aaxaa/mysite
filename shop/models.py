@@ -383,14 +383,11 @@ class Message(models.Model):
     def __unicode__(self):
         return self.question_text
 
-    def is_open(self):
-        return False if self.answer_text else True
-    is_open.short_name = u'未答复'
-
     def answer_html(self):
         return self.answer_text if self.answer_text else format_html('<span style="color:red;">新留言</span>')
 
     answer_html.short_name = u'客服答复'
+    answer_html.short_description = u'客服答复'
 
     class Meta:
         verbose_name = u'咨询'
