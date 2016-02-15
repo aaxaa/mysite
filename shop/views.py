@@ -890,19 +890,19 @@ def repw(request):
 
         s_customer = request.session['customer']
         customer = Customer.objects.get(id=s_customer['id'])
-        try:
-            if customer.check_password(data['password']):
-                customer.password = data['newpassword']
+        # try:
+        if customer.check_password(data['password']):
+            customer.password = data['newpassword']
 
-                customer.save()
+            customer.save()
 
-                return render(request, 'repw.html', {'errors': None, 'status': 'success'})
+            return render(request, 'repw.html', {'errors': None, 'status': 'success'})
 
-            else:
-                errors['message'] = u'旧密码不正确'
+        else:
+            errors['message'] = u'旧密码不正确'
 
-        except:
-            errors['message'] = u'数据库出错'
+        # except:
+        #     errors['message'] = u'数据库出错'
 
         return render(request, 'repw.html', {'errors': errors, 'status': 'db-failed'})
 
