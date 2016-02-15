@@ -111,6 +111,10 @@ class Product(models.Model):
         verbose_name_plural = u'商品管理'
         ordering = (('create_at'), ('status'),)
 
+    def save(self, *args, **kwargs):
+        self.content = re.sub(r'style="height:\d+px; width:\d+px"', '', self.content)
+        super(Category, self).save(*args, **kwargs)
+
 
 class Item(models.Model):
     category = models.ForeignKey(
