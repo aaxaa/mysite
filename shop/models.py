@@ -383,10 +383,10 @@ class Message(models.Model):
         return self.question_text
 
     def is_open(self):
-        return False if this.answer_text else True
+        return False if self.answer_text else True
 
     def answer_html(self):
-        return this.answer_text if this.answer_text else '<span style="color:red;">新留言</span>'
+        return self.answer_text if self.answer_text else '<span style="color:red;">新留言</span>'
 
     class Meta:
         verbose_name = u'咨询'
