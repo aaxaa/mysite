@@ -21,15 +21,15 @@
         {% if 'oldpassword' in errors %}
             <h3>旧密码不能为空！</h3>
         {% endif %}
-        <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
+        <a href="{% url 'repw' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% elif status == 'db-failed' %}
     <div  class="am-text-center" style="margin-top:3rem;">
         <h3>{{errors.message}}</h3>
-        <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
+        <a href="{% url 'repw' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% else %}
-    <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
+    <form class="register-form am-form" data-am-validator method="POST" action="{% url 'repw' %}">
         {% csrf_token %}
 
         <div class="am-form-group">
@@ -43,13 +43,13 @@
 
         <div class="am-form-group">
             <label class="am-form-label">重复密码</label>
-            <input type="password" name="repassword" placeholder="请重复输入您的新密码" required data-equal-to="#password" />
+            <input type="password" name="repassword" placeholder="请重复输入您的新密码" required data-equal-to="#newpassword" />
         </div>
 
         <div class="am-form-group">
             <div class="am-center" style="width:18rem;">
-                <button type="submit" class="am-btn am-btn-beauty">提交修改</button>
-                <a href="{% url "login" %}" class="am-btn am-btn-beauty">返回登陆</a>
+                <button type="submit" class="am-btn am-btn-beauty">提交</button>
+                <a href="{% url "customer" %}" class="am-btn am-btn-beauty">返回</a>
             </div>
         </div>
         
