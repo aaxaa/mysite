@@ -63,7 +63,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 class CustomerPointLogAdmin(admin.ModelAdmin):
     list_display = ('customer', 'opertor', 'event_name', 'opertion', 'score', 'create_at')
-    list_filter = ()
+    list_filter = ('create_at', 'opertor')
 
     date_hierarchy = 'create_at'
 
@@ -73,11 +73,12 @@ class CustomerPointLogAdmin(admin.ModelAdmin):
 
 class CustomerRelationAdmin(admin.ModelAdmin):
     list_display = ('customer', 'upper', 'level', 'create_at')
-    list_filter = ()
+    list_filter = ('create_at',)
     
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_html', 'create_at')
+    list_filter = ('create_at', 'is_open')
 
 
 class NoticeAdmin(admin.ModelAdmin):
