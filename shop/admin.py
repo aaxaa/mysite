@@ -63,7 +63,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 class CustomerPointLogAdmin(admin.ModelAdmin):
     list_display = ('customer', 'opertor', 'event_name', 'opertion', 'score', 'create_at')
-    list_filter = ('create_at', 'opertion')
+    list_filter = ('create_at', 'opertion', 'event_name')
 
     date_hierarchy = 'create_at'
 
