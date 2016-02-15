@@ -76,7 +76,7 @@ class CustomerRelationAdmin(admin.ModelAdmin):
     list_filter = ('create_at',)
     
 class MessageListFilter(admin.SimpleListFilter):
-    title = u'类型'
+    title = u'是否答复'
     parameter_name = 'message_type'
 
     def lookups(self, request, model_admin):
@@ -94,7 +94,7 @@ class MessageListFilter(admin.SimpleListFilter):
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_html', 'create_at')
-    list_filter = (MessageListFilter,)
+    list_filter = ('create_at', MessageListFilter)
 
 
 class NoticeAdmin(admin.ModelAdmin):
