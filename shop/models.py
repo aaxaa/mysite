@@ -4,7 +4,7 @@ from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from datetime import date
-import random, hashlib
+import random, hashlib, re
 
 
 class Category(models.Model):
