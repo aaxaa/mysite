@@ -78,7 +78,7 @@ class CustomerRelationAdmin(admin.ModelAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('customer', 'question_text', 'answer_html', 'create_at')
-    list_filter = ('create_at', 'is_open')
+    list_filter = ('create_at')
 
 
 class NoticeAdmin(admin.ModelAdmin):

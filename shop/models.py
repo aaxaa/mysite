@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils.html import format_html
 
 from datetime import date
 import random, hashlib, re
@@ -387,7 +388,7 @@ class Message(models.Model):
     is_open.short_name = u'未答复'
 
     def answer_html(self):
-        return self.answer_text if self.answer_text else '<span style="color:red;">新留言</span>'
+        return self.answer_text if self.answer_text else format_html('<span style="color:red;">新留言</span>')
 
     answer_html.short_name = u'客服答复'
 
