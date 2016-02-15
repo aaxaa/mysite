@@ -891,7 +891,7 @@ def repw(request):
         s_customer = request.session['customer']
         customer = Customer.objects.get(id=s_customer['id'])
         # try:
-        if customer.check_password(data['password']):
+        if customer.check_password(data['oldpassword']):
             customer.password = data['newpassword']
 
             customer.save()
