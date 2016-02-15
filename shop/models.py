@@ -382,6 +382,12 @@ class Message(models.Model):
     def __unicode__(self):
         return self.question_text
 
+    def is_open(self):
+        return False if this.answer_text else True
+
+    def answer_html(self):
+        return this.answer_text if this.answer_text else '<span style="color:red;">新留言</span>'
+
     class Meta:
         verbose_name = u'咨询'
         verbose_name_plural = u'客户咨询'
