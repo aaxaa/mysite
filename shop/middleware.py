@@ -12,6 +12,6 @@ class WxMiddleware(object):
 
 class TipMiddleware(object):
 	def process_template_response(self, request, response):
-		response.context_data.update({'message_num':0, 'shopcart_num':0})
+		response.context_data.update({'message_num':2, 'shopcart_num':2})
 		return response
 		
