@@ -11,7 +11,8 @@ class WxMiddleware(object):
 			return redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect'%(WECHAT_APPID, quote('http://shop.baremeii.com/wx_callback/'),request.path))
 
 class TipMiddleware(object):
-	def process_template_response(self, request, response):
-		response.context_data.update({'message_num':2, 'shopcart_num':2})
+	def process_response(self, request, response):
+		response.set_cookie('message_num', 2)
+		response.set_cookie('shopcart_num', 0)
 		return response
 		
