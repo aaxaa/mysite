@@ -10,7 +10,7 @@
           </li>
           <li>
             <a href="/server/" class="">
-                <span class="am-navbar-label"><span style="display:block;margin:2px auto 0;"><i class="am-icon-flash" style="margin: 0;display:inline; left:12px; position: relative;"></i><label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">{{message_num}}</label></span>便捷服务</span>
+                <span class="am-navbar-label" id="message_tip"><span><i class="am-icon-flash"></i></span>便捷服务</span>
             </a>
           </li>
           <li>
@@ -37,5 +37,11 @@
 <!--<![endif]-->
 <script src="{% static "js/amazeui.min.js" %}"></script>
 <script src="{% static "js/jquery.cookie.js" %}"></script>
+<scirpt>
+  $(function(){
+    $('#message_tip').addClass('message_tip');
+    $('#message_tip span i').after('<label class="am-badge am-badge-danger am-round">3</label>');
+  });
+</scirpt>
 </body>
 </html>
