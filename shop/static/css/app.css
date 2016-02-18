@@ -199,4 +199,4 @@
 	overflow: hidden;
 }
 .message_tip > span {display:block; margin:2px auto 0;}
-.message_tip > span > i {margin: 0;display:inline; left:12px; position: relative;}
+.message_tip > span > i {margin: 0 !important;display:inline !important; left:12px; position: relative;}
