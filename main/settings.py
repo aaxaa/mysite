@@ -53,6 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'shop.middleware.WxMiddleware',
+    'shop.middleware.TipMiddleware'
 ]
 
 ROOT_URLCONF = 'main.urls'
