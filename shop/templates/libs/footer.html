@@ -45,7 +45,7 @@
       $('#message_tip span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+message_num+'</label>');
     }
     var shopcart_num = $.cookie('shopcart_num');
-    iif(shopcart_num > 0){
+    if(shopcart_num > 0){
       $('#shopcart_num').addClass('message_tip');
       $('#shopcart_num span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+shopcart_num+'</label>');
     }
