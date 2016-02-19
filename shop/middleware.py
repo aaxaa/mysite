@@ -23,7 +23,8 @@ class TipMiddleware(object):
 				pass
 			try:
 				message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
-				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at).count()
+				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at)
+				print msg
 			except:
 				pass
 
@@ -31,7 +32,7 @@ class TipMiddleware(object):
 		elif 'shopcart' in request.session:
 			num = len(request.session['shopcart']['products_list'])
 
-		response.set_cookie('message_num', msg)
+		response.set_cookie('message_num', 0)
 		response.set_cookie('shopcart_num', num)
 		return response
 		
