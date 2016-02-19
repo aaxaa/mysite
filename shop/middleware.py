@@ -21,12 +21,9 @@ class TipMiddleware(object):
 				num = shopcart_product.products.count()
 			except:
 				pass
-			try:
-				message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
-				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at)
-				print msg
-			except:
-				pass
+			message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
+			msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at)
+			print msg
 
 
 		elif 'shopcart' in request.session:
