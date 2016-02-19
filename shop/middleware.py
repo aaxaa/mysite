@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from shop.models import Shopcart
+from shop.models import Shopcart, MessageLog, Message
 from main.settings import WECHAT_APPID
 from urllib import quote
 
@@ -13,14 +13,25 @@ class WxMiddleware(object):
 
 class TipMiddleware(object):
 	def process_response(self, request, response):
-		response.set_cookie('message_num', 0)
 		num = 0
-		print request.session
+		msg = 0
 		if 'customer' in request.session:
-			shopcart_product = Shopcart.objects.get(customer__id=request.session['customer']['id'])
-			num = shopcart_product.products.count()
+			try:
+				shopcart_product = Shopcart.objects.get(customer__id=request.session['customer']['id'])
+				num = shopcart_product.products.count()
+			except:
+				pass
+			try:
+				message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
+				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__lt=message_log.last_visite_at).count()
+			except:
+				pass
+
+
 		elif 'shopcart' in request.session:
 			num = len(request.session['shopcart']['products_list'])
+
+		response.set_cookie('message_num', msg)
 		response.set_cookie('shopcart_num', num)
 		return response
 		
