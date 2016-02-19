@@ -22,7 +22,7 @@ class TipMiddleware(object):
 			except:
 				pass
 			message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
-			msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at)
+			msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__gt=message_log.last_visite_at)
 			print msg
 
 
