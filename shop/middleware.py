@@ -31,7 +31,7 @@ class TipMiddleware(object):
 		elif 'shopcart' in request.session:
 			num = len(request.session['shopcart']['products_list'])
 
-		response.set_cookie('message_num', 0)
+		response.set_cookie('message_num', msg)
 		response.set_cookie('shopcart_num', num)
 		return response
 		
