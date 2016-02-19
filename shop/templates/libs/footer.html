@@ -15,7 +15,7 @@
           </li>
           <li>
             <a href="/shopcart/" class="">
-                <span class="am-navbar-label"><span><i class="am-icon-shopping-cart"></i></span>购物车</span>
+                <span class="am-navbar-label" id="shopcart_tip"><span><i class="am-icon-shopping-cart"></i></span>购物车</span>
             </a>
           </li>
           <li>
@@ -40,9 +40,14 @@
 <script>
   $(function(){
     var message_num = $.cookie('message_num');
-    if (message_num > 0){
+    if(message_num > 0){
       $('#message_tip').addClass('message_tip');
       $('#message_tip span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+message_num+'</label>');
+    }
+    var shopcart_num = $.cookie('shopcart_num');
+    iif(shopcart_num > 0){
+      $('#shopcart_num').addClass('message_tip');
+      $('#shopcart_num span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+shopcart_num+'</label>');
     }
   });
 </script>
