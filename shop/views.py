@@ -13,7 +13,7 @@ from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPS
 
 from decimal import *
 import json, time, random, requests, xmltodict
-from datetime import datetime
+from datetime import datetime, date
 
 from wechat_sdk.basic import WechatBasic
 
@@ -84,7 +84,7 @@ def server(request):
             message.question_text = message.question_text.split('\b')
             message_data.append(message)
 
-        MessageLog.objects.filter(customer__id=customer_id).update(last_visite_at=datetime.date.today())
+        MessageLog.objects.filter(customer__id=customer_id).update(last_visite_at=date.today())
     else:
         customer_id = None
         message_data = None
