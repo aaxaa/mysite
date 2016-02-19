@@ -389,7 +389,7 @@ class OrderProduct(models.Model):
 class Message(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=u"客户")
     create_at = models.DateField(u'提问时间', auto_now_add=True)
-    update_at = models.DateField(u'更新时间', auto_now=True)
+    update_at = models.DateTimeField(u'更新时间', auto_now=True)
     question_text = models.TextField(u'提问内容')
     answer_text = models.TextField(u'答复内容', null=True, blank=True)
 
@@ -410,7 +410,7 @@ class Message(models.Model):
 
 class MessageLog(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=u"客户")
-    last_visite_at = models.DateField(u'更新时间')
+    last_visite_at = models.DateTimeField(u'更新时间')
 
 
 class Notice(models.Model):
