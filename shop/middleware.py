@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from shop.models import ShopcartProduct
+from shop.models import Shopcart
 from main.settings import WECHAT_APPID
 from urllib import quote
 
@@ -17,8 +17,8 @@ class TipMiddleware(object):
 		num = 0
 		print request.session
 		if 'customer' in request.session:
-			shopcart_product = ShopcartProduct.objects.get(customer__id=request.session['customer']['id'])
-			num = shopcart_product.products_in.count()
+			shopcart_product = Shopcart.objects.get(customer__id=request.session['customer']['id'])
+			num = shopcart_product.products.count()
 		elif 'shopcart' in request.session:
 			num = len(request.session['shopcart']['products_list'])
 		response.set_cookie('shopcart_num', num)
