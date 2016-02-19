@@ -19,7 +19,7 @@ class TipMiddleware(object):
 		if 'customer' in request.session:
 			shopcart_product = ShopcartProduct.objects.get(customer__id=request.session['customer']['id'])
 			num = shopcart_product.products_in.count()
-		else if 'shopcart' in request.session:
+		elif 'shopcart' in request.session:
 			num = len(request.session['shopcart']['products_list'])
 		response.set_cookie('shopcart_num', num)
 		return response
