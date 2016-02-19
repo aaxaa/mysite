@@ -46,8 +46,8 @@
     }
     var shopcart_num = $.cookie('shopcart_num');
     if(shopcart_num > 0){
-      $('#shopcart_num').addClass('message_tip');
-      $('#shopcart_num span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+shopcart_num+'</label>');
+      $('#shopcart_tip').addClass('message_tip');
+      $('#shopcart_tip span i').after('<label class="am-badge am-badge-danger am-round" style="left:10px; position:relative;">'+shopcart_num+'</label>');
     }
   });
 </script>
