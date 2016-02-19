@@ -13,6 +13,6 @@ class WxMiddleware(object):
 class TipMiddleware(object):
 	def process_response(self, request, response):
 		response.set_cookie('message_num', 0)
-		response.set_cookie('shopcart_num', 0)
+		response.set_cookie('shopcart_num', len(request.session['shopcart']['products_list']) if 'shopcart' in request.session else 0)
 		return response
 		
