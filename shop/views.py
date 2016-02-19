@@ -113,6 +113,9 @@ def ask(request):
                     message = Message.objects.create(customer=customer, question_text=_message)
                     message.save()
 
+                    message_log = MessageLog.objects.create(customer=customer, last_visite_at=datetime.now())
+                    message_log.save()
+
                 return redirect(reverse('server'))
     else:
         return redirect('/login/?forward=ask')
