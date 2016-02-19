@@ -23,7 +23,7 @@ class TipMiddleware(object):
 				pass
 			try:
 				message_log = MessageLog.objects.get(customer__id=request.session['customer']['id'])
-				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__lt=message_log.last_visite_at).count()
+				msg = Message.objects.filter(customer__id=request.session['customer']['id'],update_at__qt=message_log.last_visite_at).count()
 			except:
 				pass
 
