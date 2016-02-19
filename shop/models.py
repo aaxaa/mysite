@@ -72,6 +72,12 @@ class Product(models.Model):
         (0, u'否'),
         (1, u'是')
     ]
+    payment_choices = [
+        (0, u'仅限现金购买'),
+        (1, u'仅限积分兑换'),
+        (2, u'可现金购买亦可积分兑换'),
+        (3, u'需要同时支付现金和积分')
+    ]
 
     model = models.CharField(u"商品SKU", max_length=50)
     name = models.CharField(u"商品名称", max_length=50)
@@ -94,6 +100,12 @@ class Product(models.Model):
     )
     price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
     point = models.IntegerField(u"积分奖励", default=0)
+    payment_type = models.SmallIntegerField(
+        u'支付方式',
+        choices=payment_choices,
+        default=0,
+    )
+    payment_point = models.IntegerField(u"所需积分", default=0)
     content = RichTextUploadingField(u"产品详情")
     cover = models.ImageField(
         u"封面图片",
@@ -377,6 +389,7 @@ class OrderProduct(models.Model):
 class Message(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=u"客户")
     create_at = models.DateField(u'提问时间', auto_now_add=True)
+    update_at = models.DateField(u'更新时间', auto_now=True)
     question_text = models.TextField(u'提问内容')
     answer_text = models.TextField(u'答复内容', null=True, blank=True)
 
@@ -393,6 +406,12 @@ class Message(models.Model):
         verbose_name = u'咨询'
         verbose_name_plural = u'客户咨询'
         ordering = (('create_at'), )
+
+
+class MessageLog(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=u"客户")
+    last_visite_at = models.DateField(u'更新时间')
+
 
 class Notice(models.Model):
     type_choices = [
