@@ -156,7 +156,7 @@ def addtocart(request, id):
             customer = Customer.objects.get(pk=request.session['customer'].get('id'))
             #积分检查
             if product.payment_type == 1 or product.payment_type == 3:
-                if customer.point < product.payment_point:
+                if customer.point < (product.payment_point*count):
                     data['status'] = 'failed'
                     data['message'] = u'您的积分不够，无法购买！'
                     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -441,6 +441,13 @@ def shopcart_order(request):
     total_price = 0
     if quick_id:
         product = Product.objects.get(id=quick_id)
+        #积分检查
+        if product.payment_type == 1 or product.payment_type == 3:
+            if customer.point < (product.payment_point*count):
+                data['status'] = 'failed'
+                data['message'] = u'您的积分不够，无法购买！'
+                return HttpResponse(json.dumps(data), content_type="application/json")
+                
         ids.add(quick_id)
         products_list.update({product.id:{'count':count, 'price':product.price*count}})
     else:
