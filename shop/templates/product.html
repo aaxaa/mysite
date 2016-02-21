@@ -5,11 +5,11 @@
 	<img class="am-img-responsive" src="{{product.cover}}" />
 	<div class="title">
 		<p class="am-margin-xs"><strong>{{product.name}}</strong></p>
-		{% if payment_type == 1 %}
+		{% if product.payment_type == 1 %}
 		<p class="am-margin-xs"><strong class="am-text-danger">{{product.payment_point}} 积分</strong></p>
-		{% elif payment_type == 2 %}
+		{% elif product.payment_type == 2 %}
 		<p class="am-margin-xs"><strong class="am-text-danger">¥ {{product.price}} 或 {{product.payment_point}} 积分</strong></p>
-		{% elif payment_type == 3 %}
+		{% elif product.payment_type == 3 %}
 		<p class="am-margin-xs"><strong class="am-text-danger">¥ {{product.price}} 和 {{product.payment_point}} 积分</strong></p>
 		{% else %}
 		<p class="am-margin-xs"><strong class="am-text-danger">¥ {{product.price}}</strong></p>
