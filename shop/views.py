@@ -447,7 +447,7 @@ def shopcart_order(request):
                 data['status'] = 'failed'
                 data['message'] = u'您的积分不够，无法购买！'
                 return HttpResponse(json.dumps(data), content_type="application/json")
-                
+
         ids.add(quick_id)
         products_list.update({product.id:{'count':count, 'price':product.price*count}})
     else:
@@ -546,6 +546,9 @@ def shopcart_order_checkout(request):
             for product in order.products_in.all():
                 data['products'] += u"%s * %s = ￥%s<br/>" % (product.product.name, product.count, product.price)
                 total_price += float(product.price)
+
+
+            data['products_all'] = order.products.all()
 
             data['total_price'] = "%0.2f"%total_price
 
