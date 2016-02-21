@@ -154,6 +154,13 @@ def addtocart(request, id):
         #如果是已登录的用户，则读出数据库购物车
         if 'customer' in request.session and request.session['customer']:
             customer = Customer.objects.get(pk=request.session['customer'].get('id'))
+            #积分检查
+            if product.payment_type = 1 or product.payment_type = 3:
+                if customer.point < product.payment_point:
+                    data['status'] = 'failed'
+                    data['message'] = u'您的积分不够，无法购买！'
+                    return HttpResponse(json.dumps(data), content_type="application/json")
+
             #获取购物车信息，不存在则创建新购物车
             try:
                 shopcart = Shopcart.objects.get(customer=customer)
