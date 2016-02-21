@@ -155,7 +155,7 @@ def addtocart(request, id):
         if 'customer' in request.session and request.session['customer']:
             customer = Customer.objects.get(pk=request.session['customer'].get('id'))
             #积分检查
-            if product.payment_type = 1 or product.payment_type = 3:
+            if product.payment_type == 1 or product.payment_type == 3:
                 if customer.point < product.payment_point:
                     data['status'] = 'failed'
                     data['message'] = u'您的积分不够，无法购买！'
