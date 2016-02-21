@@ -40,14 +40,14 @@
     {% if product.payment_type == 1 %}
       <li class="am-text-xs"> * {{product.name}} 仅限 {{product.payment_point}} 积分兑换 </li>
     {% elif product.payment_type == 2 %}
-      <li class="am-text-xs"> * {{product.name}} 是否适用 {{product.payment_point}} 积分兑换 <input type="checkbox" value="1" name="payment_type_2_{{product.id}}"></li>
+      <li class="am-text-xs"> * {{product.name}} 是否适用 {{product.payment_point}} 积分兑换 <input type="checkbox" value="1" name="payment_type_2_{{product.id}}" data-price="{{product.price}}" data-point="{{product.payment_point}}"></li>
     {% elif product.payment_type == 3 %}
       <li class="am-text-xs"> * {{product.name}} 需要多付 {{product.payment_point}} 积分才能购买 </li>
     {% endif %}
   {% endfor %}
   </ul>
-  <p>您需要支付 ¥ 以及扣除 积分(目前积分：<label class="am-text-danger">{{customer.point}}</label>)</p>
-  <p><input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付</p>
+  <p class="am-text-xs">您需要支付 ¥<label id="total_price">{{total_price}}</label> 以及扣除 <label id="total_point">0</label>积分</p>
+  <p class="am-text-xs"><input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付</p>
   
 
   <div class="am-text-center am-padding-top-lg">
@@ -70,6 +70,23 @@
       }else{
         $('#order_products').addClass('am-hide');
         $('#show_icon').attr('class','am-icon-angle-double-left am-fr');
+      }
+    });
+    $('input[type="checkbox"]').click(function(){
+      if($(this).is(':checked')){
+        var total_price = parseInt($('#total_price'));
+        var total_point = parseInt($('#total_point'));
+        var price = $(this).attr('data-price');
+        var point = $(this).attr('data-point');
+        $('#total_price').html(total_price-price);
+        $('#total_point').html(total_point+point);
+      }else{
+        var total_price = parseInt($('#total_price'));
+        var total_point = parseInt($('#total_point'));
+        var price = $(this).attr('data-price');
+        var point = $(this).attr('data-point');
+        $('#total_price').html(total_price+price);
+        $('#total_point').html(total_point-point);
       }
     });
     
