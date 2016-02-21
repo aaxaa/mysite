@@ -35,25 +35,20 @@
         <textarea class="" rows="3" name="message">{{order.message|default_if_none:''}}</textarea>
     </div>
   </div>
+  <ul class="am-list am-list-static am-list-border am-text-xs am-padding-xs">
   {% for product in products_all %}
     {% if product.payment_type == 1 %}
-      <p class="am-text-xs"> * {{product.name}} 仅限 {{product.payment_point}} 积分兑换 </p>
+      <li class="am-text-xs"> * {{product.name}} 仅限 {{product.payment_point}} 积分兑换 </li>
     {% elif product.payment_type == 2 %}
-      <p class="am-text-xs"> * <input type="checkbox" value="1" name="payment_type_2_{{product.id}}">{{product.name}} 是否适用 {{product.payment_point}} 积分兑换 </p>
+      <li class="am-text-xs"> * {{product.name}} 是否适用 {{product.payment_point}} 积分兑换 <input type="checkbox" value="1" name="payment_type_2_{{product.id}}"></li>
     {% elif product.payment_type == 3 %}
-      <p class="am-text-xs"> * {{product.name}} 需要多付 {{product.payment_point}} 积分才能购买 </p>
+      <li class="am-text-xs"> * {{product.name}} 需要多付 {{product.payment_point}} 积分才能购买 </li>
     {% endif %}
   {% endfor %}
-
-  <ul class="am-list am-list-static am-list-border am-text-xs am-padding-xs">
-    <li class="am-pading-vertical-0">
-    <label class="am-radio am-pading-vertical-0">
-        <input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付
-      </label> </li>
-    <li class="am-padding-xs"><label class="am-radio am-pading-vertical-0">
-        <input type="radio"  value="point" name="pay" required {% if customer.point < order.total_price %}disabled="disabled" {% endif %}> 积分支付 (目前积分：<i class="am-text-danger">{{customer.point}}</i> )
-      </label> </li>
   </ul>
+  <p>您需要支付 ¥ 以及扣除 积分(目前积分：<label class="am-text-danger">{{customer.point}}</label>)</p>
+  <p><input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付</p>
+  
 
   <div class="am-text-center am-padding-top-lg">
     <button type="submit" class="am-btn am-btn-beauty am-btn-sm">付款</button>
