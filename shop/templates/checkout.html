@@ -76,15 +76,15 @@
       if($(this).is(':checked')){
         var total_price = parseInt($('#total_price'));
         var total_point = parseInt($('#total_point'));
-        var price = $(this).attr('data-price');
-        var point = $(this).attr('data-point');
+        var price = parseInt($(this).attr('data-price'));
+        var point = parseInt($(this).attr('data-point'));
         $('#total_price').html(total_price-price);
         $('#total_point').html(total_point+point);
       }else{
         var total_price = parseInt($('#total_price'));
         var total_point = parseInt($('#total_point'));
-        var price = $(this).attr('data-price');
-        var point = $(this).attr('data-point');
+        var price = parseInt($(this).attr('data-price'));
+        var point = parseInt($(this).attr('data-point'));
         $('#total_price').html(total_price+price);
         $('#total_point').html(total_point-point);
       }
