@@ -612,9 +612,13 @@ def purchase(request):
                     products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
                 print 'discount:', discount
                 print 'point:', total_point
+                customer = Customer.objects.get(id=order.customer.id)
 
-                if 0 < order.customer.point - total_point:
+                if 0 < customer.point - total_point:
                     return HttpResponse(u'积分不够，支付不成功！')
+                else:
+                    customer.point = F('point') - total_point
+                    customer.save()
 
                 total_price = order.total_price - discount
                 if total_price > 0:
@@ -633,6 +637,10 @@ def purchase(request):
                         return render(request, 'purchase.html', params)
                     else:
                         return HttpResponse(params['err_code_des'])
+                else:
+                    order.status = 3
+                    order.save()
+
 
         except:
             return HttpResponse(u'禁止支付不属于自己的订单')
