@@ -603,7 +603,11 @@ def purchase(request):
                         discount += product.product.price * product.count
                         total_point += product.product.payment_point
                     elif product.product.payment_type == 2:
-                        print request.POST.getlist('payment_point')
+                        if str(product.product.id) in request.POST.getlist('payment_point'):
+                            discount += product.product.price * product.count
+                            total_point += product.product.payment_point
+                    elif product.product.payment_type == 3:
+                        total_point += product.product.payment_point
 
                     products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
                 print 'discount:', discount
