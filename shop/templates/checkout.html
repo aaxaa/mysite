@@ -46,10 +46,7 @@
     {% endif %}
   {% endfor %}
   </ul>
-  <p class="am-text-xs">您需要支付 ¥<label id="total_price">{{total_price}}</label> 以及扣除 <label id="total_point">0</label>积分</p>
-  <p class="am-text-xs"><input type="radio"  value="weixin" name="pay" checked="checked" required> 微信支付</p>
-  
-
+  <p class="am-text-xs">您需要支付 ¥<label id="total_price">{{total_price}}</label> 以及扣除 <label id="total_point">0</label> 积分</p>
   <div class="am-text-center am-padding-top-lg">
     <button type="submit" class="am-btn am-btn-beauty am-btn-sm">付款</button>
   </div>
@@ -78,7 +75,6 @@
         var total_point = parseInt($('#total_point').html());
         var price = parseFloat($(this).attr('data-price'));
         var point = parseInt($(this).attr('data-point'));
-        alert(total_price-price);
         $('#total_price').html(total_price-price);
         $('#total_point').html(total_point+point);
       }else{
