@@ -35,7 +35,7 @@
         <textarea class="" rows="3" name="message">{{order.message|default_if_none:''}}</textarea>
     </div>
   </div>
-  <ul class="am-list am-list-static am-list-border am-text-xs am-padding-xs">
+  <ul class="am-list am-list-static am-list-border am-text-xs">
   {% for product in products_all %}
     {% if product.payment_type == 1 %}
       <li class="am-text-xs"> * {{product.name}} 仅限 {{product.payment_point}} 积分兑换 </li>
@@ -54,7 +54,6 @@
 </div>
 {% endblock %}
 {% block script %}
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
   $(function(){
     if ($.AMUI && $.AMUI.validator) {
