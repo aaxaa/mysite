@@ -558,9 +558,7 @@ def shopcart_order_checkout(request):
                     total_price += float(product.price)
 
             data['products_all'] = order.products.all()
-
             data['total_price'] = "%0.2f"%total_price
-
             data['order'] = order
 
         else:
@@ -598,24 +596,33 @@ def purchase(request):
                 order.save()
 
                 products_str = ''
+                discount = 0
+                total_point = 0
                 for product in order.products_in.all():
+                    if product.product.payment_type == 1:
+                        discount += product.product.price * product.count
+                        total_point += product.product.payment_point
+                    elif product.product.payment_type == 2:
+                        print request.POST['payment_point']
+
                     products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
+                print 'discount:', discount
+                print 'point:', total_point
+                # params = build_form_by_params({
+                #     'body': products_str.rstrip(', ').encode('utf8'),
+                #     'out_trade_no' : "%s"%str(order.order_txt),
+                #     'total_fee':int(order.total_price*100),
+                #     'spbill_create_ip':get_client_ip(request),
+                #     'openid':request.session['openid']
+                # })
+                # if params['paySign']:
+                #     params['order_id'] = str(order.id)
 
-                params = build_form_by_params({
-                    'body': products_str.rstrip(', ').encode('utf8'),
-                    'out_trade_no' : "%s"%str(order.order_txt),
-                    'total_fee':int(order.total_price*100),
-                    'spbill_create_ip':get_client_ip(request),
-                    'openid':request.session['openid']
-                })
-                if params['paySign']:
-                    params['order_id'] = str(order.id)
-
-                    wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-                    params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/purchase/")
-                    return render(request, 'purchase.html', params)
-                else:
-                    return HttpResponse(params['err_code_des'])
+                #     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
+                #     params['signature'] = wx.generate_jsapi_signature(timestamp=params['timeStamp'], noncestr=params['nonceStr'], url="http://shop.baremeii.com/purchase/")
+                #     return render(request, 'purchase.html', params)
+                # else:
+                #     return HttpResponse(params['err_code_des'])
 
         except:
             return HttpResponse(u'禁止支付不属于自己的订单')
