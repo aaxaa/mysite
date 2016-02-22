@@ -74,16 +74,16 @@
     });
     $('input[type="checkbox"]').click(function(){
       if($(this).is(':checked')){
-        var total_price = parseInt($('#total_price'));
+        var total_price = parseFloat($('#total_price'));
         var total_point = parseInt($('#total_point'));
-        var price = parseInt($(this).attr('data-price'));
+        var price = parseFloat($(this).attr('data-price'));
         var point = parseInt($(this).attr('data-point'));
         $('#total_price').html(total_price-price);
         $('#total_point').html(total_point+point);
       }else{
-        var total_price = parseInt($('#total_price'));
+        var total_price = parseFloat($('#total_price'));
         var total_point = parseInt($('#total_point'));
-        var price = parseInt($(this).attr('data-price'));
+        var price = parseFloat($(this).attr('data-price'));
         var point = parseInt($(this).attr('data-point'));
         $('#total_price').html(total_price+price);
         $('#total_point').html(total_point-point);
