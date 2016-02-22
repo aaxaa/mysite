@@ -25,7 +25,11 @@ am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" >
           <a href="{% url 'product' product.id %}" class="">
             <img src="{{product.cover}}"  alt="{{product.name}}"/>
               <h3 class="am-gallery-title">{{product.name}}</h3>
-              <div class="am-gallery-desc am-font-beauty">¥ {{product.price}}</div>
+              {% if product.payment_type == 1 %}
+                <div class="am-gallery-desc am-font-beauty">{{product.payment_point}} 积分</div>
+              {% else %}
+                <div class="am-gallery-desc am-font-beauty">¥ {{product.price}}</div>
+              {% endif %}
           </a>
       </div>
     </li>
@@ -45,7 +49,11 @@ am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered">
           <a href="{% url 'product' product.id %}" class="">
             <img src="{{product.cover}}"  alt="{{product.name}}"/>
               <h3 class="am-gallery-title">{{product.name}}</h3>
-              <div class="am-gallery-desc">¥ {{product.price}}</div>
+              {% if product.payment_type == 1 %}
+                <div class="am-gallery-desc">{{product.payment_point}} 积分</div>
+              {% else %}
+                <div class="am-gallery-desc">¥ {{product.price}}</div>
+              {% endif %}
           </a>
       </div>
     </li>
