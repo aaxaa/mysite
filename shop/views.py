@@ -640,6 +640,7 @@ def purchase(request):
                 else:
                     order.status = 3
                     order.save()
+                    return HttpResponse(u'支付成功！')
 
 
         except:
