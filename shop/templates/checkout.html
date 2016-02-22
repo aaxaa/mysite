@@ -78,6 +78,7 @@
         var total_point = parseInt($('#total_point'));
         var price = parseFloat($(this).attr('data-price'));
         var point = parseInt($(this).attr('data-point'));
+        alert(total_price-price);
         $('#total_price').html(total_price-price);
         $('#total_point').html(total_point+point);
       }else{
