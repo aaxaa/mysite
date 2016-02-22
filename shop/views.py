@@ -572,7 +572,7 @@ def purchase(request):
     if  "customer" in request.session and "openid" in request.session and request.method == 'POST':
         empty_fields = []
         data = {}
-        for field in ('realname', 'phone', 'address', 'pay'):
+        for field in ('realname', 'phone', 'address'):
             data[field] = request.POST.get(field)
             if data[field] is None or data[field] == '':
                 empty_fields.append(field)
