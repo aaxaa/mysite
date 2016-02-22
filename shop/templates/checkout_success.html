@@ -1,0 +1,24 @@
+{% extends "libs/base.html" %}
+{% load static %}
+{% block container %}
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="showmessage">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd"><a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a></div>
+		<div class="am-modal-bd">
+	 	<p id="showmessage_content">{{message}}</p>
+	 	<a href="{% if url != '' %}{{url}}{% else %}javascript: void(0){% endif %}" data-am-modal-close class="am-btn am-btn-beauty am-btn-sm">确定</a>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(function(){
+	$('#showmessage').modal({
+        'closeViaDimmer' : 0,
+        'width': 300,
+        'height': 120, 
+    });
+});
+</script>
+{% endblock %}

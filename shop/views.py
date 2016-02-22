@@ -615,7 +615,7 @@ def purchase(request):
                 customer = Customer.objects.get(id=order.customer.id)
 
                 if 0 < customer.point - total_point:
-                    return HttpResponse(u'积分不够，支付不成功！')
+                    return render(request, 'checkout_success.html', {'message':u'积分不够，支付不成功！', 'url':'/order'})
                 else:
                     customer.point = F('point') - total_point
                     customer.save()
@@ -640,11 +640,12 @@ def purchase(request):
                 else:
                     order.status = 3
                     order.save()
-                    return HttpResponse(u'支付成功！')
+                    return render(request, 'checkout_success.html', {'message':u'支付成功，请返回！', 'url':'/order'})
+                    #return HttpResponse(u'支付成功！')
 
 
         except:
-            return HttpResponse(u'禁止支付不属于自己的订单')
+            return render(request, 'checkout_success.html', {'message':u'您不能操作不属于自己的订单', 'url':'/shopcart'})
 
     else:
         return redirect('/login/?forward=purchase')
