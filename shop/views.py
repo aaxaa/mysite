@@ -618,6 +618,9 @@ def purchase(request):
                     customer.point = F('point') - total_point
                     customer.save()
 
+                    cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'购物消费', opertion='-', score=total_point)
+                    cpl.save()
+
                     #从购物车内删除
                     pids = [int(product.product.id) for product in order.products_in.all()]
                     sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
@@ -892,9 +895,9 @@ def register(request):
                         customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
                         customer_relation.save()
                         #给一级关系加积分
-                        upper.point = F('point') + 10
+                        upper.point = F('point') + 100
                         upper.save()
-                        cpl = CustomerPointLog.objects.create(customer=upper, opertor=customer, event_name=u'邀请注册', opertion='+', score=10)
+                        cpl = CustomerPointLog.objects.create(customer=upper, opertor=customer, event_name=u'邀请注册', opertion='+', score=100)
                         cpl.save()
                         #查找是否有二级关系，存在则创建二级关系
                         try:
@@ -904,10 +907,10 @@ def register(request):
                             customer_relation.save()
 
                             #给二级关系加积分
-                            upper_relation.customer.point = F('point') + 2
+                            upper_relation.customer.point = F('point') + 20
                             upper_relation.customer.save()
 
-                            cpl = CustomerPointLog.objects.create(customer=upper_relation.customer, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=2)
+                            cpl = CustomerPointLog.objects.create(customer=upper_relation.customer, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=20)
                             cpl.save()
 
                         except:
