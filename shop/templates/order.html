@@ -31,7 +31,7 @@
                                     {% else %}
                                     <a class="am-btn am-btn-beauty am-btn-xs am-fr" href="tel:075729292933">电话预约</a>
                                     {% endif %}
-                                {% else %}
+                                {% elif order.status != 4 %}
                                     <a class="am-btn am-btn-danger am-btn-xs am-fr" href="{% url 'shopcart_order_checkout' %}?order_id={{order.id}}">付款</a>
                                     <a class="am-btn am-btn-warning am-btn-xs am-fr" href="{% url 'order_operation' %}?operation=delete&order_id={{order.id}}">取消</a>
                                 {% endif %}
