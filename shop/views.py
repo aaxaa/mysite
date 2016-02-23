@@ -96,8 +96,8 @@ def order_operation(request):
             message = u'请您选择操作类型和对应的订单'
 
         return render(request, 'checkout_success.html', {'message':message, 'url': '/order'})
-
-
+    else:
+        return redirect('/login/?forward=order')
 
 def server(request):
     notice_list = Notice.objects.filter(type='news')
