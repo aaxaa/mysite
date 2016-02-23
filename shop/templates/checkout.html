@@ -40,7 +40,7 @@
     {% if product.payment_type == 1 %}
       <li class="am-text-xs"> * {{product.name}} 仅限 {{product.payment_point}} 积分兑换 </li>
     {% elif product.payment_type == 2 %}
-      <li class="am-text-xs"> * {{product.name}} 是否适用 {{product.payment_point}} 积分兑换 <input type="checkbox" value="{{product.id}}" name="payment_point" data-price="{{product.price}}" data-point="{{product.payment_point}}"></li>
+      <li class="am-text-xs"> * {{product.name}} 是否适用 {{product.payment_point}} 积分兑换 <input type="checkbox" value="{{product.id}}" name="payment_point" data-price="{{product.price}}" data-point="{{product.payment_point}}" data-count="{{product.count}}"></li>
     {% elif product.payment_type == 3 %}
       <li class="am-text-xs"> * {{product.name}} 需要多付 {{product.payment_point}} 积分才能购买 </li>
     {% endif %}
@@ -69,20 +69,17 @@
       }
     });
     $('input[type="checkbox"]').click(function(){
+      var total_price = parseFloat($('#total_price').html());
+      var total_point = parseInt($('#total_point').html());
+      var price = parseFloat($(this).attr('data-price'));
+      var point = parseInt($(this).attr('data-point'));
+      var count = parseInt($(this).attr('data-count'));
       if($(this).is(':checked')){
-        var total_price = parseFloat($('#total_price').html());
-        var total_point = parseInt($('#total_point').html());
-        var price = parseFloat($(this).attr('data-price'));
-        var point = parseInt($(this).attr('data-point'));
-        $('#total_price').html(total_price-price);
-        $('#total_point').html(total_point+point);
+        $('#total_price').html(total_price-price*count);
+        $('#total_point').html(total_point+point*count);
       }else{
-        var total_price = parseFloat($('#total_price').html());
-        var total_point = parseInt($('#total_point').html());
-        var price = parseFloat($(this).attr('data-price'));
-        var point = parseInt($(this).attr('data-point'));
-        $('#total_price').html(total_price+price);
-        $('#total_point').html(total_point-point);
+        $('#total_price').html(total_price+price*count);
+        $('#total_point').html(total_point-point*count);
       }
     });
     
