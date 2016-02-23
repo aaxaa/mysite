@@ -64,7 +64,7 @@ $(function(){
         $('#myconfirm').modal({
             relatedTarget: this,
             onConfirm: function(options) {
-              window location.href = $(this.relatedTarget).attr('to');
+              window.location.href = $(this.relatedTarget).prev('a').attr('to');
             },
       });
     });
