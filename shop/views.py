@@ -612,13 +612,17 @@ def purchase(request):
                     products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
                 
                 customer = Customer.objects.get(id=order.customer.id)
-                print 'customer point:', customer.point
-                print 'need point: ', customer.point - total_point
                 if customer.point - total_point < 0:
                     return render(request, 'checkout_success.html', {'message':u'积分不够，支付不成功！', 'url':'/order'})
                 else:
                     customer.point = F('point') - total_point
                     customer.save()
+
+                    #从购物车内删除
+                    pids = [int(product.product.id) for product in order.products_in.all()]
+                    sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
+                    sp.delete()
+
 
                 total_price = order.total_price - discount
                 if total_price > 0:
