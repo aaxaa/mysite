@@ -366,7 +366,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = u'订单'
         verbose_name_plural = u'客户订单'
-        ordering = ('-create_at',)
+        ordering = ('-create_at','-id')
 
 class OrderProduct(models.Model):
     status_choices = [
