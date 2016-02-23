@@ -568,9 +568,10 @@ def shopcart_order_checkout(request):
             data['order_txt'] = order.order_txt
             data['products'] = ''
             data['total_point'] = 0
-
+            products_count = {}
             total_price = 0
             for product in order.products_in.all():
+                products_count[product.product.id] = product.count
                 if product.product.payment_type == 1:
                     data['total_point'] += product.product.payment_point * product.count
                     data['products'] += u"%s * %s = <del>￥%s</del><br/>" % (product.product.name, product.count, product.price)
@@ -582,7 +583,11 @@ def shopcart_order_checkout(request):
                     data['products'] += u"%s * %s = ￥%s<br/>" % (product.product.name, product.count, product.price)
                     total_price += float(product.price)
 
-            data['products_all'] = order.products.all()
+            data['products_all'] = []
+            for product in order.products.all():
+                product.count = products_count[product.id]
+                data['products_all'].append(product)
+
             data['total_price'] = "%0.2f"%total_price
             data['order'] = order
 
