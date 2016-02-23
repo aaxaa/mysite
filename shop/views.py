@@ -631,13 +631,13 @@ def purchase(request):
                 for product in order.products_in.all():
                     if product.product.payment_type == 1:
                         discount += product.product.price * product.count
-                        total_point += product.product.payment_point
+                        total_point += product.product.payment_point * product.count
                     elif product.product.payment_type == 2:
                         if str(product.product.id) in request.POST.getlist('payment_point'):
                             discount += product.product.price * product.count
-                            total_point += product.product.payment_point
+                            total_point += product.product.payment_point * product.count
                     elif product.product.payment_type == 3:
-                        total_point += product.product.payment_point
+                        total_point += product.product.payment_point * product.count
 
                     products_str += u"%s * %s = ￥%s, " % (product.product.name, product.count, product.price)
                 
