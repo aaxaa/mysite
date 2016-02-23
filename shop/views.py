@@ -87,6 +87,7 @@ def order_operation(request):
                     if order.status < 3:
                         order.status = 4
                         order.save()
+                        message = u'订单取消成功，请返回！'
                     else:
                         message = u'不能结束进行中的订单'
             else:
