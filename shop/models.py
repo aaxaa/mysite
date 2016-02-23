@@ -345,6 +345,7 @@ class Order(models.Model):
         (1, u'已下单'),
         (2, u'未支付'),
         (3, u'已付款'),
+        (4, u'已关闭'),
     ]
     order_txt = models.CharField(u'订单号', max_length=12, default='')
     customer = models.ForeignKey(

@@ -74,6 +74,30 @@ def order(request):
     else:
         return redirect('/login/?forward=order')
 
+def order_operation(request):
+    if 'customer' in request.session and request.session['customer']:
+        message = ''
+        operation = request.GET.get('operation', '')
+        order_id = request.GET.get('order_id', '')
+
+        if operation != '' and order_id != '':
+            order = Order.objects.get(id=order_id)
+            if request.session['customer']['id'] == order.customer.id:
+                if operation == 'delete':
+                    if order.status < 3:
+                        order.status = 4
+                        order.save()
+                    else:
+                        message = u'不能结束进行中的订单'
+            else:
+                message = u'您不能操作不属于自己的订单'
+        else:
+            message = u'请您选择操作类型和对应的订单'
+
+        return render(request, 'checkout_success.html', {'message':message, 'url': '/order'})
+
+
+
 def server(request):
     notice_list = Notice.objects.filter(type='news')
     if 'customer' in request.session and request.session['customer']:
