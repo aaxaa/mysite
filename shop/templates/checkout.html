@@ -75,11 +75,11 @@
       var point = parseInt($(this).attr('data-point'));
       var count = parseInt($(this).attr('data-count'));
       if($(this).is(':checked')){
-        $('#total_price').html(total_price-price*count);
-        $('#total_point').html(total_point+point*count);
+        $('#total_price').html(total_price-(price*count));
+        $('#total_point').html(total_point+(point*count));
       }else{
-        $('#total_price').html(total_price+price*count);
-        $('#total_point').html(total_point-point*count);
+        $('#total_price').html(total_price+(price*count));
+        $('#total_point').html(total_point-(point*count));
       }
     });
     
