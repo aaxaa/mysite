@@ -60,7 +60,7 @@ def order(request):
             order_list = Order.objects.filter(customer=customer, status__gt = 2 if tabstatus == 'unuse' else 0)
             for order in order_list:
                 if tabstatus == 'all':
-                    order.products_in_all = order.products_in.filter(status__lt=4)
+                    order.products_in_all = order.products_in.filter(status__neq=4)
                 elif tabstatus == 'unuse':
                     order.products_in_all = order.products_in.filter(status=0)
                 elif tabstatus == 'used':
