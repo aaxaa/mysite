@@ -57,10 +57,10 @@ def order(request):
         order_data = []
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
-            order_list = Order.objects.filter(customer=customer, status__gt = 2 if tabstatus == 'unuse' else 0)
+            order_list = Order.objects.filter(customer=customer, status__in = [3] if tabstatus == 'unuse' else [0,1,2])
             for order in order_list:
                 if tabstatus == 'all':
-                    order.products_in_all = order.products_in.filter(status__in=[1,2,3])
+                    order.products_in_all = order.products_in.filter()
                 elif tabstatus == 'unuse':
                     order.products_in_all = order.products_in.filter(status=0)
                 elif tabstatus == 'used':
