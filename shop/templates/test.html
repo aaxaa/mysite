@@ -1,0 +1,88 @@
+{% extends "libs/base.html" %}
+{% load staticfiles %}
+{% block container %}
+<div class="am-slider am-slider-default am-margin-0" data-am-flexslider="{directionNav: false, controlNav: false}">
+  <ul class="am-slides">
+    {% for row in notice_list %}
+    <li class="slider-notice-li"><p><a href="{% url "notice" row.id %}" class="am-text-sm am-text-white">{{row.title}}</a></p></li>
+    {% endfor %}
+  </ul>
+</div>
+<div data-am-widget="map" class="am-map am-map-default"
+    data-name="贝尔美医学美容医院" data-address="中国广东省佛山市顺德区容桂镇桂洲大道东（桂洲大道与105国道交汇处/创富酒店旁）" data-longitude="113.290157" data-latitude="22.761491" data-scaleControl="false" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
+  <div id="bd-map"></div>
+</div>
+<div class="am-text-xs am-text-grey am-margin-xs am-padding-xs">
+  <div class="am-g">
+    <div class="am-u-sm-1 am-u-lg-2">
+      <i class="am-icon-map-marker"></i>
+    </div> 
+    <div class="am-u-sm-11 am-u-lg-10">
+      中国广东省佛山市顺德区容桂镇桂洲大道东（桂洲大道与105国道交汇处/创富酒店旁）
+    </div>
+  </div>
+  <div class="am-g">
+    <div class="am-u-sm-1 am-u-lg-2">
+      <i class="am-icon-phone"></i>
+    </div> 
+    <div class="am-u-sm-11 am-u-lg-10">
+      美丽热线：400-823-2833
+    </div>
+  </div>
+  <div class="am-g">
+    <div class="am-u-sm-1 am-u-lg-2">
+      <i class="am-icon-bus"></i>
+    </div> 
+    <div class="am-u-sm-11 am-u-lg-10">
+        轻轨：广州南站 → 顺德站 → 容桂站<br/>
+        自驾：广珠西线 → 碧桂公路 → 龙盘西路 → 容奇大桥 →桂洲大道与105国道交汇处<br/>
+        途经公交：335路; 326路; 322路; 317路 ; 214路,; 217路 ; 211路到鹿茵酒店公交站下车
+    </div>
+  </div>
+  <a class="am-btn am-btn-beauty am-btn-block am-margin-top-sm" href="tel:075729292933" target="_blank">我要预约</a>
+</div>
+
+{% if customer_id %}
+<div class="am-container">
+  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+      <h2 class="am-titlebar-title ">
+          我要咨询
+      </h2>
+  </div>
+  <ul class="am-comments-list am-comments-list-flip am-text-xs">
+    {%for message in message_data %}
+      {% for m in message.question_text %}
+      <li class="am-comment am-comment-flip">
+        {% if message.customer.avatar %}
+        <img src="{{message.customer.avatar}}" alt="" class="am-comment-avatar" width="48" height="48">
+        {% else %}
+        <img src="{% static "img/no-pic.png" %}" alt="" class="am-comment-avatar" width="48" height="48">
+        {% endif %}
+        <div class="am-comment-main">
+          <div class="am-comment-bd"><p>{{m}}</p></div>
+        </div>
+      </li>
+      {% endfor %}
+      {% if message.answer_text %}
+      <li class="am-comment am-comment-danger">
+        <img src="{% static "img/logo-avatar.png" %}" alt="" class="am-comment-avatar" width="48" height="48">
+        <div class="am-comment-main"><div class="am-comment-bd"><p>{{message.answer_text}}</p></div>
+        </div>
+      </li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+
+  <form class="am-form am-magin-l" action="{% url "ask"%}" method="POST">
+  {% csrf_token %}
+  <fieldset>
+    <div class="am-form-group">
+      <textarea class="" rows="3" name="message" required ></textarea>
+    </div>
+    </fieldset>
+    <button class="am-btn am-btn-beauty am-btn-block" href="http://www.bing.com" target="_blank">发送</button>
+  </form>
+  
+</div>
+{% endif %}
+{% endblock %}

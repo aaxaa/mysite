@@ -751,20 +751,8 @@ def wx_callback(request):
     else:
         return HttpResponse(u'网络出现故障，请返回重试！')
 
-def wxpay_test(request):
-    data = build_form_by_params({
-        'body': 'product test',
-        'out_trade_no' : '001',
-        'total_fee':1,
-        'spbill_create_ip':get_client_ip(request),
-        'openid':request.session['openid']
-    })
-
-
-    wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
-    data['signature'] = wx.generate_jsapi_signature(timestamp=data['timeStamp'], noncestr=data['nonceStr'], url="http://shop.baremeii.com/wxpay_test/")
-
-    return render(request, 'wxpay_test.html', data)
+def test(request):
+    return render(request, 'test.html')
 
 @csrf_exempt
 def wxpay_notify(request):
