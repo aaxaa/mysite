@@ -8,7 +8,7 @@
     {% endfor %}
   </ul>
 </div>
-<div id="bd-map" style="width:750px;height:250px;"></div>
+<div id="bd-map" style="width:450px;height:250px;"></div>
 <div class="am-text-xs am-text-grey am-margin-xs am-padding-xs">
   <div class="am-g">
     <div class="am-u-sm-1 am-u-lg-2">
@@ -95,7 +95,7 @@
     }
     function createMap(){ 
       map = new BMap.Map("bd-map"); 
-      map.centerAndZoom(new BMap.Point(113.358877,22.814469),13);
+      map.centerAndZoom(new BMap.Point(113.290157,22.761491),18);
     }
     function setMapEvent(){
       map.enableScrollWheelZoom();
@@ -110,7 +110,7 @@
     }
     function addMapOverlay(){
       var markers = [
-        {content:"",title:"",imageOffset: {width:-23,height:-21},position:{lat:22.761691,lng:113.290211}}
+        {content:"",title:"",imageOffset: {width:-23,height:-21},position:{lat:22.761491,lng:113.290157}}
       ];
       for(var index = 0; index < markers.length; index++ ){
         var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
@@ -129,7 +129,7 @@
         map.addOverlay(marker);
       };
       var labels = [
-        {position:{lng:113.290229,lat:22.761741},content:"贝尔美医学美容医院"}
+        {position:{lng:113.290157,lat:22.761491},content:"贝尔美医学美容医院"}
       ];
       for(var index = 0; index < labels.length; index++){
         var opt = { position: new BMap.Point(labels[index].position.lng,labels[index].position.lat )};
