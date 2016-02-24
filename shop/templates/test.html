@@ -128,14 +128,6 @@
         addClickHandler(marker,infoWindow);
         map.addOverlay(marker);
       };
-      var labels = [
-        {position:{lng:113.290157,lat:22.761491},content:"贝尔美医学美容医院"}
-      ];
-      for(var index = 0; index < labels.length; index++){
-        var opt = { position: new BMap.Point(labels[index].position.lng,labels[index].position.lat )};
-        var label = new BMap.Label(labels[index].content,opt);
-        map.addOverlay(label);
-      };
     }
     //向地图添加控件
     function addMapControl(){
