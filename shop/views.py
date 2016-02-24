@@ -137,14 +137,14 @@ def ask(request):
                 except:
                     message = Message.objects.create(customer=customer, question_text=_message)
                     message.save()
-                # try:
-                message_log = Message.objects.get(customer=customer)
-                message_log.last_visite_at = datetime.now()
-                message_log.save()
+                try:
+                    message_log = MessageLog.objects.get(customer=customer)
+                    message_log.last_visite_at = datetime.now()
+                    message_log.save()
 
-                # except:
-                #     message_log = MessageLog.objects.create(customer=customer, last_visite_at=datetime.now())
-                #     message_log.save()
+                except:
+                    message_log = MessageLog.objects.create(customer=customer, last_visite_at=datetime.now())
+                    message_log.save()
 
                 return redirect(reverse('server'))
     else:
