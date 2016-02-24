@@ -406,7 +406,7 @@ class Message(models.Model):
     class Meta:
         verbose_name = u'咨询'
         verbose_name_plural = u'客户咨询'
-        ordering = (('create_at'), )
+        ordering = (('-update_at'), )
 
 
 class MessageLog(models.Model):
