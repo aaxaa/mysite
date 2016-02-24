@@ -8,8 +8,7 @@
     {% endfor %}
   </ul>
 </div>
-<div data-am-widget="map" class="am-map am-map-default"
-    data-name="贝尔美医学美容医院" data-address="中国广东省佛山市顺德区容桂镇桂洲大道东（桂洲大道与105国道交汇处/创富酒店旁）" data-longitude="113.290157" data-latitude="22.761491" data-scaleControl="false" data-zoomControl="true" data-setZoom="17" data-icon="http://amuituku.qiniudn.com/mapicon.png">
+<div class="am-map am-map-default">
   <div id="bd-map"></div>
 </div>
 <div class="am-text-xs am-text-grey am-margin-xs am-padding-xs">
@@ -86,3 +85,69 @@
 </div>
 {% endif %}
 {% endblock %}
+{% block script %}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=TKPqlXZHLrMwt2nf9n9mLReN"></script>
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+      createMap();//创建地图
+      setMapEvent();//设置地图事件
+      addMapControl();//向地图添加控件
+      addMapOverlay();//向地图添加覆盖物
+    }
+    function createMap(){ 
+      map = new BMap.Map("bd-map"); 
+      map.centerAndZoom(new BMap.Point(113.358877,22.814469),13);
+    }
+    function setMapEvent(){
+      map.enableScrollWheelZoom();
+      map.enableKeyboard();
+      map.enableDragging();
+      map.enableDoubleClickZoom()
+    }
+    function addClickHandler(target,window){
+      target.addEventListener("click",function(){
+        target.openInfoWindow(window);
+      });
+    }
+    function addMapOverlay(){
+      var markers = [
+        {content:"",title:"",imageOffset: {width:-23,height:-21},position:{lat:22.761691,lng:113.290211}}
+      ];
+      for(var index = 0; index < markers.length; index++ ){
+        var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
+        var marker = new BMap.Marker(point,{icon:new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png",new BMap.Size(20,25),{
+          imageOffset: new BMap.Size(markers[index].imageOffset.width,markers[index].imageOffset.height)
+        })});
+        var label = new BMap.Label(markers[index].title,{offset: new BMap.Size(25,5)});
+        var opts = {
+          width: 200,
+          title: markers[index].title,
+          enableMessage: false
+        };
+        var infoWindow = new BMap.InfoWindow(markers[index].content,opts);
+        marker.setLabel(label);
+        addClickHandler(marker,infoWindow);
+        map.addOverlay(marker);
+      };
+      var labels = [
+        {position:{lng:113.290229,lat:22.761741},content:"贝尔美医学美容医院"}
+      ];
+      for(var index = 0; index < labels.length; index++){
+        var opt = { position: new BMap.Point(labels[index].position.lng,labels[index].position.lat )};
+        var label = new BMap.Label(labels[index].content,opt);
+        map.addOverlay(label);
+      };
+    }
+    //向地图添加控件
+    function addMapControl(){
+      var scaleControl = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+      scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+      map.addControl(scaleControl);
+      var navControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,type:1});
+      map.addControl(navControl);
+    }
+    var map;
+      initMap();
+  </script>
+  {% endblock %}
