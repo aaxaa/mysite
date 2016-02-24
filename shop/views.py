@@ -103,7 +103,7 @@ def server(request):
     notice_list = Notice.objects.filter(type='news')
     if 'customer' in request.session and request.session['customer']:
         customer_id = request.session['customer'].get('id')
-        message_list = Message.objects.filter(customer__id=customer_id)
+        message_list = Message.objects.filter(customer__id=customer_id).order_by('-create_at')
         message_data = []
         for message in message_list:
             message.question_text = message.question_text.split('\b')
