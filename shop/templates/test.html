@@ -94,8 +94,8 @@
       addMapOverlay();//向地图添加覆盖物
     }
     function createMap(){ 
-      map = new BMap.Map("bd-map"); 
-      map.centerAndZoom(new BMap.Point(113.290157,22.761491),18);
+      map = new BMap.Map("map"); 
+      map.centerAndZoom(new BMap.Point(113.290157,22.761491),19);
     }
     function setMapEvent(){
       map.enableScrollWheelZoom();
@@ -110,7 +110,7 @@
     }
     function addMapOverlay(){
       var markers = [
-        {content:"",title:"",imageOffset: {width:-23,height:-21},position:{lat:22.761491,lng:113.290157}}
+        {content:"贝尔美医学美容医院",title:"贝尔美医学美容医院",imageOffset: {width:-23,height:-21},position:{lat:22.761691,lng:113.290211}}
       ];
       for(var index = 0; index < markers.length; index++ ){
         var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
@@ -129,7 +129,6 @@
         map.addOverlay(marker);
       };
       var labels = [
-        {position:{lng:113.290157,lat:22.761491},content:"贝尔美医学美容医院"}
       ];
       for(var index = 0; index < labels.length; index++){
         var opt = { position: new BMap.Point(labels[index].position.lng,labels[index].position.lat )};
@@ -139,9 +138,6 @@
     }
     //向地图添加控件
     function addMapControl(){
-      var scaleControl = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
-      scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
-      map.addControl(scaleControl);
       var navControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,type:1});
       map.addControl(navControl);
     }
