@@ -195,7 +195,7 @@ class Customer(models.Model):
     point = models.IntegerField(u'积分', default=0)
     address = models.CharField(u'收件地址', null=True, blank=True, max_length=255)
     register_at = models.DateField(u'注册时间', auto_now_add=True)
-    status = models.SmallIntegerField(u'状态', default=1)
+    status = models.SmallIntegerField(u'状态', choices=status_choices ,default=1)
 
     def save(self, *args, **kwargs):
         self.password = self.hash_password()
@@ -287,6 +287,11 @@ class CustomerPointLog(models.Model):
 
 
 class CustomerRelation(models.Model):
+    level_choices = (
+        (1, u'一级代言'),
+        (2, u'二级代言'),
+    )
+
     customer = models.ForeignKey(
         Customer,
         verbose_name=u'客户',
@@ -298,7 +303,7 @@ class CustomerRelation(models.Model):
         on_delete=models.CASCADE,
         related_name='upper'
     )
-    level = models.SmallIntegerField(u'级别')
+    level = models.SmallIntegerField(u'级别', choices=opertion_choices, default=1)
     create_at = models.DateField(u'时间', auto_now_add=True)
 
     class Meta:
