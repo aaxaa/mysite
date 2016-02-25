@@ -928,8 +928,8 @@ def register(request):
 
                             customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.upper, level=2)
                             customer_relation.save()
-                            
-                            if upper_relation.upper.id != customer.id
+
+                            if upper_relation.upper.id != customer.id:
                                 #给二级关系加积分
                                 upper_relation.upper.point = F('point') + 20
                                 upper_relation.upper.save()
