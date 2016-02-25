@@ -926,15 +926,16 @@ def register(request):
                         try:
                             upper_relation = CustomerRelation.objects.get(customer=upper)
 
-                            customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.customer, level=2)
+                            customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.upper, level=2)
                             customer_relation.save()
+                            
+                            if upper_relation.upper.id != customer.id
+                                #给二级关系加积分
+                                upper_relation.upper.point = F('point') + 20
+                                upper_relation.upper.save()
 
-                            #给二级关系加积分
-                            upper_relation.customer.point = F('point') + 20
-                            upper_relation.customer.save()
-
-                            cpl = CustomerPointLog.objects.create(customer=upper_relation.customer, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=20)
-                            cpl.save()
+                                cpl = CustomerPointLog.objects.create(customer=upper_relation.upper, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=20)
+                                cpl.save()
 
                         except:
                             pass
