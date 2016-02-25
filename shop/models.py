@@ -303,7 +303,7 @@ class CustomerRelation(models.Model):
         on_delete=models.CASCADE,
         related_name='upper'
     )
-    level = models.SmallIntegerField(u'级别', choices=opertion_choices, default=1)
+    level = models.SmallIntegerField(u'级别', choices=level_choices, default=1)
     create_at = models.DateField(u'时间', auto_now_add=True)
 
     class Meta:
