@@ -931,11 +931,27 @@ def register(request):
 
                             if upper_relation.upper.id != customer.id:
                                 #给二级关系加积分
-                                upper_relation.upper.point = F('point') + 20
+                                upper_relation.upper.point = F('point') + 50
                                 upper_relation.upper.save()
 
-                                cpl = CustomerPointLog.objects.create(customer=upper_relation.upper, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=20)
+                                cpl = CustomerPointLog.objects.create(customer=upper_relation.upper, opertor=customer, event_name=u'二级下线邀请注册', opertion='+', score=50)
                                 cpl.save()
+
+                            #三级关系
+                            try:
+                                upper_upper_relation = CustomerRelation.objects.get(customer=upper_relation.upper)
+
+                                upper_customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_upper_relation.upper, level=3)
+                                customer_relation.save()
+
+                                if upper_relation.upper.id != customer.id and upper_upper_relation.upper.id != customer.id:
+                                    #给三级关系加积分
+                                    upper_upper_relation.upper.point = F('point') + 25
+                                    upper_upper_relation.upper.save()
+
+                                    cpl = CustomerPointLog.objects.create(customer=upper_upper_relation.upper, opertor=customer, event_name=u'三级下线邀请注册', opertion='+', score=25)
+                                    cpl.save()
+
 
                         except:
                             pass

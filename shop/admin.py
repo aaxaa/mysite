@@ -37,6 +37,13 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = (ProductItemInline, )
 
+    fieldsets = (
+        (u'积分设置', {
+            'classes':('collapse',),
+            'fields': ('point_1', 'point_2', 'point_3'),
+        }),
+    )
+
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('category', 'name', 'display_order')
     fields = ('category', 'name', 'display_order')

@@ -100,6 +100,11 @@ class Product(models.Model):
     )
     price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
     point = models.IntegerField(u"积分奖励", default=0)
+    point_custom = models.BooleanField(u'自定义积分', default=False)
+    point_1 = models.IntegerField(u"一级积分", default=0)
+    point_2 = models.IntegerField(u"二级积分", default=0)
+    point_3 = models.IntegerField(u"三级积分", default=0)
+
     payment_type = models.SmallIntegerField(
         u'支付方式',
         choices=payment_choices,
@@ -290,6 +295,7 @@ class CustomerRelation(models.Model):
     level_choices = (
         (1, u'一级代言'),
         (2, u'二级代言'),
+        (3, u'三级代言'),
     )
 
     customer = models.ForeignKey(
