@@ -785,8 +785,6 @@ def wxpay_notify(request):
                     point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else (prod.product.point * 0.25)
                     point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else (prod.product.point * 0.25)
 
-                print point_data
-
                 if point_data['point']>0:
 
                     customer.point = F('point') + point_data['point']
