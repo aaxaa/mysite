@@ -39,13 +39,12 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('category', 'name', 'model', 'description', 'type', 'cover')
+            'fields': ('category', 'name', 'model', 'type', 'cover')
         }),
         (u'价格设置', {
             'fields': ('payment_type', 'price', 'payment_point')
         }),
         (u'积分设置', {
-            'classes':('extrapretty',),
             'fields': ('point','point_custom','point_1', 'point_2', 'point_3'),
         }),
         (u'商品详情', {
