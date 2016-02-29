@@ -773,25 +773,48 @@ def wxpay_notify(request):
                 customer.address = order.address
                 #加积分
                 point = sum([int(product.product.point) for product in order.products_in.all()])
-                customer.point = F('point') + point
-                customer.save()
+                point_data = {}
+                point_data['point'] = 0
+                point_data['point_1'] = 0
+                point_data['point_2'] = 0
+                point_data['point_3'] = 0
 
-                cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'支付订单', opertion='+', score=point)
-                cpl.save()
+                for prod in order.products_in.all():
+                    point_data['point'] += prod.product.point
+                    if prod.product.point_1 and prod.product.point_2 and prod.product.point_3:
+                        point_data['point_1'] += prod.product.point_1
+                        point_data['point_2'] += prod.product.point_2
+                        point_data['point_3'] += prod.product.point_3
 
-                try:
-                    customer_relations = CustomerRelation.objects.filter(customer=customer, level__in=[1,2,3])
+                    else:
+                        point_data['point_1'] += prod.product.point * 0.5
+                        point_data['point_2'] += prod.product.point * 0.25
+                        point_data['point_3'] += prod.product.point * 0.25
 
-                    for relation in customer_relations:
-                        score = (point * 0.5) if relation.level == 1 else (point * 0.25)
-                        relation.upper.point = F('point') + score
-                        relation.upper.save()
+                if point_data['point']>0:
 
-                        cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
-                        cpl.save()
+                    customer.point = F('point') + point_data['point']
+                    customer.save()
 
-                except:
-                    pass
+                    cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'支付订单', opertion='+', score=point)
+                    cpl.save()
+
+                if sum([point_data['point_1'], point_data['point_1'], point_data['point_1']])>0:
+
+                    try:
+                        customer_relations = CustomerRelation.objects.filter(customer=customer, level__in=[1,2,3])
+
+                        for relation in customer_relations:
+
+                            score = point_data.get("point_%d" % relation.level)
+                            relation.upper.point = F('point') + score
+                            relation.upper.save()
+
+                            cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
+                            cpl.save()
+
+                    except:
+                        pass
 
 
                 #从购物车内删除
