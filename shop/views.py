@@ -952,7 +952,8 @@ def register(request):
                                     cpl = CustomerPointLog.objects.create(customer=upper_upper_relation.upper, opertor=customer, event_name=u'三级下线邀请注册', opertion='+', score=25)
                                     cpl.save()
 
-
+                            except:
+                                pass
                         except:
                             pass
 
