@@ -780,19 +780,14 @@ def wxpay_notify(request):
                 cpl.save()
 
                 try:
-                    customer_relation = CustomerRelation.objects.get(customer=customer)
-                    customer_relation.upper.point = F('point') + point * 0.5
-                    customer_relation.upper.save()
+                    customer_relations = CustomerRelation.objects.filter(customer=customer, level__in=[1,2,3])
 
-                    cpl = CustomerPointLog.objects.create(customer=customer_relation.upper, opertor=customer, event_name=u'二级代言支付订单', opertion='+', score=point * 0.5)
-                    cpl.save()
+                    for relation in customer_relations:
+                        score = (point * 0.5) if relation.level == 1 else (point * 0.25)
+                        relation.upper.point = F('point') + score
+                        relation.upper.save()
 
-                    if customer_relation.level == 2:
-                        upper_relation = CustomerRelation.objects.get(customer=customer_relation.upper)
-                        upper_relation.upper.point = F('point') + point * 0.2
-                        upper_relation.upper.save()
-
-                        cpl = CustomerPointLog.objects.create(customer=upper_relation.upper, opertor=customer, event_name=u'三级代言支付订单', opertion='+', score=point * 0.2)
+                        cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
                         cpl.save()
 
                 except:
@@ -924,7 +919,7 @@ def register(request):
                         cpl.save()
                         #查找是否有二级关系，存在则创建二级关系
                         try:
-                            upper_relation = CustomerRelation.objects.get(customer=upper)
+                            upper_relation = CustomerRelation.objects.get(customer=upper, level=1)
 
                             customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_relation.upper, level=2)
                             customer_relation.save()
@@ -939,7 +934,7 @@ def register(request):
 
                             #三级关系
                             try:
-                                upper_upper_relation = CustomerRelation.objects.get(customer=upper_relation.upper)
+                                upper_upper_relation = CustomerRelation.objects.get(customer=upper_relation.upper, level=1)
 
                                 upper_customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper_upper_relation.upper, level=3)
                                 customer_relation.save()
