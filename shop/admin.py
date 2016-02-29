@@ -38,9 +38,18 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = (ProductItemInline, )
 
     fieldsets = (
+        (None, {
+            'fields': ('category', 'name', 'model', 'description', 'type', 'cover')
+        }),
+        (u'价格设置', {
+            'fields': ('payment_type', 'price', 'payment_point')
+        }),
         (u'积分设置', {
             'classes':('collapse',),
-            'fields': ('point_1', 'point_2', 'point_3'),
+            'fields': ('point','point_custom','point_1', 'point_2', 'point_3'),
+        }),
+        (None, {
+            'fields': ('description', 'content', 'recommend', 'status')
         }),
     )
 

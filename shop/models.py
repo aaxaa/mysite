@@ -98,9 +98,9 @@ class Product(models.Model):
         choices=recommend_choices,
         default=0,
     )
-    price = models.DecimalField(u"商品价格", max_digits=8, default=0.00, decimal_places=2)
+    price = models.DecimalField(u"所需价格", max_digits=8, default=0.00, decimal_places=2)
     point = models.IntegerField(u"积分奖励", default=0)
-    point_custom = models.BooleanField(u'自定义积分', default=False)
+    point_custom = models.BooleanField(u'是否自定义积分', default=False)
     point_1 = models.IntegerField(u"一级积分", default=0)
     point_2 = models.IntegerField(u"二级积分", default=0)
     point_3 = models.IntegerField(u"三级积分", default=0)
