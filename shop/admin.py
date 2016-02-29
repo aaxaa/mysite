@@ -45,7 +45,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('payment_type', 'price', 'payment_point')
         }),
         (u'积分设置', {
-            'fields': ('point','point_custom','point_1', 'point_2', 'point_3'),
+            'fields': ('point','point_1', 'point_2', 'point_3'),
         }),
         (u'商品详情', {
             'fields': ('description', 'content', 'recommend', 'status')
