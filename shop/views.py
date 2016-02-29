@@ -781,15 +781,11 @@ def wxpay_notify(request):
 
                 for prod in order.products_in.all():
                     point_data['point'] += prod.product.point
-                    if prod.product.point_1 and prod.product.point_2 and prod.product.point_3:
-                        point_data['point_1'] += prod.product.point_1
-                        point_data['point_2'] += prod.product.point_2
-                        point_data['point_3'] += prod.product.point_3
+                    point_data['point_1'] += prod.product.point_1 if prod.product.point_1 else (prod.product.point * 0.5)
+                    point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else (prod.product.point * 0.25)
+                    point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else (prod.product.point * 0.25)
 
-                    else:
-                        point_data['point_1'] += prod.product.point * 0.5
-                        point_data['point_2'] += prod.product.point * 0.25
-                        point_data['point_3'] += prod.product.point * 0.25
+                print point_data
 
                 if point_data['point']>0:
 
