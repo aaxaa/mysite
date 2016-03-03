@@ -19,11 +19,11 @@ from wechat_sdk.basic import WechatBasic
 
 def main(request):
     notice_list = Notice.objects.filter(type='global', status=1)
-    recommend_products = Product.objects.filter(recommend=1)
+    recommend_products = Product.objects.filter(recommend=1, status=1)
 
     category_list = Category.objects.filter(parent=None)
     for category in category_list:
-        category.product_list = Product.objects.filter(category=category)
+        category.product_list = Product.objects.filter(category=category, status=1)
 
     return render(request, 'home.html', {
         'notice_list': notice_list,
