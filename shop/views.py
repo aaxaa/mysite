@@ -781,9 +781,9 @@ def wxpay_notify(request):
 
                 for prod in order.products_in.all():
                     point_data['point'] += prod.product.point
-                    point_data['point_1'] += prod.product.point_1 if prod.product.point_1 else (prod.product.point * 0.5)
-                    point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else (prod.product.point * 0.25)
-                    point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else (prod.product.point * 0.25)
+                    point_data['point_1'] += prod.product.point_1 if prod.product.point_1 else 0
+                    point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else 0
+                    point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else 0
 
                 if point_data['point']>0:
 
@@ -801,11 +801,13 @@ def wxpay_notify(request):
                         for relation in customer_relations:
 
                             score = point_data.get("point_%d" % relation.level)
-                            relation.upper.point = F('point') + score
-                            relation.upper.save()
 
-                            cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
-                            cpl.save()
+                            if score>0:
+                                relation.upper.point = F('point') + score
+                                relation.upper.save()
+
+                                cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
+                                cpl.save()
 
                     except:
                         pass

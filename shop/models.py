@@ -100,9 +100,9 @@ class Product(models.Model):
     )
     price = models.DecimalField(u"所需价格", max_digits=8, default=0.00, decimal_places=2)
     point = models.IntegerField(u"积分奖励", default=0)
-    point_1 = models.IntegerField(u"一级积分", default=0, help_text=u"当值为0时则默认为积分奖励的50%")
-    point_2 = models.IntegerField(u"二级积分", default=0, help_text=u"当值为0时则默认为积分奖励的25%")
-    point_3 = models.IntegerField(u"三级积分", default=0, help_text=u"当值为0时则默认为积分奖励的25%")
+    point_1 = models.IntegerField(u"一级积分", default=0, help_text=u"当值为0时不给积分奖励")
+    point_2 = models.IntegerField(u"二级积分", default=0, help_text=u"当值为0时不给积分奖励")
+    point_3 = models.IntegerField(u"三级积分", default=0, help_text=u"当值为0时不给积分奖励")
 
     payment_type = models.SmallIntegerField(
         u'支付方式',
