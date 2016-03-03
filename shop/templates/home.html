@@ -36,29 +36,31 @@ am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered" >
     {% endfor %}
   </ul>
   {% for category in category_list %}
-  <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
-      <h2 class="am-titlebar-title ">
-          {{category.name}}
-      </h2>
-  </div>
-  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
-am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered">
-    {% for product in category.product_list %}
-    <li>
-      <div class="am-gallery-item">
-          <a href="{% url 'product' product.id %}" class="">
-            <img src="{{product.cover}}"  alt="{{product.name}}"/>
-              <h3 class="am-gallery-title">{{product.name}}</h3>
-              {% if product.payment_type == 1 %}
-                <div class="am-gallery-desc">{{product.payment_point}} 积分</div>
-              {% else %}
-                <div class="am-gallery-desc">¥ {{product.price}}</div>
-              {% endif %}
-          </a>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
+    {% if category.product_list %}
+    <div data-am-widget="titlebar" class="am-titlebar am-titlebar-default" >
+        <h2 class="am-titlebar-title ">
+            {{category.name}}
+        </h2>
+    </div>
+    <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+  am-avg-md-3 am-avg-lg-4 am-gallery-imgbordered">
+      {% for product in category.product_list %}
+      <li>
+        <div class="am-gallery-item">
+            <a href="{% url 'product' product.id %}" class="">
+              <img src="{{product.cover}}"  alt="{{product.name}}"/>
+                <h3 class="am-gallery-title">{{product.name}}</h3>
+                {% if product.payment_type == 1 %}
+                  <div class="am-gallery-desc">{{product.payment_point}} 积分</div>
+                {% else %}
+                  <div class="am-gallery-desc">¥ {{product.price}}</div>
+                {% endif %}
+            </a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
   {% endfor %}
 </div>
 {% endblock %}
