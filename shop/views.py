@@ -989,9 +989,13 @@ def register(request):
 
         return render(request, 'register.html', {'errors': errors, 'status': 'db-failed'})
     #verify token
+    status = None
+    if 'invite_customer_id' in request.session and request.session['invite_customer_id']:
+        status = 'invite_customer'
+
     verify_token = random.randint(100000000,999999999)
     request.session['verifytoken'] = verify_token
-    return render(request, 'register.html', {'errors': None, 'status': None, 'verify_token':verify_token})
+    return render(request, 'register.html', {'errors': None, 'status': status, 'verify_token':verify_token})
 
 def repw(request):
     if not ('customer' in request.session and request.session['customer']):
