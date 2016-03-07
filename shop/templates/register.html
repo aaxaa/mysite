@@ -52,6 +52,15 @@
                     </div>
                 </div>
             </div>
+            <script>
+            $(function(){
+                $('#showmessage').modal({
+                    'closeViaDimmer' : 0,
+                    'width': 300,
+                    'height': 120, 
+                });
+            });
+            </script>
         {% endif %}
 
         <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
