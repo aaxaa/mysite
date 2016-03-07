@@ -42,12 +42,12 @@
         <a href="{% url 'register' %}" class="am-btn am-btn-beauty am-btn-sm am-center">返回</a>
     </div>
     {% else %}
-        {% if status == 'invite_customer' %}
+        
             <div class="am-modal am-modal-no-btn" tabindex="-1" id="showmessage">
                 <div class="am-modal-dialog">
                     <div class="am-modal-hd"><a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a></div>
                     <div class="am-modal-bd">
-                    <p id="showmessage_content">长按并选择扫描屏幕二维码<img src="{% static 'img/64.pic_hd.jpg' %}" /></p>
+                    <p id="showmessage_content">长按并选择扫描屏幕二维码{{status}}<img src="{% static 'img/64.pic_hd.jpg' %}" /></p>
                     <a href="javascript: void(0)" data-am-modal-close class="am-btn am-btn-beauty am-btn-sm">确定</a>
                     </div>
                 </div>
@@ -61,7 +61,6 @@
                 });
             });
             </script>
-        {% endif %}
 
         <form class="register-form am-form" data-am-validator method="POST" action="{% url 'register' %}">
             {% csrf_token %}
