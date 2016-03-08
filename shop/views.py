@@ -932,9 +932,9 @@ def register(request):
                         customer_relation = CustomerRelation.objects.create(customer=customer, upper=upper, level=1)
                         customer_relation.save()
                         #给一级关系加积分
-                        upper.point = F('point') + 100
+                        upper.point = F('point') + 10
                         upper.save()
-                        cpl = CustomerPointLog.objects.create(customer=upper, opertor=customer, event_name=u'邀请注册', opertion='+', score=100)
+                        cpl = CustomerPointLog.objects.create(customer=upper, opertor=customer, event_name=u'邀请注册', opertion='+', score=10)
                         cpl.save()
                         #查找是否有二级关系，存在则创建二级关系
                         try:

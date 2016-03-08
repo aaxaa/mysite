@@ -23,9 +23,11 @@
 	position:absolute;
 	bottom: 0;
 	width: 100%;
+	opacity: 0.5;
+	background-color: rgb(253, 241, 247);
 } 
 .product-detail-cover .title p {
-	color: #eee;
+	color: rgb(235, 104, 162);
 }
 .product-detail-cart {
 	background-color: rgb(253,241,247);
