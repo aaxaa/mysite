@@ -602,7 +602,7 @@ def shopcart_order_checkout(request):
             data['total_price'] = "%0.2f"%total_price
             data['order'] = order
 
-            CustomerOperationLog.objects.create(customer=customer, message="checkout order_id=%s and order.total_price=%s, use point=%s"%(order.id, total_price, data['total_point']), data=data['products']).save()
+            CustomerOperationLog.objects.create(customer=order.customer, message="checkout order_id=%s and order.total_price=%s, use point=%s"%(order.id, total_price, data['total_point']), data=data['products']).save()
         else:
             pass
         return render(request, 'checkout.html', data)
