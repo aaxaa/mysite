@@ -762,7 +762,6 @@ def test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
-
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
@@ -771,60 +770,66 @@ def wxpay_notify(request):
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
 
             if order.customer.id == customer_connect.customer.id:
-                order.status = 3
-                order.save()
+                CustomerOperationLog.objects.create(customer=customer_connect.customer, message="wxpay_notify order_id=%s, order.id=%s, login customer="%(order.id, order.customer.id,customer_connect.customer.id), data=request.body).save()
 
-                customer = Customer.objects.get(pk=order.customer.id)
-                customer.realname = order.realname
-                customer.address = order.address
-                #加积分
-                point = sum([int(product.product.point) for product in order.products_in.all()])
-                point_data = {}
-                point_data['point'] = 0
-                point_data['point_1'] = 0
-                point_data['point_2'] = 0
-                point_data['point_3'] = 0
+            order.status = 3
+            order.save()
 
-                for prod in order.products_in.all():
-                    point_data['point'] += prod.product.point
-                    point_data['point_1'] += prod.product.point_1 if prod.product.point_1 else 0
-                    point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else 0
-                    point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else 0
+            customer = Customer.objects.get(pk=order.customer.id)
+            customer.realname = order.realname
+            customer.address = order.address
+            #加积分
+            point = sum([int(product.product.point) for product in order.products_in.all()])
+            point_data = {}
+            point_data['point'] = 0
+            point_data['point_1'] = 0
+            point_data['point_2'] = 0
+            point_data['point_3'] = 0
 
-                if point_data['point']>0:
+            for prod in order.products_in.all():
+                point_data['point'] += prod.product.point
+                point_data['point_1'] += prod.product.point_1 if prod.product.point_1 else 0
+                point_data['point_2'] += prod.product.point_2 if prod.product.point_2 else 0
+                point_data['point_3'] += prod.product.point_3 if prod.product.point_3 else 0
 
-                    customer.point = F('point') + point_data['point']
-                    customer.save()
+            if point_data['point']>0:
 
-                    cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'支付订单', opertion='+', score=point)
-                    cpl.save()
+                customer.point = F('point') + point_data['point']
+                customer.save()
 
-                if sum([point_data['point_1'], point_data['point_1'], point_data['point_1']])>0:
+                cpl = CustomerPointLog.objects.create(customer=customer, opertor=customer, event_name=u'支付订单', opertion='+', score=point)
+                cpl.save()
 
-                    try:
-                        customer_relations = CustomerRelation.objects.filter(customer=customer, level__in=[1,2,3])
+            if sum([point_data['point_1'], point_data['point_1'], point_data['point_1']])>0:
 
-                        for relation in customer_relations:
+                try:
+                    customer_relations = CustomerRelation.objects.filter(customer=customer, level__in=[1,2,3])
 
-                            score = point_data.get("point_%d" % relation.level)
+                    for relation in customer_relations:
 
-                            if score>0:
-                                relation.upper.point = F('point') + score
-                                relation.upper.save()
+                        score = point_data.get("point_%d" % relation.level)
 
-                                cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
-                                cpl.save()
+                        if score>0:
+                            relation.upper.point = F('point') + score
+                            relation.upper.save()
 
-                    except:
-                        pass
+                            cpl = CustomerPointLog.objects.create(customer=relation.upper, opertor=customer, event_name=u'%s级下线支付订单'%(relation.level), opertion='+', score=score)
+                            cpl.save()
+
+                except:
+                    pass
 
 
-                #从购物车内删除
-                pids = [int(product.product.id) for product in order.products_in.all()]
-                sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
-                sp.delete()
+            #从购物车内删除
+            pids = [int(product.product.id) for product in order.products_in.all()]
+            sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
+            sp.delete()
 
-                return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+            return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
+        else:
+            CustomerOperationLog.objects.create(message="wxpay_notify return_code=ERROR", data=request.body).save()
+            return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
+
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
 
 
