@@ -69,7 +69,6 @@ class OrderAdmin(admin.ModelAdmin):
 
     inlines = (OrderProductInline, )
 
-
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('username', 'realname', 'phone', 'point', 'register_at')
     list_filter = ('sex',)
@@ -84,6 +83,9 @@ class CustomerPointLogAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+class CustomerOperationLogAdmin(admin.ModelAdmin):
+    list_display = ('customer', 'create_at', 'message')
 
 
 class CustomerRelationAdmin(admin.ModelAdmin):
@@ -125,5 +127,6 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(CustomerPointLog, CustomerPointLogAdmin)
 admin.site.register(CustomerRelation, CustomerRelationAdmin)
+admin.site.register(CustomerOperationLog, CustomerOperationLogAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Message, MessageAdmin)

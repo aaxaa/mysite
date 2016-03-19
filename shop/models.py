@@ -316,6 +316,25 @@ class CustomerRelation(models.Model):
         verbose_name_plural = u'客户关系'
 
 
+class CustomerOperationLog(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        verbose_name=u'客户',
+        null=True,
+        blank=True
+    )
+    create_at = models.DateField(u'时间', auto_now_add=True)
+    message = models.CharField(u'操作', max_length=255)
+    data = models.TextField(u'信息')
+
+    def __unicode__(self):
+        return str(self.message)
+
+    class Meta:
+        verbose_name = u'操作日志'
+        verbose_name_plural = u'操作日志'
+
+
 class Shopcart(models.Model):
     customer = models.ForeignKey(
         Customer,

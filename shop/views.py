@@ -35,7 +35,7 @@ def main(request):
         'category_list':category_list
     })
 
-
+@cache_page(60*60*7)
 def product(request, id=0):
     product = Product.objects.get(pk=id)
 
@@ -48,6 +48,7 @@ def product(request, id=0):
         'product_items': product_items
     })
 
+@cache_page(60*60*7)
 def notice(request, id=0):
     try:
         notice = Notice.objects.get(pk=id)
