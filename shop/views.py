@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 
-from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message, MessageLog, CustomerPointLog
+from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message, MessageLog, CustomerPointLog, CustomerOperationLog
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_xml_string_to_dict, dict_to_xml, generate_random_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
@@ -275,14 +275,12 @@ def shopcart(request):
     if 'customer' in request.session and request.session['customer']:
         try:
             customer = Customer.objects.get(id=request.session['customer'].get('id'))
-
         except:
             pass
 
     if customer:
         try:
             order = Order.objects.get(customer__pk=request.session['customer'].get('id'), status=1)
-
         except:
             pass
 
@@ -526,8 +524,11 @@ def shopcart_order(request):
 
             except ObjectDoesNotExist:
                 pass
-        #最新的订单结束，则创建薪订单
-        if (not order) or order.status > 1:
+            #最新的订单结束，则创建薪订单
+            CustomerOperationLog.objects.create(customer=customer, message="session save order_id=%s and order.status="%(order_id, order.status if order else 'None')).save()
+
+        if (not order) or order.status > 2:
+            CustomerOperationLog.objects.create(customer=customer, message="create order from session order_id=%s and order.status="%(order_id, order.status if order else 'None')).save()
             order = Order.objects.create(
                 customer=customer,
                 status=0,
@@ -609,7 +610,7 @@ def shopcart_order_checkout(request):
 
 
 def purchase(request):
-    if  "customer" in request.session and "openid" in request.session and request.method == 'POST':
+    if  "customer" in request.session and request.method == 'POST':
         empty_fields = []
         data = {}
         for field in ('realname', 'phone', 'address'):
@@ -665,7 +666,6 @@ def purchase(request):
                     pids = [int(product.product.id) for product in order.products_in.all()]
                     sp = ShopcartProduct.objects.filter(shopcart__customer__id=order.customer.id, product__id__in=pids)
                     sp.delete()
-
 
                 total_price = order.total_price - discount
                 if total_price > 0:
