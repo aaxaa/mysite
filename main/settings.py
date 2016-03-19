@@ -158,15 +158,15 @@ SESSION_REDIS_HOST = 'localhost'
 SESSION_REDIS_PORT = 6379
 SESSION_REDIS_DB = 0
 
-# CACHES = {
-#     'default' : {
-#         'BACKEND': 'redis_cache.cache.RedisCache',
-#         'LOCATION': '127.0.0.1:6379/1',
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
-#         },
-#     },
-# }
+CACHES = {
+    'default' : {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
+}
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media/')
 MEDIA_URL = '/media/'
