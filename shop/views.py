@@ -762,8 +762,7 @@ def test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
-    if 'customer' in request.session:
-        CustomerOperationLog.objects.create(customer__id=request.session['customer'].get('id'), message="wxpay_notify data", data=request.body).save()
+    CustomerOperationLog.objects.create(message="wxpay_notify data", data=request.body).save()
 
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
@@ -773,7 +772,7 @@ def wxpay_notify(request):
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
 
             if order.customer.id == customer_connect.customer.id:
-                CustomerOperationLog.objects.create(customer=customer_connect.customer, message="wxpay_notify order_id=%s, order.id=%s, login customer="%(order.id, order.customer.id,customer_connect.customer.id), data=request.body).save()
+                CustomerOperationLog.objects.create(customer=customer_connect.customer, message="wxpay_notify order_id=%s, order.id=%s, login customer=%s"%(order.id, order.customer.id,customer_connect.customer.id), data=request.body).save()
 
             order.status = 3
             order.save()
