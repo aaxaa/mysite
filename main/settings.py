@@ -136,7 +136,7 @@ USE_TZ = True
 
 LOGGING = {
     'version':1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'handlers': {
         'file': {
             'level': 'DEBUG',
