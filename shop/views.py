@@ -20,7 +20,7 @@ from wechat_sdk.basic import WechatBasic
 logger = logging.getLogger(__name__)
 
 def main(request):
-    logger.info(u'首页')
+    logger.info(u'main')
     notice_list = Notice.objects.filter(type='global', status=1)
     recommend_products = Product.objects.filter(recommend=1, status=1)
 
