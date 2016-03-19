@@ -702,7 +702,7 @@ def wx_verify(request):
         return HttpResponse('error')
 
 def wx_callback(request):
-    logger.debug(u'微信登陆开始')
+    logger.info(u'微信登陆开始')
     r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
     if int(r.status_code) == 200:
         data = r.json()
