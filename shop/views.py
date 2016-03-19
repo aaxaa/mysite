@@ -762,6 +762,9 @@ def test(request):
 
 @csrf_exempt
 def wxpay_notify(request):
+    if 'customer' in request.session:
+        CustomerOperationLog.objects.create(customer__id=request.session['customer'].get('id'), message="wxpay_notify data", data=request.body).save()
+
     if verify_notify_string(request.body):
         params = notify_xml_string_to_dict(request.body)
         if params['return_code'] == 'SUCCESS':
@@ -827,7 +830,6 @@ def wxpay_notify(request):
 
             return HttpResponse(dict_to_xml({'return_code':'SUCCESS','return_msg':'OK'}))
         else:
-            CustomerOperationLog.objects.create(message="wxpay_notify return_code=ERROR", data=request.body).save()
             return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
 
     return HttpResponse(dict_to_xml({'return_code':'FAILED','return_msg':'ERROR'}))
