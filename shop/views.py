@@ -12,10 +12,12 @@ from shop.utils import build_form_by_params, get_client_ip, verify_notify_string
 from main.settings import EMAY_SN, EMAY_KEY, EMAY_PWD, WECHAT_APPID, WECHAT_APPSECRET, WECHAT_TOKEN
 
 from decimal import *
-import json, time, random, requests, xmltodict
+import json, time, random, requests, xmltodict, logging
 from datetime import datetime
 
 from wechat_sdk.basic import WechatBasic
+
+logger = logging.getLogger(__name__)
 
 def main(request):
     notice_list = Notice.objects.filter(type='global', status=1)
@@ -700,7 +702,7 @@ def wx_verify(request):
         return HttpResponse('error')
 
 def wx_callback(request):
-    
+    logger.debug(u'微信登陆开始')
     r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
     if int(r.status_code) == 200:
         data = r.json()
