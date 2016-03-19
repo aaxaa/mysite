@@ -6,6 +6,7 @@ from django.db.models import Q, F, Sum
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
 
 from shop.models import Notice, Product, Customer, Category, Shopcart, ShopcartProduct, Order, OrderProduct, CustomerRelation, CustomerConnect, Message, MessageLog, CustomerPointLog
 from shop.utils import build_form_by_params, get_client_ip, verify_notify_string, notify_xml_string_to_dict, dict_to_xml, generate_random_string
@@ -19,8 +20,8 @@ from wechat_sdk.basic import WechatBasic
 
 logger = logging.getLogger(__name__)
 
+@cache_page(60*15)
 def main(request):
-    logger.error(u'main')
     notice_list = Notice.objects.filter(type='global', status=1)
     recommend_products = Product.objects.filter(recommend=1, status=1)
 
