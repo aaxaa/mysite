@@ -611,6 +611,7 @@ def shopcart_order_checkout(request):
 
 
 def purchase(request):
+    order_id = request.POST.get('order_id')
     if  "customer" in request.session and request.method == 'POST':
         empty_fields = []
         data = {}
@@ -622,7 +623,6 @@ def purchase(request):
         if len(empty_fields):
             return render(request, 'checkout.html', {'errors': empty_fields, 'status': 'field-failed'})
 
-        order_id = request.POST.get('order_id')
         try:
             order = Order.objects.get(id=order_id)
 
@@ -655,6 +655,7 @@ def purchase(request):
                 
                 customer = Customer.objects.get(id=order.customer.id)
                 if customer.point - total_point < 0:
+                    CustomerOperationLog.objects.create(customer=customer, message="purchase point enough customer.point, total_point: %s<%s"%(customer.point, total_point)).save()
                     return render(request, 'checkout_success.html', {'message':u'积分不够，支付不成功！', 'url':'/order'})
                 else:
                     customer.point = F('point') - total_point
@@ -670,6 +671,7 @@ def purchase(request):
 
                 total_price = order.total_price - discount
                 if total_price > 0:
+                    CustomerOperationLog.objects.create(customer=customer, message="purchase order_id=%s, total_price=%s, discount=%s, total_fee=%s"%(order.id, order.total_price,discount, total_price), data=products_str).save()
                     params = build_form_by_params({
                         'body': products_str.rstrip(', ').encode('utf8'),
                         'out_trade_no' : "%s"%str(order.order_txt),
@@ -691,12 +693,11 @@ def purchase(request):
                     return render(request, 'checkout_success.html', {'message':u'支付成功，请返回！', 'url':'/order'})
                     #return HttpResponse(u'支付成功！')
 
-
         except:
             return render(request, 'checkout_success.html', {'message':u'您不能操作不属于自己的订单', 'url':'/shopcart'})
 
     else:
-        return redirect('/login/?forward=purchase')
+        return redirect('/login?forward=shopcart_order_checkout&order_id=%s'%order_id)
 
 def wx_verify(request):
     wx = WechatBasic(token=WECHAT_TOKEN, appid=WECHAT_APPID, appsecret=WECHAT_APPSECRET)
