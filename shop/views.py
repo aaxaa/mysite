@@ -525,10 +525,10 @@ def shopcart_order(request):
             except ObjectDoesNotExist:
                 pass
             #最新的订单结束，则创建薪订单
-            CustomerOperationLog.objects.create(customer=customer, message="session save order_id=%s and order.status="%(request.session['order_id'], order.status if order else 'None')).save()
+            CustomerOperationLog.objects.create(customer=customer, message="session save order_id=%s and order.status=%s"%(request.session['order_id'], order.status if order else 'None')).save()
 
         if (not order) or order.status > 2:
-            CustomerOperationLog.objects.create(customer=customer, message="create order from session order_id=%s and order.status="%(request.session['order_id'], order.status if order else 'None')).save()
+            CustomerOperationLog.objects.create(customer=customer, message="create order from session order_id=%s and order.status=%s"%(order.id if order else 'None', order.status if order else 'None')).save()
             order = Order.objects.create(
                 customer=customer,
                 status=0,
