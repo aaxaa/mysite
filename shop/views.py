@@ -20,6 +20,7 @@ from wechat_sdk.basic import WechatBasic
 logger = logging.getLogger(__name__)
 
 def main(request):
+    logger.info(u'首页')
     notice_list = Notice.objects.filter(type='global', status=1)
     recommend_products = Product.objects.filter(recommend=1, status=1)
 
@@ -702,7 +703,6 @@ def wx_verify(request):
         return HttpResponse('error')
 
 def wx_callback(request):
-    logger.info(u'微信登陆开始')
     r = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code'%(WECHAT_APPID, WECHAT_APPSECRET, request.GET.get('code')))
     if int(r.status_code) == 200:
         data = r.json()
