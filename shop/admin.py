@@ -82,7 +82,7 @@ class OrderAdmin(admin.ModelAdmin):
         writer.writerow([u'订单号'.encode('utf8'), u'购买产品'.encode('utf8'), u'客户姓名'.encode('utf8'), u'客户手机'.encode('utf8'), u'客户地址'.encode('utf8'), u'其它附言'.encode('utf8'), u'创建时间'.encode('utf8'), u'订单状态'.encode('utf8')])
         for row in queryset.all():
             products_txt = ''
-            for p in row.products:
+            for p in row.products_in.all():
                 products_txt += "%s*%s=%s, " % (p.product.title, p.count, p.price)
 
             writer.writerow([row.order_txt, products_txt[:-2], row.realname, row.phone, row.address, row.message, row.create_at, row.status])
