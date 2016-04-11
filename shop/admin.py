@@ -79,11 +79,17 @@ class OrderAdmin(admin.ModelAdmin):
         response['Content-Disposition'] = 'attachment; filename = "order.csv"'
 
         writer = csv.writer(response)
-        
+        writer.writerow([u'订单号', u'购买产品', u'客户姓名', u'客户手机', u'客户地址', u'其它附言', u'创建时间', u'订单状态'])
         for row in queryset.all():
-            writer.writerow([row.order_txt, row.customer.realname, row.customer.phone])
+            products_txt = ''
+            for p in row.products.set():
+                products_txt += "%s*%s=%s, " % (p.product.title, p.count, p.price)
+
+            writer.writerow([row.order_txt, products_txt[:-2], row.realname, row.phone, row.address, row.message, row.create_at, row.status])
 
         return response
+
+    export_selected_ojects.short_description = u'导出所选数据'
 
 
 class CustomerAdmin(admin.ModelAdmin):
