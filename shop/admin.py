@@ -1,5 +1,6 @@
 # coding:utf8
 from django.contrib import admin
+from django.http import HttpResponse
 from .models import *
 
 
@@ -67,7 +68,23 @@ class OrderAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'create_at'
 
+    actions = ['export_selected_ojects']
+
     inlines = (OrderProductInline, )
+
+
+    def export_selected_ojects(self, request, queryset):
+        import csv
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename = "order.csv"'
+
+        writer = csv.writer(response)
+        
+        for row in queryset.all():
+            writer.writerow([row.order_text, row.customer.realname, row.customer.phone])
+
+        return response
+
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('username', 'realname', 'phone', 'point', 'register_at')
