@@ -79,7 +79,7 @@ class OrderAdmin(admin.ModelAdmin):
         response['Content-Disposition'] = 'attachment; filename = "order.csv"'
 
         writer = csv.writer(response)
-        writer.writerow([u'订单号', u'购买产品', u'客户姓名', u'客户手机', u'客户地址', u'其它附言', u'创建时间', u'订单状态'])
+        writer.writerow([u'订单号'.encode('utf8'), u'购买产品'.encode('utf8'), u'客户姓名'.encode('utf8'), u'客户手机'.encode('utf8'), u'客户地址'.encode('utf8'), u'其它附言'.encode('utf8'), u'创建时间'.encode('utf8'), u'订单状态'.encode('utf8')])
         for row in queryset.all():
             products_txt = ''
             for p in row.products.set():
