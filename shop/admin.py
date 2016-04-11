@@ -81,7 +81,7 @@ class OrderAdmin(admin.ModelAdmin):
         writer = csv.writer(response)
         
         for row in queryset.all():
-            writer.writerow([row.order_text, row.customer.realname, row.customer.phone])
+            writer.writerow([row.order_txt, row.customer.realname, row.customer.phone])
 
         return response
 
