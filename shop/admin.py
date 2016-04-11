@@ -83,7 +83,7 @@ class OrderAdmin(admin.ModelAdmin):
         for row in queryset.all():
             products_txt = ''
             for p in row.products_in.all():
-                products_txt += "%s*%s=%s, " % (p.product.title, p.count, p.price)
+                products_txt += "%s*%s=%s, " % (p.product.name, p.count, p.price)
 
             writer.writerow([row.order_txt, products_txt[:-2], row.realname, row.phone, row.address, row.message, row.create_at, row.status])
 
