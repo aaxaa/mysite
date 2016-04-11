@@ -85,7 +85,7 @@ class OrderAdmin(admin.ModelAdmin):
             for p in row.products_in.all():
                 products_txt += "%s*%s=%s, " % (p.product.name, p.count, p.price)
 
-            writer.writerow([row.order_txt, products_txt[:-2].encode('utf8'), row.realname.encode('utf8') if row.realname else (row.customer.realname.encode('utf8') if row.customer.realname else row.customer.username.encode('utf8')), row.phone, row.address.encode('utf8') if row.address else '', row.message.encode('utf8') if row.message else '', row.create_at, row.get_status_display()])
+            writer.writerow([row.order_txt, products_txt[:-2].encode('utf8'), row.realname.encode('utf8') if row.realname else (row.customer.realname.encode('utf8') if row.customer.realname else row.customer.username.encode('utf8')), row.phone, row.address.encode('utf8') if row.address else '', row.message.encode('utf8') if row.message else '', row.create_at, row.get_status_display().encode('utf8')])
 
         return response
 
