@@ -79,13 +79,13 @@ class OrderAdmin(admin.ModelAdmin):
         response['Content-Disposition'] = 'attachment; filename = "order.csv"'
 
         writer = csv.writer(response)
-        writer.writerow([u'订单号'.encode('utf8'), u'购买产品'.encode('utf8'), u'客户姓名'.encode('utf8'), u'客户手机'.encode('utf8'), u'客户地址'.encode('utf8'), u'其它附言'.encode('utf8'), u'创建时间'.encode('utf8'), u'订单状态'.encode('utf8')])
+        writer.writerow([u'订单号'.encode('utf8'), u'购买产品'.encode('utf8'), u'订单价格'.encode('utf8'), u'客户姓名'.encode('utf8'), u'客户手机'.encode('utf8'), u'客户地址'.encode('utf8'), u'其它附言'.encode('utf8'), u'创建时间'.encode('utf8'), u'订单状态'.encode('utf8')])
         for row in queryset.all():
             products_txt = ''
             for p in row.products_in.all():
                 products_txt += "%s*%s=%s, " % (p.product.name, p.count, p.price)
 
-            writer.writerow([row.order_txt, products_txt[:-2].encode('utf8'), row.realname.encode('utf8') if row.realname else (row.customer.realname.encode('utf8') if row.customer.realname else (row.customer.username.encode('utf8') if row.customer.username else '')), row.phone, row.address.encode('utf8') if row.address else '', row.message.encode('utf8') if row.message else '', row.create_at, row.get_status_display().encode('utf8')])
+            writer.writerow([row.order_txt, products_txt[:-2].encode('utf8'), '%0.2f' % float(row.total_price), row.realname.encode('utf8') if row.realname else (row.customer.realname.encode('utf8') if row.customer.realname else (row.customer.username.encode('utf8') if row.customer.username else '')), row.phone, row.address.encode('utf8') if row.address else '', row.message.encode('utf8') if row.message else '', row.create_at, row.get_status_display().encode('utf8')])
 
         return response
 
