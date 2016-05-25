@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'get all weixin pay order'
 
     def handle(self, *args, **options):
-        date = (datetime.today() - timedelta(days=0)).strftime("%Y%m%d")
+        date = (datetime.today() - timedelta(days=1)).strftime("%Y%m%d")
         print date
         self.stdout.write('start download all bill')
         headers = {'Content-Type': 'application/xml'}
