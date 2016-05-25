@@ -61,7 +61,7 @@ class OrderProductInline(admin.TabularInline):
     model = OrderProduct
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_txt', 'customer',  'total_price', 'create_at', 'status')
+    list_display = ('order_txt', 'customer',  'total_price', 'create_at', 'status', 'wxstatus')
     list_filter = ('status',)
 
     search_fields = ['customer__realname', 'customer__phone', 'order_txt']
