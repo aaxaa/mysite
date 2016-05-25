@@ -772,7 +772,7 @@ def wxpay_notify(request):
             customer_connect = CustomerConnect.objects.get(openid=params['openid'])
 
             if order.customer.id == customer_connect.customer.id:
-                CustomerOperationLog.objects.create(customer=customer_connect.customer, message="wxpay_notify order_id=%s, order.id=%s, login customer=%s"%(order.id, order.customer.id,customer_connect.customer.id), data=request.body).save()
+                CustomerOperationLog.objects.create(customer=customer_connect.customer, message="wxpay_notify order_id=%s, order.customer.id=%s, login customer=%s"%(order.id, order.customer.id,customer_connect.customer.id), data=request.body).save()
 
             order.status = 3
             order.save()

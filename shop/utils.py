@@ -58,6 +58,18 @@ def build_unifiedorder(params):
     base_params['sign'] = build_sign(base_params)
     return dict_to_xml(base_params)
 
+def build_downloadall(params):
+    base_params = {
+        'appid': WECHAT_APPID,
+        'mch_id': WECHAT_MCHID,
+        'nonce_str': generate_random_string(),
+        'bill_date': params['bill_date'],
+        'bill_type': params['bill_type']
+    }
+
+    base_params['sign'] = build_sign(base_params)
+    return dict_to_xml(base_params)
+
 def generate_random_string(randomlength=32):
     str = ''
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789'

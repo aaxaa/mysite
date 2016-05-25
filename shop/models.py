@@ -376,6 +376,12 @@ class Order(models.Model):
         (3, u'已付款'),
         (4, u'已关闭'),
     ]
+    wxstatus_choices = [
+        (0, u'未同步'),
+        (1, u'对账通过'),
+        (2, u'对账失败')
+    ]
+
     order_txt = models.CharField(u'订单号', max_length=12, default='')
     customer = models.ForeignKey(
         Customer,
@@ -391,6 +397,7 @@ class Order(models.Model):
     message = models.CharField(u'附言', max_length=255, null=True, blank=True)
     create_at = models.DateField(u'创建时间', auto_now_add=True)
     status = models.SmallIntegerField(u'状态', choices=status_choices, default=0)
+    wxstatus = models.SmallIntegerField(u'对账', choices=wxstatus_choices, default=0)
 
     class Meta:
         verbose_name = u'订单'
