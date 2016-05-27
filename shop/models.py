@@ -377,7 +377,7 @@ class Order(models.Model):
         (4, u'已关闭'),
     ]
     wxstatus_choices = [
-        (0, u'未同步'),
+        (0, u'-'),
         (1, u'对账通过'),
         (2, u'对账失败')
     ]
