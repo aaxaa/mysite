@@ -572,9 +572,7 @@ def shopcart_order_checkout(request):
 
         if order_id:
             order = Order.objects.get(id=order_id)
-            order.status = 1
-            order.save()
-
+            
             data['order_id'] = order_id
             data['order_txt'] = order.order_txt
             data['products'] = ''
@@ -601,6 +599,10 @@ def shopcart_order_checkout(request):
 
             data['total_price'] = "%0.2f"%total_price
             data['order'] = order
+
+            order.total_price = total_price
+            order.status = 1
+            order.save()
 
             CustomerOperationLog.objects.create(customer=order.customer, message="checkout order_id=%s and order.total_price=%s, use point=%s"%(order.id, total_price, data['total_point']), data=data['products']).save()
         else:
